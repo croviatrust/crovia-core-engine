@@ -361,15 +361,14 @@ def main() -> None:
         required=False,
         default="data/trust_providers.csv",
         help="Percorso CSV output con metriche di trust per provider.",
-    )
+    )   
     p.add_argument(
         "--out-report",
         dest="out_report",
         required=False,
-        default="trust_summary.md",
+        default="docs/trust_summary.md",   
         help="Percorso report markdown sintetico.",
-    )
-
+    ) 
     args = p.parse_args()
 
     providers, total_outputs, all_dp_eps = process_file(
@@ -416,3 +415,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
