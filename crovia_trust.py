@@ -1,4 +1,5 @@
-﻿import argparse
+#!/usr/bin/env python3
+import argparse
 import csv
 import json
 from dataclasses import dataclass, field
@@ -7,22 +8,22 @@ from typing import Dict, Any, List, Set
 
 @dataclass
 class ProviderStats:
-    """Aggregati di trust per un provider."""
-    appear_topk: int = 0           # volte nel top_k
-    appear_top1: int = 0           # volte rank == 1
-    total_share: float = 0.0       # somma share attribuite
-    outputs_with_share: int = 0    # output in cui appare almeno una volta
-    conf_pos: int = 0              # volte con share_ci95_low > 0
-    low_conf_top1: int = 0         # volte top1 con low_confidence=True
+    """Aggregated trust metrics for a provider."""
+    appear_topk: int = 0           # number of times in top_k (allocations)
+    appear_top1: int = 0           # number of times rank == 1
+    total_share: float = 0.0       # sum of shares attributed
+    outputs_with_share: int = 0    # distinct outputs where provider has >0 share
+    conf_pos: int = 0              # times with share_ci95_low > 0
+    low_conf_top1: int = 0         # times top1 with low_confidence=True
     dp_eps_top1: Set[float] = field(default_factory=set)
-    max_share: float = 0.0         # share massima in un singolo output
+    max_share: float = 0.0         # max share in a single output
 
-    # per sapere se in un certo output è già stato visto (per outputs_with_share)
+    # used to track distinct outputs (for outputs_with_share)
     last_output_id: str = ""
 
 
 def iter_ndjson(path: str):
-    """Iteratore streaming su un file NDJSON."""
+    """Stream iterator over an NDJSON file."""
     with open(path, "r", encoding="utf-8") as f:
         for lineno, line in enumerate(f, start=1):
             line = line.strip()
@@ -31,7 +32,7 @@ def iter_ndjson(path: str):
             try:
                 obj = json.loads(line)
             except Exception as e:
-                print(f"[WARN] linea {lineno}: JSON non valido, skip ({e})")
+                print(f"[trust][WARN] line {lineno}: invalid JSON, skipping ({e})")
                 continue
             yield lineno, obj
 
@@ -41,7 +42,7 @@ def process_file(path: str, min_appear: int):
     total_outputs = 0
     all_dp_eps: Set[float] = set()
 
-    print(f"[trust] lettura file: {path}")
+    print(f"[trust] reading receipts from: {path}")
 
     for lineno, obj in iter_ndjson(path):
         if obj.get("schema") != "royalty_receipt.v1":
@@ -65,7 +66,7 @@ def process_file(path: str, min_appear: int):
             except Exception:
                 eps_val = None
 
-        # unifica per provider dentro allo stesso output (multi-shard -> singolo provider)
+        # unify contributions per provider for this output (multi-shard -> single provider)
         share_by_provider: Dict[str, float] = {}
 
         for alloc in top_k:
@@ -80,10 +81,10 @@ def process_file(path: str, min_appear: int):
             try:
                 s = float(share)
             except Exception:
-                print(f"[WARN] linea {lineno}: share non numerica {share!r} per {pid!r}")
+                print(f"[trust][WARN] line {lineno}: non-numeric share {share!r} for {pid!r}")
                 continue
             if s < 0:
-                print(f"[WARN] linea {lineno}: share negativa {s} per {pid!r}")
+                print(f"[trust][WARN] line {lineno}: negative share {s} for {pid!r}")
                 continue
 
             share_by_provider[pid] = share_by_provider.get(pid, 0.0) + s
@@ -91,7 +92,7 @@ def process_file(path: str, min_appear: int):
         if not share_by_provider:
             continue
 
-        # aggiorna aggregati per provider
+        # update per-provider aggregates
         for alloc in top_k:
             if not isinstance(alloc, dict):
                 continue
@@ -106,7 +107,7 @@ def process_file(path: str, min_appear: int):
                 st = ProviderStats()
                 providers[pid] = st
 
-            # apparizioni nel top_k (conteggio allocazioni, utile come metrica raw)
+            # appearances in top_k (allocations, raw metric)
             st.appear_topk += 1
 
             # top1 & low_conf & dp_eps_top1
@@ -117,29 +118,29 @@ def process_file(path: str, min_appear: int):
                 if eps_val is not None:
                     st.dp_eps_top1.add(eps_val)
 
-            # conf_pos: share_ci95_low > 0 (a livello di allocazione)
+            # conf_pos: share_ci95_low > 0 (per allocation)
             if isinstance(ci_low, (int, float)) and ci_low is not None and ci_low > 0:
                 st.conf_pos += 1
 
-        # somma share unificate per provider e conta una sola volta l'output
+        # sum unified shares per provider and count output once
         for pid, ssum in share_by_provider.items():
             st = providers[pid]
             st.total_share += ssum
             if ssum > st.max_share:
                 st.max_share = ssum
-            if st.last_output_id != output_id:   # garantisce 1 conteggio per output
+            if st.last_output_id != output_id:   # ensure each output counted once
                 st.outputs_with_share += 1
                 st.last_output_id = output_id
 
-    # filtro su numero di output distinti in cui compaiono
+    # filter providers by minimum distinct outputs
     filtered = {
         pid: st for pid, st in providers.items()
         if st.outputs_with_share >= min_appear
     }
 
-    print(f"[trust] output totali considerati: {total_outputs}")
-    print(f"[trust] provider totali (prima del filtro): {len(providers)}")
-    print(f"[trust] provider dopo filtro min_appear={min_appear}: {len(filtered)}")
+    print(f"[trust] total outputs considered: {total_outputs}")
+    print(f"[trust] total providers (before filter): {len(providers)}")
+    print(f"[trust] providers after min_appear={min_appear} filter: {len(filtered)}")
 
     return filtered, total_outputs, all_dp_eps
 
@@ -156,16 +157,16 @@ def finalize_scores(
     total_share_overall = sum(st.total_share for st in providers.values()) or 1.0
 
     for provider_id, st in providers.items():
-        appear_alloc = st.appear_topk                 # allocazioni nel top_k (multi-shard)
-        appear_outputs = st.outputs_with_share        # output distinti in cui compare
+        appear_alloc = st.appear_topk                 # allocations in top_k
+        appear_outputs = st.outputs_with_share        # distinct outputs
         top1 = st.appear_top1
         conf_pos = st.conf_pos
         low_conf_top1 = st.low_conf_top1
 
         top1_rate = top1 / total
-        topk_rate = appear_outputs / total            # <-- fix: per output, non per allocazione
+        topk_rate = appear_outputs / total            # rate per output, not per allocation
         den = float(appear_outputs) if appear_outputs > 0 else 1.0
-        conf_rate = conf_pos / den                    # <-- consigliato: per output
+        conf_rate = conf_pos / den                    # recommended: per output
         low_conf_rate = (low_conf_top1 / float(top1)) if top1 > 0 else 0.0
 
         trust_core = 0.5 * top1_rate + 0.3 * topk_rate + 0.2 * conf_rate
@@ -206,7 +207,8 @@ def finalize_scores(
             "n_low_conf_top1": low_conf_top1,
             "total_share": st.total_share,
             "outputs_with_share": appear_outputs,
-            "avg_share_per_output": (st.total_share / float(max(1, st.outputs_with_share))
+            "avg_share_per_output": (
+                st.total_share / float(max(1, st.outputs_with_share))
             ),
             "global_share_fraction": global_share_fraction,
             "max_share_single_output": st.max_share,
@@ -223,14 +225,13 @@ def finalize_scores(
     return rows
 
 
-
 def write_provider_csv(rows: List[Dict[str, Any]], path: str) -> None:
-    """Scrive un CSV con tutte le metriche per provider."""
+    """Write a CSV with trust metrics for each provider."""
     if not rows:
-        print("[trust] Nessun provider, CSV non scritto.")
+        print("[trust] No providers to write; CSV not created.")
         return
 
-    print(f"[trust] scrittura CSV provider: {path}")
+    print(f"[trust] writing provider CSV: {path}")
     fieldnames = [
         "provider_id",
         "trust",
@@ -258,7 +259,7 @@ def write_provider_csv(rows: List[Dict[str, Any]], path: str) -> None:
         w.writeheader()
         for r in rows:
             row = r.copy()
-            # formattiamo alcune colonne come stringhe numeriche
+            # format numeric columns
             row["trust"] = f"{row['trust']:.6f}"
             row["risk"] = f"{row['risk']:.6f}"
             row["priority_score"] = f"{row['priority_score']:.6f}"
@@ -273,7 +274,7 @@ def write_provider_csv(rows: List[Dict[str, Any]], path: str) -> None:
             row["dp_eps_top1"] = ";".join(str(x) for x in row["dp_eps_top1"])
             w.writerow(row)
 
-    print("[trust] CSV provider scritto.")
+    print("[trust] provider CSV written.")
 
 
 def write_report(
@@ -282,19 +283,19 @@ def write_report(
     path: str,
     top_n: int,
 ) -> None:
-    """Scrive un report markdown sintetico."""
-    print(f"[trust] scrittura report: {path}")
+    """Write a compact markdown report for governance/audit."""
+    print(f"[trust] writing trust summary report: {path}")
     lines: List[str] = []
     lines.append("# CROVIA – Trust & Priority summary")
     lines.append("")
-    lines.append(f"- Output totali considerati: {total_outputs}")
-    lines.append(f"- Provider totali (dopo filtro): {len(rows)}")
+    lines.append(f"- Total outputs considered: {total_outputs}")
+    lines.append(f"- Providers (after filter): {len(rows)}")
     lines.append("")
 
     if not rows or total_outputs <= 0:
-        lines.append("Nessun dato sufficiente per calcolare il trust.")
+        lines.append("Not enough data to compute trust metrics for this run.")
     else:
-        lines.append(f"## Top {min(top_n, len(rows))} provider per trust")
+        lines.append(f"## Top {min(top_n, len(rows))} providers by trust")
         lines.append("")
         lines.append("| Rank | Provider | Trust | Risk | Priority | Band | Top1% | TopK% | Conf+% | LowConf% | Global share % |")
         lines.append("|------|----------|-------|------|----------|------|-------|-------|--------|----------|----------------|")
@@ -323,14 +324,14 @@ def write_report(
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
-    print("[trust] Report scritto.")
+    print("[trust] trust summary report written.")
 
 
 def main() -> None:
     p = argparse.ArgumentParser(
         description=(
-            "Aggregatore di trust & priority per CROVIA "
-            "su ricevute royalty_receipt.v1"
+            "Aggregate trust & priority metrics for CROVIA "
+            "from royalty_receipt.v1 NDJSON logs."
         )
     )
     p.add_argument(
@@ -339,36 +340,36 @@ def main() -> None:
         dest="input",
         required=False,
         default="data/royalty_receipts.ndjson",
-        help="File NDJSON di input (schema=royalty_receipt.v1, una riga per ricevuta).",
+        help="Input NDJSON file (schema=royalty_receipt.v1, one receipt per line).",
     )
     p.add_argument(
         "--min-appear",
         dest="min_appear",
         type=int,
         default=5,
-        help="Minimo numero di apparizioni nel top_k per includere il provider.",
+        help="Minimum number of distinct outputs in which a provider must appear to be included.",
     )
     p.add_argument(
         "--top-n",
         dest="top_n",
         type=int,
         default=50,
-        help="Numero massimo di provider da mostrare nel report.",
+        help="Maximum number of providers to show in the markdown report.",
     )
     p.add_argument(
         "--out-provider",
         dest="out_provider_csv",
         required=False,
         default="data/trust_providers.csv",
-        help="Percorso CSV output con metriche di trust per provider.",
-    )   
+        help="Output CSV path with trust metrics per provider.",
+    )
     p.add_argument(
         "--out-report",
         dest="out_report",
         required=False,
-        default="docs/trust_summary.md",   
-        help="Percorso report markdown sintetico.",
-    ) 
+        default="docs/trust_summary.md",
+        help="Output markdown report path.",
+    )
     args = p.parse_args()
 
     providers, total_outputs, all_dp_eps = process_file(
@@ -383,13 +384,13 @@ def main() -> None:
     )
 
     if not rows:
-        print("Nessun provider con apparizioni sufficienti.")
+        print("[trust] No providers met the appearance threshold; nothing to write.")
         return
 
     write_provider_csv(rows, args.out_provider_csv)
     write_report(rows, total_outputs, args.out_report, args.top_n)
 
-    # stampa riassunto a console (stile vecchio script)
+    # console summary (kept for quick CLI inspection)
     print(
         f"# CROVIA trust summary  |  total_outputs={total_outputs}  "
         f"|  providers={len(rows)}  (min_appear={args.min_appear})"
@@ -415,4 +416,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
