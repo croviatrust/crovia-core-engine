@@ -4,19 +4,20 @@ CROVIA – Hash-chain writer
 
 Builds a rolling SHA-256 hash-chain over an NDJSON file, in fixed-size chunks.
 
-For each chunk of N lines (default: 10_000), it computes:
+For each chunk of N lines (default: 10_000), it computes a block digest that
+folds together:
 
-    H_block = sha256( anchor || line_1 || line_2 || ... || line_N )
+    - the previous block digest (32 bytes, the “anchor”), and
+    - the raw UTF-8 NDJSON lines in that block.
 
-where:
-  - anchor is the previous block digest (32 bytes), starting from 32 zero-bytes,
-  - lines are the raw NDJSON lines (UTF-8).
+The initial anchor is 32 zero-bytes. A different convention can be adopted
+by contract / policy, but MUST be kept consistent across writer and verifier.
 
 The output is a tab-separated text file with one line per block:
 
     <block_index> <global_line_count> <hex_digest>
 
-This file can later be verified with a matching hashchain verifier.
+This file can later be verified with the matching hashchain verifier.
 """
 
 import argparse
@@ -50,8 +51,10 @@ def main() -> None:
     parser.add_argument(
         "--out",
         required=False,
-        help="Output path for the hash-chain text file "
-             "(default: proofs/hashchain_<basename>.txt).",
+        help=(
+            "Output path for the hash-chain text file "
+            "(default: proofs/hashchain_<basename>.txt)."
+        ),
     )
     parser.add_argument(
         "--chunk",
@@ -69,8 +72,13 @@ def main() -> None:
     out_path = args.out or os.path.join("proofs", f"hashchain_{base}.txt")
     os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
 
+    print(
+        f"[HASHCHAIN] building hash-chain "
+        f"(source={args.source}, chunk={args.chunk}, out={out_path})"
+    )
+
     # Initial anchor (32 zero-bytes). This can be changed if a different anchor
-    # convention is agreed in a contract / policy document.
+    # convention is agreed in a contract / policy document, but MUST match the verifier.
     prev = b"\x00" * 32
 
     block_idx = 0       # 0-based index of the current block
@@ -79,7 +87,9 @@ def main() -> None:
 
     with open(out_path, "w", encoding="utf-8") as out:
         for s in iter_lines(args.source):
-            # For each line, fold previous block digest + current line bytes
+            # For each line, fold previous block digest + current line bytes.
+            # NOTE: This is the convention used for the current CROVIA demo
+            # and MUST remain in sync with verify_hashchain.py.
             h.update(prev)
             h.update(s.encode("utf-8"))
             count += 1
@@ -97,9 +107,12 @@ def main() -> None:
             digest = h.hexdigest()
             out.write(f"{block_idx}\t{count}\t{digest}\n")
 
-    print(f"[HASHCHAIN] Written: {out_path}")
+    total_blocks = block_idx + (1 if count % args.chunk != 0 else 0)
+    print(
+        f"[HASHCHAIN] wrote chain file: {out_path} "
+        f"(blocks={total_blocks}, lines={count})"
+    )
 
 
 if __name__ == "__main__":
     main()
-
