@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import subprocess
+import sys
 from pathlib import Path
 from typing import List
 
@@ -9,11 +10,12 @@ from typing import List
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 PROOFS_DIR = BASE_DIR / "proofs"
+DOCS_DIR = BASE_DIR / "docs"
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="CROVIA period orchestration (trust + payouts + bundle + floors)."
+        description="CROVIA period orchestration (trust + payouts + floors + proofs)."
     )
     p.add_argument(
         "--period",
@@ -61,66 +63,35 @@ def main() -> None:
 
     print(f"=== CROVIA RUN (Period={period}) ===")
 
-    venv_python = str(BASE_DIR / ".venv" / "bin" / "python3")
+    # Usa sempre lo stesso interprete con cui è stato lanciato run_period.py
+    python_exe = sys.executable
 
     # 1) QA receipts
     run_step(
         "QA receipts",
-        [venv_python, "qa_receipts.py", str(receipts_path)],
+        [python_exe, "qa_receipts.py", str(receipts_path)],
     )
 
     # 2) CROVIA trust (aggregate providers)
+    trust_csv = DATA_DIR / "trust_providers.csv"
+    trust_report = DOCS_DIR / "trust_summary.md"
     run_step(
         "CROVIA trust",
         [
-            venv_python,
+            python_exe,
             "crovia_trust.py",
             "--input",
             str(receipts_path),
             "--min-appear",
             str(args.min_appear),
             "--out-provider",
-            str(DATA_DIR / "trust_providers.csv"),
+            str(trust_csv),
             "--out-report",
-            "trust_summary.md",
+            str(trust_report),
         ],
     )
 
-    # 3) Validate schema + business rules (non-blocking)
-    run_step(
-        "Validate schema+business",
-        [
-            venv_python,
-            "crovia_validate.py",
-            "--input",
-            str(receipts_path),
-            "--out-report",
-            "validate_report.md",
-            "--out-bad",
-            "validate_sample_bad.jsonl",
-        ],
-        required=False,
-    )
-
-    # 4) Compliance AI Act (non-blocking)
-    run_step(
-        "Compliance AI Act",
-        [
-            venv_python,
-            "compliance_ai_act.py",
-            "--input",
-            str(receipts_path),
-            "--out-summary",
-            "compliance_summary.md",
-            "--out-gaps",
-            str(DATA_DIR / "compliance_gaps.csv"),
-            "--out-pack",
-            str(DATA_DIR / "compliance_pack.json"),
-        ],
-        required=False,
-    )
-
-    # 5) Payouts calculation
+    # 3) Payouts calculation
     payouts_ndjson = DATA_DIR / f"payouts_{period}.ndjson"
     payouts_csv = DATA_DIR / f"payouts_{period}.csv"
     assumptions_json = DATA_DIR / f"assumptions_{period}.json"
@@ -129,7 +100,7 @@ def main() -> None:
     run_step(
         "Payouts calculation",
         [
-            venv_python,
+            python_exe,
             "payouts_from_royalties.py",
             "--input",
             str(receipts_path),
@@ -148,12 +119,12 @@ def main() -> None:
         ],
     )
 
-    # 6) Payout charts (non-blocking)
-    readme_payout = BASE_DIR / f"README_PAYOUT_{period}.md"
+    # 4) Payout charts (non-blocking)
+    readme_payout = DOCS_DIR / f"README_PAYOUT_{period}.md"
     run_step(
         "Payout charts",
         [
-            venv_python,
+            python_exe,
             "make_payout_charts.py",
             "--period",
             period,
@@ -165,13 +136,14 @@ def main() -> None:
         required=False,
     )
 
-    # 7) Hashchain writer (non-blocking)
+    # 5) Hashchain writer (non-blocking) – basato sul nome del file di ricevute
     PROOFS_DIR.mkdir(parents=True, exist_ok=True)
-    chain_path = PROOFS_DIR / f"hashchain_royalty_from_faiss.ndjson__{period_compact}_chunk1000.txt"
+    source_stem = receipts_path.name.replace(".ndjson", "")
+    chain_path = PROOFS_DIR / f"hashchain_{source_stem}__{period_compact}_chunk1000.txt"
     run_step(
         "Hashchain writer",
         [
-            venv_python,
+            python_exe,
             "hashchain_writer.py",
             "--source",
             str(receipts_path),
@@ -183,11 +155,11 @@ def main() -> None:
         required=False,
     )
 
-    # 8) Hashchain verify (non-blocking)
+    # 6) Hashchain verify (non-blocking)
     run_step(
         "Hashchain verify",
         [
-            venv_python,
+            python_exe,
             "verify_hashchain.py",
             "--source",
             str(receipts_path),
@@ -199,44 +171,18 @@ def main() -> None:
         required=False,
     )
 
-    # 9) Trust bundle (base bundle without governance/floors yet)
-    run_step(
-        "Trust bundle",
-        [
-            venv_python,
-            "make_trust_bundle.py",
-            "--period",
-            period,
-            "--receipts",
-            str(receipts_path),
-        ],
-        required=False,
-    )
-
-    # 10) Crovian Floors (from trust_providers.csv + eur_total)
+    # 7) Crovian Floors (from trust_providers.csv + eur_total)
     run_step(
         "Crovian Floors",
         [
-            venv_python,
+            python_exe,
             "crovia_floor.py",
             "--period",
             period,
             "--eur-total",
             str(eur_total),
             "--trust-csv",
-            str(DATA_DIR / "trust_providers.csv"),
-        ],
-        required=False,
-    )
-
-    # 11) Augment trust bundle (governance + attestations + floors)
-    run_step(
-        "Augment trust bundle",
-        [
-            venv_python,
-            "augment_trust_bundle.py",
-            "--period",
-            period,
+            str(trust_csv),
         ],
         required=False,
     )
