@@ -1,0 +1,11 @@
+{
+  "schema": "merkle_payouts.v1",
+  "period": "2025-11",
+  "file": {
+    "schema": "payouts.v1",
+    "path": "data/dpi_payouts_2025-11.ndjson",
+    "sha256": "9d481b8f38f58be7eafeb49b10f20d2521b0c9a4edd74d0dfab2bcb0b578a79c"
+  },
+  "root": "02690a2a637a400d28bd90eb9b2b1a55d9e8e6b6be48fb744b7c0bddcf913fdb",
+  "leaf_count": 3717
+}

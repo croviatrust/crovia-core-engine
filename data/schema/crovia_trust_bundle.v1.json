@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CROVIA Trust Bundle v1",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "crovia_trust_bundle.v1"
+    },
+    "profile_id": {
+      "type": "string",
+      "description": "Profile identifier for this bundle (e.g. CROVIA_DPI_FAISS_DEMO_v1)."
+    },
+    "period": {
+      "type": "string",
+      "description": "Settlement period in YYYY-MM format.",
+      "pattern": "^[0-9]{4}-[0-9]{2}$"
+    },
+    "crovia_id": {
+      "type": "string",
+      "description": "Compact CROVIA settlement identifier (CTB-<PERIOD>-<OP:8><RUN:4>).",
+      "pattern": "^CTB-[0-9]{4}-[0-9]{2}-[A-Z-]{8}[0-9]{4}$"
+    },
+    "crovia_id_line": {
+      "type": "string",
+      "description": "Human-readable CROVIA-ID line to be reused in contracts and documentation."
+    },
+    "model_id": {
+      "type": "string",
+      "description": "Identifier of the model or run associated with this bundle."
+    },
+    "artifacts": {
+      "type": "object",
+      "description": "Declared artifacts (payouts, Merkle summary, reports, hashchains, charts, etc.).",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "schema": { "type": "string" },
+          "path": { "type": "string" },
+          "sha256": { "type": "string" },
+          "bytes": { "type": "integer" },
+          "root": { "type": "string" },
+          "leaf_count": { "type": "integer" }
+        },
+        "required": ["path", "sha256"]
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "profile_id",
+    "period",
+    "crovia_id",
+    "artifacts"
+  ],
+  "additionalProperties": true
+}

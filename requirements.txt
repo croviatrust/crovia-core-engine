@@ -1,0 +1,5 @@
+﻿fastapi==0.115.5
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+jsonschema==4.23.0
+orjson==3.10.7

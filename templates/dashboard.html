@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CroviaTrust – Demo period {{ period }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-card: rgba(15, 23, 42, 0.96);
+      --border: #1f2937;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.1);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+    }
+
+    * , *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .hero-topline {
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-main {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px 16px;
+    }
+
+    .hero-title {
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .hero-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+    }
+
+    .hero-sub {
+      max-width: 640px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 20px 20px 18px;
+      border: 1px solid #0f172a;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.75);
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin: 0 0 10px;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      margin: 16px 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .markdown h1,
+    .markdown h2,
+    .markdown h3 {
+      font-size: 15px;
+      margin: 8px 0 4px;
+    }
+
+    .markdown p {
+      margin: 4px 0 6px;
+      line-height: 1.4;
+    }
+
+    .markdown ul {
+      margin: 6px 0 6px 20px;
+      padding-left: 16px;
+    }
+
+    .markdown li {
+      margin: 2px 0;
+    }
+
+    .markdown code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 480px;
+    }
+
+    thead {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    th, td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    th {
+      font-weight: 500;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    td:first-child, th:first-child {
+      text-align: left;
+    }
+
+    .charts-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .chart img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #020617;
+    }
+
+    .chart figcaption {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #020617;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 8px;
+    }
+
+    .button:hover {
+      filter: brightness(1.05);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    @media (min-width: 768px) {
+      .page {
+        padding-top: 32px;
+      }
+
+      .hero-title {
+        font-size: 32px;
+      }
+
+      .charts-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div style="display:flex;justify-content:flex-end;gap:16px;padding:16px 24px;font-size:14px;">
+    <a href="/" style="color:#9ca3af;text-decoration:none;">Dashboard</a>
+    <a href="/sandbox" style="color:#9ca3af;text-decoration:none;">Sandbox</a>
+    <a href="/about" style="color:#9ca3af;text-decoration:none;">About</a>
+  </div>
+
+  <main class="page">
+    <header class="hero">
+      <div class="hero-topline">CroviaTrust · Motore Crovia · Demo period {{ period }}</div>
+      <div class="hero-main">
+                <h1 class="hero-title">CROVIA – Trust &amp; Payout summary</h1>
+        <p class="hero-subtitle">
+          This report is generated under the
+          <strong>CROVIA – AI Training Data Trust Profile v1.0</strong>,
+          aligned with the EU AI Act (data &amp; record-keeping) and with leading
+          international standards for training-data governance.
+        </p>         
+
+        <span class="hero-pill">Periodo {{ period }}</span>
+      </div>
+      <p class="hero-sub">
+        Attribution, trust, compliance and payout for AI training data.
+        This is the <strong>sign-ready</strong> result for period {{ period }} on {{ bundle_name }}.
+      </p>
+    </header>
+
+    <section class="card">
+      <h2>Trust summary</h2>
+
+      {% if trust_summary_html %}
+        <div class="markdown">
+          {{ trust_summary_html|safe }}
+        </div>
+      {% else %}
+        <p class="muted">No <code>trust_summary.md</code> found for this period.</p>
+      {% endif %}
+
+      {% if trust_header and trust_rows %}
+        <h3 class="section-subtitle">Top provider per trust</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                {% for col in trust_header %}
+                  <th>{{ col }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in trust_rows %}
+                <tr>
+                  {% for cell in row %}
+                    <td>{{ cell }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="muted">Tabella provider non disponibile (manca <code>data/trust_providers.csv</code>).</p>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <h2>Payout &amp; grafici</h2>
+
+      {% if payout_readme_html %}
+        <div class="markdown">
+          {{ payout_readme_html|safe }}
+        </div>
+      {% else %}
+        <p class="muted">
+          No payout summary is available yet for this period.
+          Please ask an operator to regenerate the demo run for {{ period }}.
+        </p>
+      {% endif %}
+     
+     <div class="charts-grid">
+       <figure class="chart">
+         <img src="{{ charts.top10 }}" alt="Top-10 providers by payout for period {{ period }}">
+         <figcaption>Top-10 providers by payout · period {{ period }}</figcaption>
+       </figure>
+       <figure class="chart">
+         <img src="{{ charts.cumulative }}" alt="Cumulative payout curve for period {{ period }}">
+         <figcaption>Cumulative payout · budget share vs providers</figcaption>
+       </figure>
+     </div>
+   </section>
+
+
+    <section class="card">
+      <h2>Trust Bundle JSON</h2>
+      <p class="text-sm text-slate-300">
+        Download the sign-ready JSON manifest for this period.
+        The bundle includes: payout data, policy assumptions, an AI-Act-oriented
+        compliance pack, hash-chained integrity evidence and governance metadata
+        under the <strong>CROVIA – AI Training Data Trust Profile v1.0</strong>.
+      </p>
+
+     {% if bundle_exists %}
+       <a class="button" href="/bundle/{{ period }}">Download {{ bundle_name }}</a>
+     {% else %}
+       <p class="muted">
+      The file {{ bundle_name }} does not exist yet. Run the engine for this period first.
+       </p>
+     {% endif %}
+    </section>
+   
+    <footer class="footer">
+      CroviaTrust – Attribution & royalty engine for AI training data ·
+      <a href="mailto:info@croviatrust.com"
+         style="color: inherit; text-decoration: underline;">
+        info@croviatrust.com
+      </a>
+    </footer>
+  </main>
+</body>
+</html>

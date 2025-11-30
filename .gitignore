@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pye
+*.bak*
+*.tgz
+
+# Nessun dato grezzo qui dentro
+data/*
+!data/schema/
+!data/schema/crovia_trust_bundle.v1.json
+
+# Sandbox locali (non dovrebbero esserci, ma per sicurezza)
+sandbox_runs/
+sandbox_stats.json

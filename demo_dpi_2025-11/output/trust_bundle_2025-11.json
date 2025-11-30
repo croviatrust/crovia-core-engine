@@ -1,0 +1,32 @@
+{
+  "schema": "crovia_trust_bundle.v1",
+  "profile_id": "CROVIA_DPI_FAISS_DEMO_v1",
+  "period": "2025-11",
+  "crovia_id": "CTB-2025-11-HF------8559",
+  "crovia_id_line": "CROVIA-ID: CTB-2025-11-HF------8559 sha256=9d481b8f38f58be7",
+  "model_id": "crovia-dpi-demo",
+  "artifacts": {
+    "payouts_ndjson": {
+      "schema": "payouts.v1",
+      "path": "data/dpi_payouts_2025-11.ndjson",
+      "sha256": "9d481b8f38f58be7eafeb49b10f20d2521b0c9a4edd74d0dfab2bcb0b578a79c"
+    },
+    "merkle_payouts": {
+      "schema": "merkle_payouts.v1",
+      "path": "proofs/merkle_payouts_2025-11.json",
+      "sha256": "57eff1e859a811378f4bc18da2cc79cf3e70ca8bf35876ed1e68a4681c84b0c3",
+      "root": "02690a2a637a400d28bd90eb9b2b1a55d9e8e6b6be48fb744b7c0bddcf913fdb",
+      "leaf_count": 3717
+    },
+    "trust_summary_md": {
+      "schema": "text/markdown",
+      "path": "docs/trust_summary.md",
+      "sha256": "3fc78ce631a5b60beef4bdc24f735bdeeac5949724fb8f9428110ee81d9c9488"
+    },
+    "trust_providers_csv": {
+      "schema": "text/csv",
+      "path": "data/trust_providers.csv",
+      "sha256": "2021e5dfc1f48054dc77b207c1a6746711f8338a139da60c241567cb9806fdd1"
+    }
+  }
+}
