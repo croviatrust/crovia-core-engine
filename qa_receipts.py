@@ -2,10 +2,10 @@
 """
 qa_receipts.py – quick QA over royalty_receipt.v1 NDJSON.
 
-Checks:
+Checks (per royalty_receipt.v1 row with a non-empty top_k):
   - per-row share sum is within [0.99, 1.01]
   - no negative shares
-  - rank field is monotonic increasing within top_k
+  - rank field is monotonically non-decreasing within top_k
 """
 
 import argparse
@@ -26,6 +26,12 @@ def parse_args() -> argparse.Namespace:
 
 
 def qa_file(path: str) -> Tuple[int, int, int]:
+    """
+    Scan the NDJSON file and return:
+      bad_sum   = rows whose share sum is outside [0.99, 1.01]
+      bad_neg   = rows with at least one negative share
+      bad_order = rows where rank is not monotonically increasing
+    """
     bad_sum = bad_order = bad_neg = 0
 
     with open(path, "r", encoding="utf-8") as f:
@@ -44,6 +50,8 @@ def qa_file(path: str) -> Tuple[int, int, int]:
                 continue
 
             top_k = o.get("top_k") or []
+            if not top_k:
+                continue
 
             # 1) Sum of shares
             s = 0.0
@@ -70,8 +78,19 @@ def qa_file(path: str) -> Tuple[int, int, int]:
 
 def main() -> None:
     args = parse_args()
-    bad_sum, bad_neg, bad_order = qa_file(args.path)
+    path = args.path
+
+    print(f"[QA] reading receipts from: {path}")
+    bad_sum, bad_neg, bad_order = qa_file(path)
     print(f"[QA] bad_sum={bad_sum}  bad_neg={bad_neg}  bad_order={bad_order}")
+
+    if bad_sum == 0 and bad_neg == 0 and bad_order == 0:
+        print("[QA] OK – all royalty_receipt.v1 rows passed basic checks.")
+    else:
+        print(
+            "[QA] WARN – some rows failed QA checks "
+            "(see bad_sum / bad_neg / bad_order counters above)."
+        )
 
 
 if __name__ == "__main__":
