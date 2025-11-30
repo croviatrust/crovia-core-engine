@@ -62,7 +62,7 @@ def main() -> None:
 
     print(f"=== CROVIA RUN (Period={period}) ===")
 
-    # Usa sempre il Python corrente (qualsiasi venv l'utente abbia attivato)
+    # Always use the current Python interpreter (whatever venv is active)
     venv_python = sys.executable
 
     # 1) QA receipts
@@ -209,7 +209,7 @@ def main() -> None:
         required=False,
     )
 
-    # 9) Trust bundle (optional in open_core; governance layer può essere chiuso)
+    # 9) Trust bundle (optional in open_core; governance layer can be closed-source)
     make_bundle_script = BASE_DIR / "make_trust_bundle.py"
     if make_bundle_script.exists():
         run_step(
@@ -264,4 +264,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
