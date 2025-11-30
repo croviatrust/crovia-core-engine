@@ -2,9 +2,17 @@
 """
 CROVIA – Trust Bundle validator (stand-alone)
 
-Usage:
-  python3 trust_bundle_validator.py --bundle data/trust_bundle_2025-11.json
-  python3 trust_bundle_validator.py --bundle path/to/bundle.json --base-dir /opt/crovia
+Usage examples:
+
+  # Validate a standard period bundle from /opt/crovia
+  python3 trust_bundle_validator.py \
+    --bundle trust_bundle_2025-11.json \
+    --base-dir /opt/crovia
+
+  # Validate the FAISS/DPI demo bundle
+  python3 trust_bundle_validator.py \
+    --bundle demo_dpi_2025-11/output/trust_bundle_2025-11.json \
+    --base-dir /opt/crovia
 
 Exit codes:
   0 = everything OK
@@ -59,16 +67,18 @@ def validate_bundle(bundle_path: Path, base_dir: Path) -> int:
             print(f"[WARN] {name}: missing 'path' – skipping")
             continue
 
-        # 1) relativo alla cartella del bundle
+        # 1) Try path relative to the bundle file
         file_path = (bundle_path.parent / path_str).resolve()
-        # 2) se non esiste, prova base_dir (es: /opt/crovia)
+        # 2) If not found, try base_dir (e.g. /opt/crovia)
         if not file_path.exists():
             alt = (base_dir / path_str).resolve()
             if alt.exists():
                 file_path = alt
             else:
-                print(f"[ERROR] {name}: file not found at '{path_str}' "
-                      f"(checked {file_path} and {alt})")
+                print(
+                    f"[ERROR] {name}: file not found at '{path_str}' "
+                    f"(checked {file_path} and {alt})"
+                )
                 errors += 1
                 continue
 
@@ -85,10 +95,14 @@ def validate_bundle(bundle_path: Path, base_dir: Path) -> int:
 
         print(f"- {name}")
         print(f"    path: {path_str}")
-        print(f"    size: {size} bytes"
-              + (f" (expected {expected_bytes})" if expected_bytes is not None else ""))
-        print(f"    sha256: {sha}"
-              + (f" (expected {expected_sha256})" if expected_sha256 else ""))
+        print(
+            f"    size: {size} bytes"
+            + (f" (expected {expected_bytes})" if expected_bytes is not None else "")
+        )
+        print(
+            f"    sha256: {sha}"
+            + (f" (expected {expected_sha256})" if expected_sha256 else "")
+        )
         print(f"    status: {status}\n")
 
     if errors:
@@ -106,12 +120,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--bundle",
         required=True,
-        help="Path to trust_bundle_YYYY-MM.json",
+        help="Path to trust_bundle_YYYY-MM.json (or FAISS/DPI demo bundle).",
     )
     parser.add_argument(
         "--base-dir",
         default=".",
-        help="Optional base directory for artifacts (default: current dir).",
+        help="Base directory for artifacts (default: current dir, e.g. /opt/crovia).",
     )
     args = parser.parse_args(argv)
 
