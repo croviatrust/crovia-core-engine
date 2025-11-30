@@ -16,8 +16,13 @@ def file_sha256(path: str) -> str:
     return h.hexdigest()
 
 
+def file_size(path: str) -> int:
+    """Return file size in bytes."""
+    return os.path.getsize(path)
+
+
 def read_ndjson_lines(path: str) -> List[bytes]:
-    lines = []
+    lines: List[bytes] = []
     with open(path, "rb") as f:
         for raw in f:
             raw = raw.rstrip(b"\r\n")
@@ -64,7 +69,7 @@ def format_op8(alias: str) -> str:
     return a.ljust(8, "-")
 
 
-def make_crovia_id(period: str, operator_alias: str, payouts_path: str):
+def make_crovia_id(period: str, operator_alias: str, payouts_path: str) -> Tuple[str, str]:
     """
     Build (crovia_id, crovia_id_line) for a given run.
 
@@ -99,7 +104,7 @@ def make_crovia_id(period: str, operator_alias: str, payouts_path: str):
     return crovia_id, crovia_id_line
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Build Merkle summary over payouts NDJSON and a CROVIA trust bundle."
     )
@@ -115,7 +120,7 @@ def main():
     )
     parser.add_argument(
         "--period",
-        default="2025-11",
+        default="2025-11",  # example; override in real runs
         help="Settlement period string (e.g. 2025-11).",
     )
     parser.add_argument(
@@ -153,6 +158,7 @@ def main():
     lines = read_ndjson_lines(payouts_path)
     root_hex, leaf_count = merkle_root_from_lines(lines)
     payouts_sha = file_sha256(payouts_path)
+    payouts_bytes = file_size(payouts_path)
     print(f"[MERKLE] root={root_hex}  leaves={leaf_count}")
     print(f"[MERKLE] payouts.sha256={payouts_sha}")
 
@@ -162,10 +168,11 @@ def main():
         "file": {
             "schema": "payouts.v1",
             "path": payouts_path,
-            "sha256": payouts_sha
+            "size": payouts_bytes,
+            "sha256": payouts_sha,
         },
         "root": root_hex,
-        "leaf_count": leaf_count
+        "leaf_count": leaf_count,
     }
 
     os.makedirs(os.path.dirname(merkle_out), exist_ok=True)
@@ -185,34 +192,38 @@ def main():
     trust_summary_path = "docs/trust_summary.md"
     trust_providers_path = "data/trust_providers.csv"
 
-    artifacts = {}
+    artifacts: dict[str, dict] = {}
 
     artifacts["payouts_ndjson"] = {
         "schema": "payouts.v1",
         "path": payouts_path,
-        "sha256": payouts_sha
+        "size": payouts_bytes,
+        "sha256": payouts_sha,
     }
 
     artifacts["merkle_payouts"] = {
         "schema": "merkle_payouts.v1",
         "path": merkle_out,
+        "size": file_size(merkle_out),
         "sha256": file_sha256(merkle_out),
         "root": root_hex,
-        "leaf_count": leaf_count
+        "leaf_count": leaf_count,
     }
 
     if os.path.exists(trust_summary_path):
         artifacts["trust_summary_md"] = {
             "schema": "text/markdown",
             "path": trust_summary_path,
-            "sha256": file_sha256(trust_summary_path)
+            "size": file_size(trust_summary_path),
+            "sha256": file_sha256(trust_summary_path),
         }
 
     if os.path.exists(trust_providers_path):
         artifacts["trust_providers_csv"] = {
             "schema": "text/csv",
             "path": trust_providers_path,
-            "sha256": file_sha256(trust_providers_path)
+            "size": file_size(trust_providers_path),
+            "sha256": file_sha256(trust_providers_path),
         }
 
     bundle = {
@@ -222,7 +233,7 @@ def main():
         "crovia_id": crovia_id,
         "crovia_id_line": crovia_id_line,
         "model_id": model_id,
-        "artifacts": artifacts
+        "artifacts": artifacts,
     }
 
     os.makedirs(os.path.dirname(bundle_out), exist_ok=True)
@@ -233,3 +244,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
