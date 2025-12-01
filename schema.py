@@ -1,4 +1,19 @@
-﻿from typing import Dict, Any, List
+# Copyright 2025  Tarik En Nakhai
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+from typing import Dict, Any, List
 from jsonschema import Draft202012Validator
 
 # ===========================
@@ -249,3 +264,4 @@ def validate_record(rec: Dict[str, Any]) -> None:
     if not isinstance(s, str) or s not in _VALIDATORS:
         raise ValueError(f"Unknown or missing schema: {s!r}")
     _VALIDATORS[s].validate(rec)
+
