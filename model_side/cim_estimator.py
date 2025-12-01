@@ -1,5 +1,17 @@
-#!/usr/bin/env python3
-# cim_estimator.py — softmax stabile + sinergia a 2 vie (Shapley-2 lite) + (opz.) rumore DP
+# Copyright 2025  Tarik En Nakhai
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 
 from __future__ import annotations
 import numpy as np
@@ -106,3 +118,4 @@ def cim_estimate(
     y = y / (y.sum() + 1e-12)
 
     return y.astype(np.float64), keep_idx.astype(int)
+
