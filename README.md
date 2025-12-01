@@ -185,14 +185,14 @@ as long as you comply with the terms of the Apache-2.0 license.
 
 The full license text is included in the LICENSE file.
 
-Copyright
+## Copyright
 Copyright 2025 Tarik En Nakhai
 
 
 Crovia Core Engine and all original contributions are copyrighted by
 Tarik En Nakhai, the original author and maintainer.
 
-NOTICE
+## NOTICE
 
 This repository includes a NOTICE file, which must be preserved
 in any source or binary redistribution as required by Apache-2.0.
