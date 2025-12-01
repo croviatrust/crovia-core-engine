@@ -167,7 +167,55 @@ out of scope for this repository.
 
 ---
 
-## 5. Contact
+ ## 5.Licensing
+
+This project is released under the Apache License, Version 2.0.
+
+You are free to:
+
+use the code in commercial or academic environments
+
+modify and redistribute it
+
+build closed-source or open-source derivatives
+
+integrate the engine into external pipelines
+
+as long as you comply with the terms of the Apache-2.0 license.
+
+The full license text is included in the LICENSE file.
+
+Copyright
+Copyright 2025 Tarik En Nakhai
+
+
+Crovia Core Engine and all original contributions are copyrighted by
+Tarik En Nakhai, the original author and maintainer.
+
+NOTICE
+
+This repository includes a NOTICE file, which must be preserved
+in any source or binary redistribution as required by Apache-2.0.
+
+The NOTICE currently states:
+
+Crovia Core Engine
+Copyright 2025 Tarik En Nakhai
+
+This product includes components developed by Crovia Trust.
+Website: https://croviatrust.com
+
+First canonical trust bundle:
+CTB-2025-11-HF------8559
+
+Warranty disclaimer
+
+Software is provided “as is”, without warranties or conditions
+of any kind, as described in the license.
+
+For details, see the full Apache License 2.0 text.
+
+## 6. Contact
 
 For questions, integration discussions or to run a **CROVIA-style settlement**
 on your own attribution logs, you can reach:
