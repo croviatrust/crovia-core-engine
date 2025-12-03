@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 #!/usr/bin/env python3
 """
 crovia_validate.py
@@ -221,7 +222,7 @@ def write_markdown_report(
     health: str,
     codes: Counter,
 ) -> None:
-    now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%SZ")
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%SZ")
     with open(path, "w", encoding="utf-8") as f:
         f.write(f"# Crovia NDJSON validation report\n\n")
         f.write(f"- Generated: **{now} UTC**\n")

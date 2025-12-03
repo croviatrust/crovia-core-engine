@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 # Copyright 2025  Tarik En Nakhai
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -177,7 +178,7 @@ def load_stats():
 
 def save_stats(stats: dict) -> None:
     """Salva le statistiche sandbox nel file JSON."""
-    stats["last_update"] = datetime.utcnow().isoformat() + "Z"
+    stats["last_update"] = datetime.now(timezone.utc).isoformat() + "Z"
     STATS_FILE.write_text(json.dumps(stats, indent=2))
 
 
