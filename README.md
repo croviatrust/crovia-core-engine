@@ -1,228 +1,243 @@
+
 # CROVIA Core Engine
 
 CROVIA is a **settlement and evidence engine** for AI data attribution.
 
-This repository contains an **open-core demo** that shows how to turn
-attribution logs into:
+This repository contains an open-core demo that shows how to turn attribution logs into:
 
 - per-provider **trust / priority metrics**
-- monthly **payouts** (`payouts.v1`)
+- monthly **payouts** (payouts.v1)
 - **Crovian Floors v1.1** (coverage-based minimums)
-- a **hash-chain** over the logs (receipts, payouts, etc.)
-- a sign-ready **Trust Bundle JSON** suitable for audit and governance
+- a **SHA-256 hash-chain** over receipts / payouts
+- a sign-ready **Trust Bundle JSON** (trust_bundle.v1) for audit and governance
+- optional **AI Act documentation**, schema validation, **CEP evidence blocks**
 
-The demo uses:
-
-- a **FAISS-based attribution log** (open-core, synthetic / demo-grade), and
-- a **DPI payout example** with a `crovia_trust_bundle.v1` JSON.
-
-> All numbers in this repository are **demo-only** and do *not* represent
-> real commercial contracts or real providers.
+_All numbers in this repository are demo-only and do not represent real commercial contracts or real providers._
 
 ---
 
-## 1. FAISS open-core demo (period 2025-11)
+# 1. FAISS open-core demo (period 2025-11)
 
-The FAISS open-core demo is wired to:
+The demo is wired to:
 
-- `../data/royalty_from_faiss.ndjson`  
-  (`royalty_receipt.v1`, attribution log with 200 outputs and 4 providers)
+- data/royalty_from_faiss.ndjson
 
-The main scripts involved are:
+A synthetic FAISS attribution log (royalty_receipt.v1) with:
 
-- `qa_receipts.py` – quick QA over `royalty_receipt.v1` NDJSON
-- `crovia_trust.py` – trust / priority aggregation per provider
-- `payouts_from_royalties.py` – monthly payouts (`payouts.v1`)
-- `crovia_floor.py` – Crovian Floors v1.1 from `trust_providers.csv`
-- `hashchain_writer.py` / `verify_hashchain.py` – SHA-256 hash-chain over NDJSON
-- `run_period.py` – orchestrates a full period run (trust + payouts + floors + proofs)
-- `trust_bundle_validator.py` – standalone validator for `crovia_trust_bundle.v1` JSON
+- 200 outputs  
+- 4 providers
 
-Key documentation for this demo:
+## Main components
 
-- `docs/CROVIA_FAISS_DEMO.md`  
-  FAISS attribution evidence demo (FAISS log → payouts → bundle).
+- qa_receipts.py — QA checks on receipts  
+- crovia_trust.py — trust / priority aggregation  
+- payouts_from_royalties.py — monthly payouts (payouts.v1)  
+- crovia_floor.py — Crovian Floors v1.1  
+- hashchain_writer.py / verify_hashchain.py — SHA-256 hash-chain  
+- run_period.py — orchestrator (trust → payouts → floors → proofs)  
+- trust_bundle_validator.py — validator for trust_bundle.v1  
 
-- `docs/README_PAYOUT_2025-11.md`  
-  Payout / concentration charts for the 2025-11 demo.
+## Key documentation
 
-- `docs/CROVIA_WEB_TRUST_PAYOUT_2025-11.md`  
-  Web-oriented summary of trust & payouts for 2025-11.
-
-- `docs/CROVIA_OPEN_CORE_FAISS_2025-11_OVERVIEW.md`  
-  Operator / auditor overview for the FAISS open-core demo.
+- docs/CROVIA_FAISS_DEMO.md  
+- docs/README_PAYOUT_2025-11.md  
+- docs/CROVIA_WEB_TRUST_PAYOUT_2025-11.md  
+- docs/CROVIA_OPEN_CORE_FAISS_2025-11_OVERVIEW.md  
+- docs/CROVIA_TRUST_BUNDLE_v1.md  
 
 ---
 
-## 2. Quickstart – re-running the FAISS demo
+# 2. Quickstart – running the 2025-11 demo
 
-### 2.1 Environment
+## 2.1 Environment setup
 
-You need Python 3.10+ and a virtualenv. Typical setup:
+cd /opt/crovia  
+python -m venv .venv  
+source .venv/bin/activate  
+pip install -r requirements.txt
 
-    cd /opt/crovia_staging/open_core
-    python -m venv ../.venv
-    source ../.venv/bin/activate
-    pip install -r requirements.txt    # if provided
+## 2.2 Full period run
 
-Make sure the FAISS attribution log is present at:
+python run_period.py  
+  --period 2025-11  
+  --eur-total 1000000  
+  --receipts data/royalty_from_faiss.ndjson  
+  --min-appear 1
 
-    ../data/royalty_from_faiss.ndjson
+### This will:
 
-### 2.2 Run the full period (2025-11)
+- Run QA  
+- Compute trust metrics  
+- (Optional) run schema validation (crovia_validate.py)  
+- (Optional) run AI-Act helpers (compliance_ai_act.py)  
+- Compute payouts  
+- Generate charts  
+- Build & verify a hash-chain  
+- Compute Crovian Floors  
+- (Optional) build a Trust Bundle  
 
-    cd /opt/crovia_staging/open_core
-    source ../.venv/bin/activate
+### Artifacts generated
 
-    python run_period.py \
-      --period 2025-11 \
-      --eur-total 1000000 \
-      --receipts ../data/royalty_from_faiss.ndjson \
-      --min-appear 1
-
-This will:
-
-- QA the receipts (`qa_receipts.py`)
-- Aggregate trust / priority metrics (`crovia_trust.py`)
-- Optionally run schema / business validation (`crovia_validate.py` if present)
-- Optionally run AI Act helpers (`compliance_ai_act.py` if present)
-- Compute payouts (`payouts_from_royalties.py`)
-- Generate payout charts (`make_payout_charts.py`, if present)
-- Build a hash-chain over the receipts (`hashchain_writer.py`)
-- Verify the hash-chain (`verify_hashchain.py`)
-- Optionally build a Trust Bundle (`make_trust_bundle.py`, if present)
-- Compute Crovian Floors v1.1 (`crovia_floor.py`)
-- Optionally augment the bundle (`augment_trust_bundle.py`, if present)
-
-On success you should see something like:
-
-    === CROVIA PERIOD RUN COMPLETED ===
-
-and the following artifacts (among others):
-
-- `data/trust_providers.csv`
-- `docs/trust_summary.md`
-- `data/payouts_2025-11.csv`
-- `data/payouts_2025-11.ndjson`
-- `data/floors_2025-11.json`
-- `charts/payout_top10_2025-11.png`
-- `charts/payout_cumulative_2025-11.png`
-- `proofs/hashchain_royalty_from_faiss.ndjson__*.txt`
-
-For a more detailed operator view, see:  
-`docs/CROVIA_OPEN_CORE_FAISS_2025-11_OVERVIEW.md`.
+- data/trust_providers.csv  
+- docs/trust_summary.md  
+- data/payouts_2025-11.csv  
+- data/payouts_2025-11.ndjson  
+- data/floors_2025-11.json  
+- charts/payout_top10_2025-11.png  
+- charts/payout_cumulative_2025-11.png  
+- proofs/hashchain_*.txt  
 
 ---
 
-## 3. DPI demo – Trust Bundle example
+# 3. DPI demo – Trust Bundle example
 
-The repository also ships a **Data Provenance Initiative (DPI)** payout demo,
-including a `crovia_trust_bundle.v1` JSON that ties together:
+This repository includes a small DPI demo showing:
 
-- DPI-based `royalty_receipt.v1` logs
-- `payouts.v1` per provider
-- trust / priority CSVs
-- AI-Act-style compliance artefacts
-- SHA-256 digests for all referenced files
+- DPI-based royalty_receipt.v1 logs  
+- payouts, floors, trust CSVs  
+- AI Act-style documentation  
+- SHA-256 evidence digests inside trust_bundle.v1  
 
-You can validate the demo bundle as follows:
+## Validate the bundle
 
-    cd /opt/crovia_staging/open_core
-    source ../.venv/bin/activate
+python trust_bundle_validator.py  
+  --bundle demo_dpi_2025-11/output/trust_bundle_2025-11.json  
+  --base-dir /opt/crovia
 
-    python trust_bundle_validator.py \
-      --bundle demo_dpi_2025-11/output/trust_bundle_2025-11.json \
-      --base-dir /opt/crovia
+If all hashes match:
 
-Expected output (abridged):
-
-    [*] Loading bundle: .../trust_bundle_2025-11.json
-        schema=crovia_trust_bundle.v1  period=2025-11
-
-    === Artifact verification ===
-    - payouts_ndjson
-      ...
-    [RESULT] Bundle OK: all declared artifacts match size and sha256.
-
-This shows how a single Trust Bundle can act as a **hash-addressable evidence pack**
-for auditors, regulators and partners.
-
-For a full profile of `trust_bundle.v1`, see:  
-`docs/CROVIA_TRUST_BUNDLE_v1.md`.
+**Bundle OK: all declared artifacts match size and sha256.**
 
 ---
 
-## 4. Status and scope
+# 4. Validation, AI Act & Evidence Tools
+
+## 4.1 Schema & QA – crovia_validate.py
+
+Validates royalty_receipt.v1 NDJSON:
+
+- schema correctness  
+- share ≈ 1.0 checks  
+- rank ordering  
+- malformed/suspicious rows  
+
+Produces:
+
+- Markdown validation report  
+- sample failing rows  
+
+Example:
+
+python crovia_validate.py data/royalty.ndjson  
+  --out-md docs/VALIDATE_report.md  
+  --out-bad data/royalty_bad_sample.ndjson
+
+Outputs:
+
+- docs/VALIDATE_*.md  
+- data/*_bad_sample.ndjson  
+
+---
+
+## 4.2 AI Act Annex IV — compliance_ai_act.py
+
+Generates lightweight Annex-IV-style documentation:
+
+- provider & shard distribution  
+- provenance hints  
+- concentration & risk signals  
+- gaps file  
+- JSON compliance pack  
+
+Run:
+
+python compliance_ai_act.py data/royalty.ndjson  
+  --out-summary docs/AI_ACT_summary.md  
+  --out-gaps data/AI_ACT_gaps.ndjson  
+  --out-pack data/AI_ACT_pack.json
+
+---
+
+## 4.3 CCL Validation — tools/ccl_validate.py
+
+Validates CCL v1.1 JSON descriptors for:
+
+- models  
+- datasets  
+- RAG indices  
+- APIs / tools  
+
+Run:
+
+python tools/ccl_validate.py my_model.ccl.json
+
+---
+
+## 4.4 CEP Evidence Protocol v1 — docs/CROVIA_CEP_v1.md
+
+CROVIA CEP.v1 is a compact, verifiable block for:
+
+- Hugging Face model cards  
+- research papers  
+- audit packs  
+
+Generated via:
+
+python tools/crovia_generate_cep.py  
+  --trust-bundle trust_bundle.json  
+  --period 2025-11  
+  --receipts data/royalty.ndjson  
+  --payouts data/payouts.csv  
+  --hashchain proofs/hashchain_*.txt  
+  --engine-version demo-2025  
+  --output-format yaml
+
+Includes:
+
+- SHA-256 of receipts / payouts / bundle  
+- hash-chain root  
+- trust metrics (avg_top1_share, DP epsilon min/max, CI indicators)  
+- generation metadata  
+
+Full spec → docs/CROVIA_CEP_v1.md
+
+---
+
+# 5. Status & scope
 
 This repository is:
 
-- **Open-core** – focused on the core attribution → payouts → floors → proofs pipeline.
-- **Demo-grade** – data and identifiers are synthetic or anonymized.
-- **Engine-first** – the goal is to provide a transparent, testable engine
-  that others can integrate into their own AI data pipelines.
+- **Open-core** → attribution → trust → payouts → floors → proofs  
+- **Demo-grade** → synthetic identifiers and numbers  
+- **Evidence-first** → transparency, auditability, reproducibility  
 
-Governance / contract layers (e.g. Crovian Floor Clause, provider registries,
-KYC tiers) may live in separate, closed or hybrid components and are
-out of scope for this repository.
+Business logic, contracts, billing, CCT-attested tokens and settlement overrides belong to the **private PRO engine**, not this repo.
 
 ---
 
- ## 5.Licensing
+# 6. Licensing
 
-This project is released under the Apache License, Version 2.0.
+Apache License 2.0
 
-You are free to:
+Permitted:
 
-use the code in commercial or academic environments
+- commercial & academic use  
+- modification & redistribution  
+- closed or open derivatives  
+- integration in external pipelines  
 
-modify and redistribute it
+See LICENSE file.
 
-build closed-source or open-source derivatives
+© 2025 — Tarik En Nakhai — Crovia Core Engine
 
-integrate the engine into external pipelines
+---
 
-as long as you comply with the terms of the Apache-2.0 license.
+# 7. Contact
 
-The full license text is included in the LICENSE file.
-
-## Copyright
-Copyright 2025 Tarik En Nakhai
+info@croviatrust.com  
+https://croviatrust.com
 
 
-Crovia Core Engine and all original contributions are copyrighted by
-Tarik En Nakhai, the original author and maintainer.
-
-## NOTICE
-
-This repository includes a NOTICE file, which must be preserved
-in any source or binary redistribution as required by Apache-2.0.
-
-The NOTICE currently states:
-
-Crovia Core Engine
-Copyright 2025 Tarik En Nakhai
-
-This product includes components developed by Crovia Trust.
-Website: https://croviatrust.com
-
-First canonical trust bundle:
-CTB-2025-11-HF------8559
-
-Warranty disclaimer
-
-Software is provided “as is”, without warranties or conditions
-of any kind, as described in the license.
-
-For details, see the full Apache License 2.0 text.
-
-## 6. Contact
-
-For questions, integration discussions or to run a **CROVIA-style settlement**
-on your own attribution logs, you can reach:
-
-    info@croviatrust.com
-
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
     
     
 
