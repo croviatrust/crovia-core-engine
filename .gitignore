@@ -1,14 +1,21 @@
+# Python venv and caches
+.venv/
 __pycache__/
 *.pyc
-*.pye
-*.bak*
-*.tgz
 
-# Nessun dato grezzo qui dentro
-data/*
-!data/schema/
-!data/schema/crovia_trust_bundle.v1.json
+# Local editor / OS files
+.DS_Store
 
-# Sandbox locali (non dovrebbero esserci, ma per sicurezza)
-sandbox_runs/
-sandbox_stats.json
+# CROVIA demo artifacts (not source)
+evidence/
+proofs/
+README_PAYOUT_2025-11.md
+compliance_summary.md
+trust_summary.md
+validate_report.md
+
+docs/VALIDATE_report_*.md
+docs/AI_ACT_summary_*.md
+
+# Future "latest" style outputs (AI Act, validate, etc.)
+*_*_latest.*
