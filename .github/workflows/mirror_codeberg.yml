@@ -1,23 +1,37 @@
-name: Mirror to Codeberg
+name: Mirror GitHub → Codeberg
 
 on:
   push:
     branches:
-      - main
+      - main          # ogni push su main
+  workflow_dispatch:  # pulsante "Run workflow" a mano
+  schedule:
+    - cron: "*/30 * * * *"   # ogni 30 minuti
 
 jobs:
-  sync:
+  mirror:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0      # prende tutta la history, non solo l’ultimo commit
 
-      - name: Push to Codeberg (mirror)
+      - name: Configure Git identity
         run: |
-          git remote add codeberg https://croviatrust:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/croviatrust/crovia-core-engine.git || git remote set-url codeberg https://croviatrust:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/croviatrust/crovia-core-engine.git
-          git push --mirror codeberg
+          git config --global user.name "Crovia Mirror Bot"
+          git config --global user.email "mirror-bot@croviatrust.com"
+
+      - name: Push to Codeberg
+        env:
+          CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+        run: |
+          # aggiunge il remote Codeberg usando il token
+          git remote add codeberg "https://croviatrust:${CODEBERG_TOKEN}@codeberg.org/croviatrust/crovia-core-engine.git" || git remote set-url codeberg "https://croviatrust:${CODEBERG_TOKEN}@codeberg.org/croviatrust/crovia-core-engine.git"
+
+          # push del ramo main
+          git push --force --prune codeberg main
+
+          # push dei tag (se in futuro li userai)
+          git push --force --prune --tags codeberg
