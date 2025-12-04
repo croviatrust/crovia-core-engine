@@ -87,7 +87,19 @@ For a detailed operator view, see:
 
 docs/CROVIA_OPEN_CORE_FAISS_2025-11_OVERVIEW.md
 
----
+## 2.3 Running the entire demo via C-LINE (recommended)
+
+C-LINE is the unified command-line interface for the CROVIA Core Engine.
+It wraps all internal scripts (validation, trust, payouts, floors, hash-chain,
+AI Act helpers, ZIP evidence builder) into a single, user-friendly CLI.
+
+Run the full 2025-11 demo with one command:
+
+```bash
+python tools/c_line.py demo
+# future installation:
+#   c-line demo
+
 
 # 3. DPI demo – Trust Bundle example
 
