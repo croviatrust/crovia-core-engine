@@ -6,9 +6,9 @@ This repository contains an **open-core demo** that shows how to turn attributio
 
 - per-provider trust / priority metrics  
 - monthly payouts (`payouts.v1`)  
-- **Crovian Floors v1.1**  
+- **Crovian Floors v1.1** (coverage-based minimums)  
 - a SHA-256 hash-chain over receipts / payouts  
-- a sign-ready **Trust Bundle JSON** (`trust_bundle.v1`)  
+- a sign-ready **Trust Bundle JSON** (`trust_bundle.v1`) for audit and governance  
 - optional **AI Act documentation**, schema validation, **CEP evidence blocks**
 
 All numbers in this repository are demo-only and do not represent real commercial contracts or real providers.
@@ -24,16 +24,16 @@ data/royalty_from_faiss.ndjson
 markdown
 Copia codice
 
-A synthetic FAISS attribution log (royalty_receipt.v1) with **200 outputs** and **4 providers**.
+A synthetic FAISS attribution log (`royalty_receipt.v1`) with **200 outputs** and **4 providers**.
 
 ## 1.1 Main components
 
 - `qa_receipts.py` — QA checks on receipts  
 - `crovia_trust.py` — trust / priority aggregation  
-- `payouts_from_royalties.py` — monthly payouts  
+- `payouts_from_royalties.py` — monthly payouts (`payouts.v1`)  
 - `crovia_floor.py` — Crovian Floors v1.1  
 - `hashchain_writer.py` / `verify_hashchain.py` — SHA-256 hash-chain  
-- `run_period.py` — orchestrator (trust → payouts → floors → proofs)  
+- `run_period.py` — orchestrator  
 - `trust_bundle_validator.py` — validator for trust_bundle.v1  
 
 ## 1.2 Key documentation
@@ -42,7 +42,7 @@ A synthetic FAISS attribution log (royalty_receipt.v1) with **200 outputs** and 
 - `docs/README_PAYOUT_2025-11.md`  
 - `docs/CROVIA_WEB_TRUST_PAYOUT_2025-11.md`  
 - `docs/CROVIA_OPEN_CORE_FAISS_2025-11_OVERVIEW.md`  
-- `docs/CROVIA_TRUST_BUNDLE_v1.md`  
+- `docs/CROVIA_TRUST_BUNDLE_v1.md`
 
 ---
 
@@ -69,9 +69,9 @@ Run QA
 
 Compute trust metrics
 
-(Optional) run schema validation
+(Optional) run schema validation (crovia_validate.py)
 
-(Optional) run AI-Act helpers
+(Optional) run AI Act helpers (compliance_ai_act.py)
 
 Compute payouts
 
@@ -95,7 +95,7 @@ data/floors_2025-11.json
 charts/payout_top10_2025-11.png
 charts/payout_cumulative_2025-11.png
 proofs/hashchain_*.txt
-For a detailed operator overview:
+For a detailed operator view:
 
 Copia codice
 docs/CROVIA_OPEN_CORE_FAISS_2025-11_OVERVIEW.md
@@ -113,23 +113,23 @@ python tools/c_line.py demo
 #   c-line demo
 This will automatically:
 
-validate the receipts NDJSON
+Validate the receipts NDJSON
 
-run trust aggregation
+Run trust aggregation
 
-compute payouts (payouts.v1)
+Compute payouts (payouts.v1)
 
-generate payout charts
+Generate payout charts
 
-compute Crovian Floors v1.1
+Compute Crovian Floors v1.1
 
-run AI Act Annex-IV documentation helpers
+Run AI Act Annex-IV documentation helpers
 
-write a SHA-256 hash-chain and verify it
+Write a SHA-256 hash-chain and verify it
 
-collect all artifacts into a ZIP evidence pack
+Collect all artifacts into a ZIP evidence pack
 
-generate a QR code pointing to the pack
+Generate a QR code pointing to the evidence pack
 
 Artifacts produced:
 
@@ -153,7 +153,7 @@ payouts, floors, trust CSVs
 
 AI Act-style documentation
 
-SHA-256 digests consolidated in trust_bundle.v1
+SHA-256 evidence digests consolidated in trust_bundle.v1
 
 Validate the bundle:
 
@@ -162,7 +162,7 @@ Copia codice
 python trust_bundle_validator.py \
   --bundle demo_dpi_2025-11/output/trust_bundle_2025-11.json \
   --base-dir /opt/crovia
-Expected output (abridged):
+Expected output:
 
 sql
 Copia codice
@@ -170,9 +170,8 @@ Copia codice
 schema=crovia_trust_bundle.v1  period=2025-11
 
 === Artifact verification ===
-...
 [RESULT] Bundle OK: all declared artifacts match size and sha256.
-Full profile in:
+Full profile:
 
 Copia codice
 docs/CROVIA_TRUST_BUNDLE_v1.md
@@ -196,7 +195,7 @@ python compliance_ai_act.py data/royalty.ndjson \
   --out-summary docs/AI_ACT_summary.md \
   --out-gaps data/AI_ACT_gaps.ndjson \
   --out-pack data/AI_ACT_pack.json
-4.3 CCL Validation — ccl_validate.py
+4.3 CCL Validation — tools/ccl_validate.py
 bash
 Copia codice
 python tools/ccl_validate.py my_model.ccl.json
@@ -228,13 +227,15 @@ Demo-grade
 
 Evidence-first
 
-Business logic, contracts, billing, CCT-attested tokens live in the private PRO engine.
+Business logic, contracts, billing, CCT-attested tokens, and settlement overrides
+live in the private PRO engine, not here.
 
 6. Licensing
 Apache License 2.0
 
 7. Copyright
 © 2025 — Tarik En Nakhai
+Crovia Core Engine
 
 8. Contact
 css
