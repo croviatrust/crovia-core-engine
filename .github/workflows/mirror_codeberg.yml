@@ -6,28 +6,18 @@ on:
       - main
 
 jobs:
-  mirror:
+  sync:
     runs-on: ubuntu-latest
-
-    env:
-      CODEBERG_PUSH_TOKEN: ${{ secrets.CODEBERG_PUSH_TOKEN }}
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Configure Git identity
+      - name: Push to Codeberg (mirror)
         run: |
-          git config --global user.name "Crovia Mirror Bot"
-          git config --global user.email "mirror@crovia.dev"
-
-      - name: Add Codeberg remote
-        run: |
-          # pulizia in caso esista già
-          git remote remove codeberg 2>/dev/null || true
-          git remote add codeberg https://token:${CODEBERG_PUSH_TOKEN}@codeberg.org/croviatrust/crovia-core-engine.git
-
-      - name: Push all branches and tags to Codeberg
-        run: |
-          git push --force --all codeberg
-          git push --force --tags codeberg
+          git remote add codeberg https://croviatrust:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/croviatrust/crovia-core-engine.git || git remote set-url codeberg https://croviatrust:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/croviatrust/crovia-core-engine.git
+          git push --mirror codeberg
