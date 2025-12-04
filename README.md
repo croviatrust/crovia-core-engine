@@ -146,6 +146,7 @@ You can also install the CROVIA Core Engine as a local CLI inside a virtualenv:
 ```bash
 pip install -e .
 c-line demo
+```
 This will install the c-line entrypoint in your environment and run the full
 CROVIA demo pipeline (validation → trust → payouts → floors → hash-chain →
 AI Act helpers → ZIP + QR evidence pack) with a single command.
