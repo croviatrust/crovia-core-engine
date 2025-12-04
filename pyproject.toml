@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crovia-core-engine"
+version = "0.1.0"
+description = "CROVIA Core Engine — settlement & evidence engine for AI data attribution."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+authors = [
+  { name = "Tarik En Nakhai" }
+]
+keywords = [
+  "ai",
+  "data attribution",
+  "royalties",
+  "evidence",
+  "provenance",
+  "eu-ai-act",
+  "crovia"
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Legal Industry",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Topic :: Security :: Cryptography",
+]
+
+# Dipendenze minime per far girare la demo via C-LINE
+dependencies = [
+  "pydantic>=1.10,<3",
+  "pandas>=2.0",
+  "matplotlib>=3.6",
+  "numpy>=1.24",
+  "pyyaml>=6.0",
+  "rich>=13.0",
+  "qrcode[pil]>=7.4",
+]
+
+[project.scripts]
+# Questo crea il comando "c-line" nel venv
+c-line = "tools.c_line:main"
+
+[tool.setuptools]
+# Disattiva l'autodiscovery e dice esplicitamente:
+# "l'unico package Python è 'tools'"
+packages = ["tools"]
