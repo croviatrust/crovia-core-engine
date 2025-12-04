@@ -1,14 +1,3 @@
-Ok, lo rifacciamo **da zero**, pulito.
-
-Qui sotto c’è **l’intero README.md corretto**.
-Su GitHub verrà visualizzato bene: titoli come titoli, codice nelle “celle” con pulsante di copia, niente casino dal punto 2.1 in poi.
-
-👉 **Cosa devi fare tu:**
-Copia **tutto il contenuto tra la prima riga `# CROVIA Core Engine` e la fine**, senza includere i tre backtick iniziali e finali.
-
----
-
-````markdown
 # CROVIA Core Engine
 
 CROVIA is a **settlement and evidence engine** for AI data attribution.
@@ -24,15 +13,15 @@ This repository contains an **open-core demo** that shows how to turn attributio
 
 All numbers in this repository are demo-only and do not represent real commercial contracts or real providers.
 
----
+
 
 # 1. FAISS open-core demo (period 2025-11)
 
 The demo is wired to:
 
-```text
+
 data/royalty_from_faiss.ndjson
-````
+
 
 A synthetic FAISS attribution log (`royalty_receipt.v1`) with **200 outputs** and **4 providers**.
 
