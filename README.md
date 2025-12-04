@@ -95,7 +95,6 @@ AI Act helpers, ZIP evidence builder) into a single, user-friendly CLI.
 
 Run the full 2025-11 demo with one command:
 
-```bash
 python tools/c_line.py demo
 # future installation:
 #   c-line demo
