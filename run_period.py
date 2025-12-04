@@ -111,9 +111,8 @@ def main() -> None:
             [
                 venv_python,
                 "crovia_validate.py",
+                str(receipts_path)
                 "--out-md",
-                str(receipts_path),
-                "--out-report",
                 "validate_report.md",
                 "--out-bad",
                 "validate_sample_bad.jsonl",
