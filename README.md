@@ -139,7 +139,16 @@ data/floors_2025-11.json
 
 **C-LINE v1.0** turns the CROVIA demo into a *single-shot reproducible evidence pipeline*.
 
----
+# 2.4 Install as a CLI (C-LINE)
+
+You can also install the CROVIA Core Engine as a local CLI inside a virtualenv:
+
+```bash
+pip install -e .
+c-line demo
+This will install the c-line entrypoint in your environment and run the full
+CROVIA demo pipeline (validation → trust → payouts → floors → hash-chain →
+AI Act helpers → ZIP + QR evidence pack) with a single command.
 
 # 3. DPI demo – Trust Bundle example
 
