@@ -131,7 +131,6 @@ def main() -> None:
             [
                 venv_python,
                 "compliance_ai_act.py",
-                "--input",
                 str(receipts_path),
                 "--out-summary",
                 "compliance_summary.md",
