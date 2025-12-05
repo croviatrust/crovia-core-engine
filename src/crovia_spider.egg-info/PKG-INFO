@@ -1,0 +1,56 @@
+Metadata-Version: 2.4
+Name: crovia-spider
+Version: 0.1.0
+Summary: Crovia Spider — turn open training corpora into spider_receipt.v1 logs.
+Author-email: Crovia Trust <info@croviatrust.com>
+License: Apache-2.0
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: NOTICE
+Requires-Dist: pandas>=2.1.0
+Requires-Dist: pyarrow>=15.0.0
+Dynamic: license-file
+
+# Crovia Spider
+
+**“If it’s already in the open training datasets of 2025–2026, it already has a Crovia receipt.”**
+
+Crovia Spider turns existing open training corpora (e.g. LAION, C4, The Stack) into
+standardized `spider_receipt.v1` NDJSON logs.
+
+A `spider_receipt.v1` is the minimal unit of Crovia's awareness of a content item
+in the training data ecosystem.
+
+This repository contains:
+
+- the formal spec: `docs/CROVIA_SPIDER_RECEIPT_v1.md`
+- a reference implementation to generate receipts from LAION-style metadata
+- a CLI: `crovia-spider from-laion ...`
+
+## Quick start
+
+Clone and install:
+
+    git clone https://github.com/croviatrust/crovia-spider.git
+    cd crovia-spider
+
+    python -m venv .venv
+    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+    pip install -U pip
+    pip install .
+
+    crovia-spider --help
+
+Example (LAION-style Parquet → spider_receipt NDJSON):
+
+    crovia-spider from-laion \
+      --metadata-path /data/laion/laion2B-en-meta.parquet \
+      --out data/receipts_laion_sample.ndjson \
+      --period 2025-12 \
+      --sample 100000
+
+This will produce an NDJSON file where each line is a valid `spider_receipt.v1`.
+
+See `docs/CROVIA_SPIDER_RECEIPT_v1.md` for the full specification.

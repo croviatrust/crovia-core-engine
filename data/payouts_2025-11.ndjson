@@ -1,0 +1,4 @@
+{"schema": "payouts.v1", "provider_id": "publisher_A", "period": "2025-11", "currency": "EUR", "amount": 401144.52, "share_agg": 0.40114453, "gross_revenue": 1000000.0, "policies_applied": []}
+{"schema": "payouts.v1", "provider_id": "research_C", "period": "2025-11", "currency": "EUR", "amount": 211025.21, "share_agg": 0.21102521, "gross_revenue": 1000000.0, "policies_applied": []}
+{"schema": "payouts.v1", "provider_id": "open_d", "period": "2025-11", "currency": "EUR", "amount": 200367.85, "share_agg": 0.20036785, "gross_revenue": 1000000.0, "policies_applied": []}
+{"schema": "payouts.v1", "provider_id": "publisher_B", "period": "2025-11", "currency": "EUR", "amount": 187462.42, "share_agg": 0.18746242, "gross_revenue": 1000000.0, "policies_applied": []}

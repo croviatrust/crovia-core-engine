@@ -1,0 +1,10 @@
+{
+  "period": "2025-11",
+  "eur_total": 1000000.0,
+  "currency": "EUR",
+  "min_amount": 0.0,
+  "cap_top1": null,
+  "cap_top3": null,
+  "exclusions": [],
+  "reconcile_after_min": false
+}

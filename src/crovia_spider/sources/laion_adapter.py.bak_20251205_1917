@@ -1,0 +1,69 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Dict, Iterable, Optional
+
+import pandas as pd
+
+from ..core.receipts import create_spider_receipt
+
+
+def iter_laion_spider_receipts(
+    metadata_path: str | Path,
+    *,
+    period: str,
+    dataset_origin: str = "LAION-5B",
+    sample: Optional[int] = None,
+) -> Iterable[Dict]:
+    """
+    Yield `spider_receipt.v1` objects from a LAION-style metadata Parquet file.
+
+    Expected columns (case-insensitive):
+      - 'URL' or 'url' (required)
+      - 'LICENSE' or 'license' (optional)
+      - 'NSFW' or 'nsfw' (optional)
+
+    For v0 we load the whole Parquet into memory; for huge files,
+    consider pre-filtering or sampling.
+    """
+    meta_path = Path(metadata_path)
+    if not meta_path.exists():
+        raise FileNotFoundError(f"Metadata file not found: {meta_path}")
+
+    df = pd.read_parquet(meta_path)
+    if sample is not None and sample > 0 and sample < len(df):
+        df = df.sample(n=sample, random_state=42)
+
+    # Normalize column names to lowercase
+    df.columns = [c.lower() for c in df.columns]
+
+    if "url" not in df.columns:
+        raise ValueError("LAION metadata must contain 'URL' or 'url' column.")
+
+    url_col = "url"
+    license_col = "license" if "license" in df.columns else None
+    nsfw_col = "nsfw" if "nsfw" in df.columns else None
+
+    for _, row in df.iterrows():
+        url = str(row[url_col]).strip()
+        if not url:
+            continue
+
+        license_hint = None
+        if license_col is not None and row[license_col] is not None:
+            license_hint = str(row[license_col]).strip() or None
+
+        metadata = {}
+        if nsfw_col is not None:
+            val = row[nsfw_col]
+            if val is not None:
+                # LAION nsfw may be float, int, or string; normalize best-effort
+                metadata["nsfw"] = bool(val) if isinstance(val, (bool, int)) else val
+
+        yield create_spider_receipt(
+            source_url=url,
+            dataset_origin=dataset_origin,
+            period=period,
+            license_hint=license_hint,
+            metadata=metadata or None,
+        )

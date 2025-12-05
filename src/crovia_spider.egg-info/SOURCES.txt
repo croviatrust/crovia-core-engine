@@ -1,0 +1,16 @@
+LICENSE
+NOTICE
+README.md
+pyproject.toml
+src/crovia_spider/__init__.py
+src/crovia_spider/cli.py
+src/crovia_spider/version.py
+src/crovia_spider.egg-info/PKG-INFO
+src/crovia_spider.egg-info/SOURCES.txt
+src/crovia_spider.egg-info/dependency_links.txt
+src/crovia_spider.egg-info/entry_points.txt
+src/crovia_spider.egg-info/requires.txt
+src/crovia_spider.egg-info/top_level.txt
+src/crovia_spider/core/receipts.py
+src/crovia_spider/core/validate.py
+src/crovia_spider/sources/laion_adapter.py

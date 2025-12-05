@@ -1,0 +1,70 @@
+{
+  "schema": "crovia_ai_act_compliance_pack.v1",
+  "summary": {
+    "schema": "crovia_training_data_summary.v1",
+    "source_schema": "royalty_receipt.v1",
+    "input_file": "royalty_from_faiss.ndjson",
+    "generated_at": "2025-12-05T19:55:22.389297Z",
+    "total_lines": 200,
+    "valid_schema_records": 200,
+    "bad_share_sum_records": 0,
+    "providers_count": 4,
+    "shards_count": 5,
+    "epsilon_dp": {
+      "min": 0.0,
+      "max": 0.0
+    },
+    "top_providers_by_share": [
+      {
+        "provider_id": "publisher_A",
+        "share_fraction": 80.228905
+      },
+      {
+        "provider_id": "research_C",
+        "share_fraction": 42.205041
+      },
+      {
+        "provider_id": "open_d",
+        "share_fraction": 40.07357
+      },
+      {
+        "provider_id": "publisher_B",
+        "share_fraction": 37.492484
+      }
+    ],
+    "top_shards_by_share": [
+      {
+        "shard_id": "resC_corpus_v3",
+        "share_fraction": 42.205041
+      },
+      {
+        "shard_id": "pubA_news_2023",
+        "share_fraction": 40.913001
+      },
+      {
+        "shard_id": "openD_misc_pack",
+        "share_fraction": 40.07357
+      },
+      {
+        "shard_id": "pubA_news_2022",
+        "share_fraction": 39.315905
+      },
+      {
+        "shard_id": "pubB_forum_2021",
+        "share_fraction": 37.492484
+      }
+    ],
+    "licenses": [],
+    "license_families": [],
+    "regions": [],
+    "source_types": [],
+    "purposes": [],
+    "collection_channels": [],
+    "gaps_count": 2400,
+    "first_line": 1,
+    "last_line": 200
+  },
+  "gaps_file": "compliance_gaps.csv",
+  "gaps_count": 2400,
+  "created_at": "2025-12-05T19:55:22.398529Z"
+}

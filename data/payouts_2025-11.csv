@@ -1,0 +1,5 @@
+provider_id,period,currency,gross_revenue,share_agg,amount,policies_applied
+publisher_A,2025-11,EUR,1000000.00,0.401145,401144.52,
+research_C,2025-11,EUR,1000000.00,0.211025,211025.21,
+open_d,2025-11,EUR,1000000.00,0.200368,200367.85,
+publisher_B,2025-11,EUR,1000000.00,0.187462,187462.42,

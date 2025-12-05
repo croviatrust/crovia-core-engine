@@ -1,0 +1,43 @@
+{
+  "period": "2025-11",
+  "budget_total_eur": 1000000.0,
+  "coverage_sum": 2.69,
+  "providers": [
+    {
+      "provider_id": "publisher_A",
+      "coverage_bound": 0.935,
+      "eligible": true,
+      "kyc_tier": null,
+      "status": null,
+      "display_name": null,
+      "floor_eur": 0.0
+    },
+    {
+      "provider_id": "research_C",
+      "coverage_bound": 0.59,
+      "eligible": true,
+      "kyc_tier": null,
+      "status": null,
+      "display_name": null,
+      "floor_eur": 0.0
+    },
+    {
+      "provider_id": "open_d",
+      "coverage_bound": 0.595,
+      "eligible": true,
+      "kyc_tier": null,
+      "status": null,
+      "display_name": null,
+      "floor_eur": 0.0
+    },
+    {
+      "provider_id": "publisher_B",
+      "coverage_bound": 0.57,
+      "eligible": true,
+      "kyc_tier": null,
+      "status": null,
+      "display_name": null,
+      "floor_eur": 0.0
+    }
+  ]
+}

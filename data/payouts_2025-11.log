@@ -1,0 +1,4 @@
+[PAYOUT] period=2025-11 eur_total=1000000.00 currency=EUR
+receipts_period=200 skipped_bad_sum=0
+providers=4 topk_dist={3: 200}
+sum_amount=1000000.00

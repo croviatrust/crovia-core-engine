@@ -1,0 +1,5 @@
+provider_id,trust,risk,priority_score,priority_band,top1_rate,topk_rate,conf_pos_rate,low_conf_rate,n_appear_topk,n_appear_top1,n_conf_pos,n_low_conf_top1,total_share,outputs_with_share,avg_share_per_output,global_share_fraction,max_share_single_output,dp_eps_top1
+publisher_A,0.458000,0.500000,0.270200,MED,0.355000,0.935000,0.000000,0.000000,249,71,0,0,80.228904,187,0.429032,0.401145,0.740672,0.0
+research_C,0.314500,0.500000,0.143800,MED,0.275000,0.590000,0.000000,0.000000,118,55,0,0,42.205042,118,0.357670,0.211025,0.482183,0.0
+open_d,0.286000,0.500000,0.133400,LOW,0.215000,0.595000,0.000000,0.000000,119,43,0,0,40.073573,119,0.336753,0.200368,0.428493,0.0
+publisher_B,0.248500,0.500000,0.113400,LOW,0.155000,0.570000,0.000000,0.000000,114,31,0,0,37.492485,114,0.328881,0.187462,0.436986,0.0

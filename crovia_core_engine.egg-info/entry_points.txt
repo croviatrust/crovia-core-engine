@@ -1,0 +1,2 @@
+[console_scripts]
+c-line = tools.c_line:main

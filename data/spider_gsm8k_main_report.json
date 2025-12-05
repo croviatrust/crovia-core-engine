@@ -1,0 +1,40 @@
+{
+  "dataset": "gsm8k (HF mirror: oieieio/gsm8k)",
+  "period": "2025-12",
+  "engine": "crovia-spider",
+  "schema": "spider_receipt.v1",
+  "generated_at": "2025-12-05T20:09:57.206106+00:00",
+  "analysis": {
+    "total_receipts": 7473,
+    "license_counts": {
+      "mit": 7473
+    },
+    "question_stats": {
+      "question_length_mean": 234.51,
+      "question_length_p50": 217,
+      "question_length_p90": 361,
+      "question_length_min": 42,
+      "question_length_max": 985
+    },
+    "examples": [
+      {
+        "content_id": "cid:url_sha256:077ddcca2dcd1386beba35ab29d237b84dcc2188e7eb20d4c8ab6619e9e0e688",
+        "source_url": "hf://oieieio/gsm8k/main/train-00000-of-00001.parquet#row=0",
+        "question": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+        "answer": "Natalia sold 48/2 = <<48/2=24>>24 clips in May.\nNatalia sold 48+24 = <<48+24=72>>72 clips altogether in April and May.\n#### 72"
+      },
+      {
+        "content_id": "cid:url_sha256:0e7504ff2fe9b3369523aa8f7450a7ef3ffe1bafab5074ce2fc3ce25fbc34caa",
+        "source_url": "hf://oieieio/gsm8k/main/train-00000-of-00001.parquet#row=1",
+        "question": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+        "answer": "Weng earns 12/60 = $<<12/60=0.2>>0.2 per minute.\nWorking 50 minutes, she earned 0.2 x 50 = $<<0.2*50=10>>10.\n#### 10"
+      },
+      {
+        "content_id": "cid:url_sha256:fbb27950b6b982e45ebab1940208d380b81f5ed8d91f04d003c6a468b5c151ed",
+        "source_url": "hf://oieieio/gsm8k/main/train-00000-of-00001.parquet#row=2",
+        "question": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+        "answer": "In the beginning, Betty has only 100 / 2 = $<<100/2=50>>50.\nBetty's grandparents gave her 15 * 2 = $<<15*2=30>>30.\nThis means, Betty needs 100 - 50 - 30 - 15 = $<<100-50-30-15=5>>5 more.\n#### 5"
+      }
+    ]
+  }
+}
