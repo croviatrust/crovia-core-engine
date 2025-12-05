@@ -1,54 +1,56 @@
-# CROVIA Core Engine
+# Crovia Spider
 
-CROVIA is a **settlement and evidence engine** for AI data attribution.
+**“If it’s already in the open training datasets of 2025–2026, it already has a Crovia receipt.”**
 
-This repository contains an **open-core demo** that shows how to turn attribution logs into:
+Crovia Spider turns existing open training corpora (e.g. LAION, C4, The Stack) into
+standardized `spider_receipt.v1` NDJSON logs.
 
-- per-provider trust / priority metrics  
-- monthly payouts (`payouts.v1`)  
-- **Crovian Floors v1.1** (coverage-based minimums)  
-- a SHA-256 hash-chain over receipts / payouts  
-- a sign-ready **Trust Bundle JSON** (`trust_bundle.v1`) for audit and governance  
-- optional **AI Act documentation**, schema validation, **CEP evidence blocks**
+A `spider_receipt.v1` is the minimal unit of Crovia's awareness of a content item
+in the training data ecosystem.
 
-All numbers in this repository are demo-only and do not represent real commercial contracts or real providers.
+This repository contains:
 
+- the formal spec: `docs/CROVIA_SPIDER_RECEIPT_v1.md`
+- a reference implementation to generate receipts from LAION-style metadata
+- a CLI: `crovia-spider from-laion ...`
 
+## Quick start
 
-# 1. FAISS open-core demo (period 2025-11)
+Clone and install:
 
-The demo is wired to:
+    git clone https://github.com/croviatrust/crovia-spider.git
+    cd crovia-spider
 
+    python -m venv .venv
+    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-data/royalty_from_faiss.ndjson
+    pip install -U pip
+    pip install .
 
+    crovia-spider --help
 
-A synthetic FAISS attribution log (`royalty_receipt.v1`) with **200 outputs** and **4 providers**.
+Example (LAION-style Parquet → spider_receipt NDJSON):
 
-## 1.1 Main components
+    crovia-spider from-laion \
+      --metadata-path /data/laion/laion2B-en-meta.parquet \
+      --out data/receipts_laion_sample.ndjson \
+      --period 2025-12 \
+      --sample 100000
 
-* `qa_receipts.py` — QA checks on receipts
-* `crovia_trust.py` — trust / priority aggregation
-* `payouts_from_royalties.py` — monthly payouts (`payouts.v1`)
-* `crovia_floor.py` — Crovian Floors v1.1
-* `hashchain_writer.py` / `verify_hashchain.py` — SHA-256 hash-chain
-* `run_period.py` — orchestrator (trust → payouts → floors → proofs)
-* `trust_bundle_validator.py` — validator for `trust_bundle.v1`
+This will produce an NDJSON file where each line is a valid `spider_receipt.v1`.
 
-## 1.2 Key documentation
-
-* `docs/CROVIA_FAISS_DEMO.md`
-* `docs/README_PAYOUT_2025-11.md`
-* `docs/CROVIA_WEB_TRUST_PAYOUT_2025-11.md`
-* `docs/CROVIA_OPEN_CORE_FAISS_2025-11_OVERVIEW.md`
-* `docs/CROVIA_TRUST_BUNDLE_v1.md`
+See `docs/CROVIA_SPIDER_RECEIPT_v1.md` for the full specification.
 
 ---
 
-# 2. Quickstart – running the 2025-11 demo
+## CROVIA Spider – Real evidence runs
 
-## 2.1 Environment setup
+- **GSM8K (OpenAI math word problems, HF mirror `oieieio/gsm8k`)**  
+  - Period: 2025-12  
+  - Receipts: 7,473 `spider_receipt.v1` entries  
+  - Docs: [docs/README_SPIDER_GSM8K_2025-12.md](docs/README_SPIDER_GSM8K_2025-12.md)
 
+HEAD
 ```bash
 cd /opt/crovia
 python -m venv .venv
@@ -348,3 +350,5 @@ https://croviatrust.com
 
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+=======
+>>>>>>> 394d7a4 (Spider: add real GSM8K evidence run (spider_receipt.v1))
