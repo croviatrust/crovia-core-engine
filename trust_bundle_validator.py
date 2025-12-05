@@ -12,6 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+# CROVIA – Trust Bundle validator (stand-alone)
+
+ Usage examples:
+
+   Validate a standard period bundle from /opt/crovia
+ python3 trust_bundle_validator.py \
+    --bundle trust_bundle_2025-11.json \
+    --base-dir /opt/crovia
+
+   Validate the FAISS/DPI demo bundle
+ python3 trust_bundle_validator.py \
+   --bundle demo_dpi_2025-11/output/trust_bundle_2025-11.json \
+   --base-dir /opt/crovia
+
+Exit codes:
+  0 = everything OK
+  1 = validation error (missing file, hash mismatch, parse error, etc.)
+"""
+
 
 from __future__ import annotations
 
