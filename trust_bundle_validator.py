@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+'''
 CROVIA – Trust Bundle validator (stand-alone)
 
 Usage examples:
@@ -30,7 +30,7 @@ Usage examples:
 Exit codes:
   0 = everything OK
   1 = validation error (missing file, hash mismatch, parse error, etc.)
-
+'''
 
 from __future__ import annotations
 
