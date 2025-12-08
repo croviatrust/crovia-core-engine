@@ -19,3 +19,10 @@ docs/AI_ACT_summary_*.md
 
 # Future "latest" style outputs (AI Act, validate, etc.)
 *_*_latest.*
+data/*.ndjson
+data/*.json
+sandbox_runs/
+models/
+sample.parquet
+tools/build_demo_capsules.py
+a c'è dentro
