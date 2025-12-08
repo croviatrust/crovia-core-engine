@@ -10,26 +10,52 @@ remain useful for:
 
 The core ideas:
 
-- **Directional summarization**:
-  - instead of storing every raw row, DSSE tracks how a provider “moves” the
-    semantic space (forward / backward projections, deltas, echoes).
-- **Round-trip friendly**:
-  - summaries are designed so that a downstream PRO engine can reconstruct
-    fine-grained views (within a controlled error bound) if needed.
-- **Stream-aware**:
-  - DSSE can operate in streaming mode, consuming chunks of data and
-    updating the semantic state incrementally.
+## 1. Directional summarization
 
-This open-core implementation focuses on:
+Instead of storing raw rows, DSSE tracks how a provider *moves* the semantic space via:
 
-- clean, auditable data structures,
-- deterministic behaviour for the same input,
-- hooks that can be called from:
-  - CLI tools,
-  - the core engine,
-  - external analysis scripts.
+- forward projections  
+- backward projections  
+- deltas  
+- echo-residuals  
 
-> NOTE (important):
-> - The **open-core DSSE** provides a transparent, inspectable semantic layer.
-> - Any advanced / proprietary scoring or compression logic belongs to the
->   private **Crovia PRO** engine and is **not** implemented here.
+These describe the “directional force” a provider contributes to a dataset.
+
+## 2. Round-trip friendliness
+
+DSSE summaries are designed so that a downstream PRO engine can **reconstruct**
+fine-grained semantic behavior within a controlled error bound.
+
+## 3. Stream-aware operation
+
+DSSE can operate incrementally:
+
+- read chunk  
+- update semantic accumulators  
+- update forward/backward deltas  
+- update echo  
+- write summary  
+
+This makes it viable for TB-scale logs.
+
+## 4. Open-core vs PRO boundary
+
+This open-core version provides:
+
+- clean data structures  
+- deterministic behavior  
+- safe hooks for external tools  
+
+BUT **never exposes**:
+
+- advanced scoring  
+- proprietary mixture formulas  
+- reconstruction methods  
+- weight inference  
+- trust or DPI transformations  
+
+Those live **only inside the PRO engine**.
+
+---
+
+This file documents the *shape* of DSSE for open-core users without revealing any PRO-only logic.
