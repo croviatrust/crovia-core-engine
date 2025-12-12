@@ -204,6 +204,8 @@ You may:
 
 See the LICENSE and NOTICE files for details.
 
+info@croviatrust.com
+
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
