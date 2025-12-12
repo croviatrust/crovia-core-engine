@@ -1,354 +1,209 @@
-# Crovia Spider
+# CROVIA
+## Evidence & Trust Infrastructure for AI Training Data
 
-**“If it’s already in the open training datasets of 2025–2026, it already has a Crovia receipt.”**
+Crovia is not a compliance tool.
+It is an evidence infrastructure for how AI systems use data.
 
-Crovia Spider turns existing open training corpora (e.g. LAION, C4, The Stack) into
-standardized `spider_receipt.v1` NDJSON logs.
+If an AI model makes money using data,
+there should be receipts.
+And those receipts should be auditable by anyone.
 
-A `spider_receipt.v1` is the minimal unit of Crovia's awareness of a content item
-in the training data ecosystem.
-
-This repository contains:
-
-- the formal spec: `docs/CROVIA_SPIDER_RECEIPT_v1.md`
-- a reference implementation to generate receipts from LAION-style metadata
-- a CLI: `crovia-spider from-laion ...`
-
-## Quick start
-
-Clone and install:
-
-    git clone https://github.com/croviatrust/crovia-spider.git
-    cd crovia-spider
-
-    python -m venv .venv
-    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-    pip install -U pip
-    pip install .
-
-    crovia-spider --help
-
-Example (LAION-style Parquet → spider_receipt NDJSON):
-
-    crovia-spider from-laion \
-      --metadata-path /data/laion/laion2B-en-meta.parquet \
-      --out data/receipts_laion_sample.ndjson \
-      --period 2025-12 \
-      --sample 100000
-
-This will produce an NDJSON file where each line is a valid `spider_receipt.v1`.
-
-See `docs/CROVIA_SPIDER_RECEIPT_v1.md` for the full specification.
+That is Crovia.
 
 ---
 
-## CROVIA Spider – Real evidence runs
+## What Crovia Is
 
-- **GSM8K (OpenAI math word problems, HF mirror `oieieio/gsm8k`)**  
-  - Period: 2025-12  
-  - Receipts: 7,473 `spider_receipt.v1` entries  
-  - Docs: [docs/README_SPIDER_GSM8K_2025-12.md](docs/README_SPIDER_GSM8K_2025-12.md)
+Crovia is an open-core infrastructure that turns AI training data signals into:
 
-HEAD
-```bash
-cd /opt/crovia
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
+- verifiable receipts
+- trust metrics
+- payout simulations
+- cryptographic proofs
+- audit-ready evidence packs
 
-## 2.2 Full period run
+It is designed to operate globally, across:
 
-```bash
-python run_period.py \
-  --period 2025-11 \
-  --eur-total 1000000 \
-  --receipts data/royalty_from_faiss.ndjson \
-  --min-appear 1
-```
+- research
+- commercial AI
+- open datasets
+- enterprise pipelines
+- regulators and auditors
 
-This will:
-
-* Run QA
-* Compute trust metrics
-* (Optional) run schema validation (`crovia_validate.py`)
-* (Optional) run AI-Act helpers (`compliance_ai_act.py`)
-* Compute payouts
-* Generate charts
-* Build & verify a hash-chain
-* Compute Crovian Floors
-* (Optional) build a Trust Bundle
-
-Artifacts generated:
-
-```text
-data/trust_providers.csv
-docs/trust_summary.md
-data/payouts_2025-11.csv
-data/payouts_2025-11.ndjson
-data/floors_2025-11.json
-charts/payout_top10_2025-11.png
-charts/payout_cumulative_2025-11.png
-proofs/hashchain_*.txt
-```
-
-For a detailed operator view, see:
-
-```text
-docs/CROVIA_OPEN_CORE_FAISS_2025-11_OVERVIEW.md
-```
+The EU AI Act is one of many standards Crovia can support —
+it is not the reason Crovia exists.
 
 ---
 
-## 2.3 Running the entire demo via C-LINE (recommended)
+## What This Repository Contains (Open Core)
 
-C-LINE is the unified command-line interface for the CROVIA Core Engine.
-It wraps all internal scripts (validation, trust, payouts, floors, hash-chain,
-AI Act helpers, ZIP evidence builder) into a single, user-friendly CLI.
+This repository hosts the public, auditable core of Crovia.
 
-Run the full 2025-11 demo with one command:
+It allows anyone to:
 
-```bash
-python tools/c_line.py demo
-# future installation:
-#   c-line demo
-```
+- inspect how receipts are structured
+- verify schemas and invariants
+- reproduce trust and payout calculations
+- generate cryptographic evidence
+- audit outputs without trusting a black box
 
-This will automatically:
+### Included in the Open Core
 
-* validate the receipts NDJSON
-* run trust aggregation
-* compute payouts (`payouts.v1`)
-* generate payout charts
-* compute **Crovian Floors v1.1**
-* run **AI Act Annex-IV documentation** helpers
-* write a **SHA-256 hash-chain** and verify it
-* collect all artifacts into a **ZIP evidence pack**
-* generate a **QR code** pointing to the pack
+Receipts & Schemas
+- spider_receipt.v1
+- royalty_receipt.v1
+- payouts.v1
+- trust_bundle.v1
+
+Validation & QA
+- crovia_validate.py
+- schema correctness
+- share ≈ 1.0 checks
+- rank & consistency checks
+
+Trust & Payout Engine (Deterministic)
+- trust aggregation
+- payout simulation
+- Crovian Floors v1.1
+
+Evidence & Proofs
+- SHA-256 hash-chains
+- Merkle payout trees
+- Trust Bundles
+- CEP (CROVIA Evidence Protocol)
+
+CLI
+- crovia (open CLI)
+- c-line (demo orchestrator)
+
+Everything here is transparent, reproducible, and auditable by design.
+
+---
+
+## What This Repository Does NOT Contain
+
+This repository intentionally does not include:
+
+- real attribution algorithms
+- settlement logic
+- billing & contracts
+- enterprise integrations
+- private scoring models
+- DSSE-Pro or Sentinel-Pro engines
+
+Those components live in the Crovia PRO Engine, which is private.
+
+This separation is deliberate:
+
+Open Core → trust & verification  
+PRO Engine → business & settlement  
+
+---
+
+## Crovia Spider
+
+Crovia Spider extracts forensic evidence from datasets that are already known
+to be used in AI training.
+
+“If it’s already in open training datasets,
+it already has a Crovia receipt.”
+
+Crovia Spider:
+- does not crawl the web
+- does not ingest new content
+- only structures existing metadata into verifiable receipts
 
 Artifacts produced:
+- spider_receipt.v1 NDJSON logs
+- provenance hints
+- coverage reports
 
-```text
-evidence/CROVIA_evidence_2025-11.zip
-proofs/QR_evidence_2025-11.png
-docs/VALIDATE_report_2025-11.md
-docs/AI_ACT_summary_2025-11.md
-data/payouts_2025-11.csv
-data/floors_2025-11.json
-# plus ~30 additional files: charts, logs, packs, proofs
-```
-
-**C-LINE v1.0** turns the CROVIA demo into a *single-shot reproducible evidence pipeline*.
-
-# 2.4 Install as a CLI (C-LINE)
-
-You can also install the CROVIA Core Engine as a local CLI inside a virtualenv:
-
-```bash
-pip install -e .
-c-line demo
-```
-This will install the c-line entrypoint in your environment and run the full
-CROVIA demo pipeline (validation → trust → payouts → floors → hash-chain →
-AI Act helpers → ZIP + QR evidence pack) with a single command.
-
-# 3. DPI demo – Trust Bundle example
-
-The repository includes a small DPI demo showing:
-
-* DPI-based `royalty_receipt.v1` logs
-* payouts, floors, trust CSVs
-* AI Act-style documentation
-* SHA-256 evidence digests consolidated in `trust_bundle.v1`
-
-Validate the bundle:
-
-```bash
-python trust_bundle_validator.py \
-  --bundle demo_dpi_2025-11/output/trust_bundle_2025-11.json \
-  --base-dir /opt/crovia
-```
-
-Expected output (abridged):
-
-```text
-[*] Loading bundle: .../trust_bundle_2025-11.json
-schema=crovia_trust_bundle.v1  period=2025-11
-
-=== Artifact verification ===
-[RESULT] Bundle OK: all declared artifacts match size and sha256.
-```
-
-A Trust Bundle acts as a **hash-addressable evidence pack** for auditors, regulators and partners.
-
-Full profile:
-
-```text
-docs/CROVIA_TRUST_BUNDLE_v1.md
-```
+Specification:
+docs/CROVIA_SPIDER_RECEIPT_v1.md
 
 ---
 
-# 4. Validation, AI Act & Evidence Tools
+## C-LINE (Demo Orchestrator)
 
-The open-core engine includes transparent validation and compliance modules for auditors, researchers and model-card workflows.
+C-LINE is the open demo CLI that runs the entire Crovia evidence pipeline.
 
-## 4.1 Schema & QA Validation — `crovia_validate.py`
+Command:
 
-Validates `royalty_receipt.v1` NDJSON files:
+python tools/c_line.py demo
 
-* schema correctness
-* share ≈ 1.0 checks
-* rank ordering
-* malformed / suspicious rows
+It automatically:
+- validates receipts
+- computes trust metrics
+- simulates payouts
+- computes Crovian Floors
+- generates charts
+- builds hash-chains
+- generates AI-style documentation
+- packages everything into a single evidence ZIP
 
-Produces:
-
-* validation report (Markdown)
-* sample failing rows
-
-Example:
-
-```bash
-python crovia_validate.py data/royalty.ndjson \
-  --out-md docs/VALIDATE_report.md \
-  --out-bad data/royalty_bad_sample.ndjson
-```
-
-Outputs:
-
-```text
-docs/VALIDATE_*.md
-data/*_bad_sample.ndjson
-```
+This is a reproducible evidence pipeline, not a SaaS demo.
 
 ---
 
-## 4.2 AI Act Annex IV Helpers — `compliance_ai_act.py`
+## CEP — CROVIA Evidence Protocol
 
-Generates lightweight Annex-IV-style documentation:
+CEP.v1 is a compact, verifiable evidence block designed for:
+- model cards
+- research papers
+- audit packs
+- dataset documentation
 
-* provider & shard distribution
-* provenance hints
-* concentration & risk signals
-* gaps file (`*_gaps.ndjson`)
-* JSON compliance pack
+It includes:
+- cryptographic hashes
+- trust metrics
+- payout summaries
+- hash-chain roots
+- provenance metadata
 
-Run:
-
-```bash
-python compliance_ai_act.py data/royalty.ndjson \
-  --out-summary docs/AI_ACT_summary.md \
-  --out-gaps data/AI_ACT_gaps.ndjson \
-  --out-pack data/AI_ACT_pack.json
-```
-
----
-
-## 4.3 CCL Validation — `tools/ccl_validate.py`
-
-Validates CCL v1.1 JSON descriptors for:
-
-* AI models
-* datasets
-* RAG indices
-* APIs / tools
-
-Run:
-
-```bash
-python tools/ccl_validate.py my_model.ccl.json
-```
-
-Full CCL spec:
-
-```text
-docs/CROVIA_CCL_v1.1.md
-```
-
-
-## 4.4 CEP Evidence Protocol v1 — `crovia_generate_cep.py`
-
-CROVIA CEP.v1 is a compact, verifiable evidence block for:
-
-* Hugging Face model cards
-* research papers
-* audit packs
-* trust bundle metadata
-
-Generated via:
-
-```bash
-python tools/crovia_generate_cep.py \
-  --trust-bundle trust_bundle.json \
-  --period 2025-11 \
-  --receipts data/royalty.ndjson \
-  --payouts data/payouts.csv \
-  --hashchain proofs/hashchain_*.txt \
-  --engine-version demo-2025 \
-  --output-format yaml
-```
-
-The result includes:
-
-* SHA-256 of receipts / payouts / bundle
-* hash-chain root
-* trust metrics (avg_top1_share, DP epsilon range, CI indicators)
-* generation metadata
-
-Full spec:
-
-
+Specification:
 docs/CROVIA_CEP_v1.md
 
+---
 
+## Global Scope
 
+Crovia is not limited to:
+- the European Union
+- the AI Act
+- compliance-only workflows
 
-# 5. Status & scope
+It is built for:
+- global AI training pipelines
+- open science
+- enterprise governance
+- cross-border audits
 
-This repository is:
+Regulatory frameworks consume Crovia evidence —
+they do not define it.
 
-* **Open-core** — attribution → trust → payouts → floors → proofs
-* **Demo-grade** — synthetic data
-* **Evidence-first** — built for transparency, auditability, reproducibility
+---
 
-Business logic, contracts, billing, CCT-attested tokens and settlement overrides live in the **private PRO engine**, not here.
+## Project Status
 
+Open Core — stable, auditable, reproducible  
+Demo-grade data — synthetic or partial  
+Evidence-first — infrastructure, not a product  
 
+Crovia is a foundation layer.
 
-# 6. Licensing
+---
+
+## Licensing
 
 Apache License 2.0
 
-Permitted:
+You may:
+- use Crovia commercially or academically
+- modify and redistribute it
+- integrate it into closed or open systems
 
-* commercial or academic usage
-* modification and redistribution
-* closed or open derivatives
-* integration into external pipelines
-
-See the `LICENSE` file.
-
-
-
-# 7. Copyright
-
-© 2025 — **Tarik En Nakhai**
-Crovia Core Engine
-
-This repository includes a `NOTICE` file (Apache-2.0 requirement).
-
-
-
-# 8. Contact
-
-
-info@croviatrust.com
-
-https://croviatrust.com
-
+See the LICENSE and NOTICE files for details.
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-=======
->>>>>>> 394d7a4 (Spider: add real GSM8K evidence run (spider_receipt.v1))
+
+
