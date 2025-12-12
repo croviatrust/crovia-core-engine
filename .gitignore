@@ -80,3 +80,11 @@ assumptions_*.json
 payouts_pro_*.py
 test_settlement_run.py
 
+
+# --- local / experimental / pro-only ---
+crovia/sentinel_v0_2.py
+crovia_bundle.py
+crovia_refine.py
+test_providers.json
+tools/build_preview_receipts.py
+tools/make_snapshot.py
