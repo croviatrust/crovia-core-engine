@@ -26,3 +26,57 @@ models/
 sample.parquet
 tools/build_demo_capsules.py
 a c'è dentro
+
+# --- generated data ---
+data/
+charts/
+dist/
+build/
+_snapshots/
+cep_real_capsules/
+
+# --- reports & outputs ---
+*.ndjson
+*.csv
+*.png
+validate*.md
+validate*.jsonl
+
+# --- backups / patches ---
+*.bak*
+*.broken*
+patch_*.sh
+fix_*.sh
+
+# --- virtual envs ---
+.venv*
+
+# --- Crovia: generated artifacts / local datasets ---
+/charts/
+/dist/
+/build/
+/src/*.egg-info/
+/crovia.egg-info/
+
+# data artifacts (keep only data/schema/* tracked)
+data/*
+!data/schema/
+!data/schema/**
+
+# local envs
+.venv/
+.venv-*/
+__pycache__/
+*.pyc
+
+
+# --- Crovia PRO / demo artifacts ---
+CEP-*.json
+crovia_trust_bundle*.json
+snap*.json
+dsse_test.json
+sample_ds.txt
+assumptions_*.json
+payouts_pro_*.py
+test_settlement_run.py
+

@@ -240,10 +240,110 @@ TRUST_BUNDLE_SCHEMA: Dict[str, Any] = {
 # ===========================
 # Registry validatori
 # ===========================
+
+# ===========================
+# spider_receipt.v1 (Crovia Spider output / dataset-level)
+# ===========================
+SPIDER_SCHEMA_ID = "spider_receipt.v1"
+SPIDER_SCHEMA: Dict[str, Any] = {
+    "$id": f"https://contracts.example/{SPIDER_SCHEMA_ID}.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "CROVIA Spider Receipt",
+    "type": "object",
+    "required": [
+        "schema",
+        "id",
+        "content_id",
+        "period",
+        "timestamp",
+        "meta",
+    ],
+    "properties": {
+        "schema": {"const": SPIDER_SCHEMA_ID},
+        "id": {"type": "string", "minLength": 1},
+
+        # Optional provider info (if known)
+        "provider_id": {"type": "string"},
+        "provider_type": {"type": "string"},
+
+        # Content identifiers
+        "content_id": {"type": "string", "minLength": 1},
+        "output_id": {"type": "string"},
+
+        # Shares / royalty info (often 1.0/0.0 in Spider runs,
+        # but kept for structural compatibility)
+        "share": {"type": "number"},
+        "royalty_share": {"type": "number"},
+        "royalty_amount": {"type": "number"},
+        "provider_share_sum": {"type": "number"},
+
+        "total_royalties": {
+            "type": "object",
+            "properties": {
+                "card_length": {"type": "number"},
+                "safety_words": {"type": "number"},
+                "opt_out_rate": {"type": "number"},
+                "nsfw_exposure": {"type": "number"},
+                "zero_share_rate": {"type": "number"},
+            },
+            "additionalProperties": True,
+        },
+
+        "period": {"type": "string", "pattern": r"^\d{4}-\d{2}$"},
+        "timestamp": {"type": "string", "format": "date-time"},
+
+        "meta": {
+            "type": "object",
+            "properties": {
+                "license": {"type": "string"},
+                "source_url": {"type": "string"},
+                "title": {"type": "string"},
+                "purpose": {"type": "string"},
+                "region": {"type": "string"},
+                "extracted_from": {"type": "string"},
+            },
+            "additionalProperties": True,
+        },
+    },
+    "additionalProperties": True,
+}
+
+
+# ===========================
+# data_receipt.v1 (dataset origin / open-core)
+# ===========================
+DATA_RECEIPT_SCHEMA_ID = "data_receipt.v1"
+DATA_RECEIPT_SCHEMA = {
+    "$id": f"https://contracts.example/{DATA_RECEIPT_SCHEMA_ID}.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "CROVIA Data Receipt (Dataset Origin)",
+    "type": "object",
+    "required": [
+        "schema",
+        "id",
+        "provider_id",
+        "content_id",
+        "timestamp",
+        "period"
+    ],
+    "properties": {
+        "schema": {"const": DATA_RECEIPT_SCHEMA_ID},
+        "id": {"type": "string", "minLength": 1},
+        "provider_id": {"type": "string", "minLength": 1},
+        "provider_type": {"type": "string"},
+        "content_id": {"type": "string", "minLength": 1},
+        "timestamp": {"type": "string", "format": "date-time"},
+        "period": {"type": "string", "pattern": "^\\d{4}-\\d{2}$"},
+        "meta": {"type": "object"}
+    },
+    "additionalProperties": True
+}
 _VALIDATORS: Dict[str, Draft202012Validator] = {
     SHAPLEY_SCHEMA_ID: Draft202012Validator(SHAPLEY_SCHEMA),
     PAYOUTS_SCHEMA_ID: Draft202012Validator(PAYOUTS_SCHEMA),
     ROYALTY_SCHEMA_ID: Draft202012Validator(ROYALTY_SCHEMA),
+    SPIDER_SCHEMA_ID: Draft202012Validator(SPIDER_SCHEMA),
+    DATA_RECEIPT_SCHEMA_ID: Draft202012Validator(DATA_RECEIPT_SCHEMA),
     TRUST_BUNDLE_SCHEMA_ID: Draft202012Validator(TRUST_BUNDLE_SCHEMA),
 }
 

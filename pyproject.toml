@@ -1,22 +1,59 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "crovia-spider"
+name = "crovia"
 version = "0.1.0"
-description = "Crovia Spider — turn open training corpora into spider_receipt.v1 logs."
+description = "CroviaTrust – Open-core evidence & payout engine for AI datasets"
+authors = [
+  { name = "CroviaTrust" }
+]
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
-authors = [
-  { name = "Crovia Trust", email = "info@croviatrust.com" }
-]
 
+# Dipendenze open-core (puoi aggiungere/rimuovere in base a cosa usi davvero)
 dependencies = [
-  "pandas>=2.1.0",
-  "pyarrow>=15.0.0",
+  "numpy",
+  "pandas",
+  "matplotlib",
 ]
 
 [project.scripts]
+crovia = "crovia.cli:main"
 crovia-spider = "crovia_spider.cli:main"
 
-[build-system]
-requires = ["setuptools>=69", "wheel"]
-build-backend = "setuptools.build_meta"
+[tool.setuptools]
+# qui dichiariamo:
+# - i package "strutturati" (crovia, crovia_spider)
+# - i moduli a file singolo in root
+packages = ["crovia", "crovia_spider"]
+
+py-modules = [
+  "crovia_trust",
+  "qa_receipts",
+  "csv_to_royalty",
+  "make_payout_charts",
+  "generate_receipts",
+  "generate_synthetic_receipts",
+  "compliance_ai_act",
+  "payouts_from_royalties",
+  "crovia_validate",
+  "dpi_to_royalty",
+  "events_to_royalty",
+  "hashchain_writer",
+  "verify_hashchain",
+  "check_floors_vs_payouts",
+  "crovia_floor",
+  "ndjson_io",
+  "run_period",
+  "schema",
+  "trust_bundle_validator",
+  "crovia_app"
+]
+
+[tool.setuptools.package-dir]
+crovia = "crovia"
+crovia_spider = "src/crovia_spider"
+

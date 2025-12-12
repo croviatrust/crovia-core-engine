@@ -1,3 +1,29 @@
+"""
+CROVIA Open Dashboard (Open Core)
+
+
+
+This module provides:
+
+- visualization
+
+- sandbox previews
+
+- documentation rendering
+
+
+
+It does NOT contain:
+
+- attribution algorithms
+
+- payout logic
+
+- trust scoring engines
+
+"""
+
+from __future__ import annotations
 from datetime import datetime, timezone
 # Copyright 2025  Tarik En Nakhai
 #
@@ -13,7 +39,6 @@ from datetime import datetime, timezone
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
 
 from pathlib import Path
 import csv

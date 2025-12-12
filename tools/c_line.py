@@ -13,6 +13,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+from crovia.sentinel_v0_2 import run_sentinel_v0_2, SentinelConfig
+import json
+
+
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -102,6 +106,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="Campione di righe non valide (default: data/VALIDATE_bad_sample_latest.ndjson)",
     )
     pv.set_defaults(func=cmd_validate)
+    
+    p_sentinel = sub.add_parser(
+        "sentinel",
+        help="Run Crovia Sentinel v0.2 drift/transparency analysis",
+    )
+    p_sentinel.add_argument(
+        "--current",
+        required=True,
+        help="Current snapshot JSON",
+    )
+    p_sentinel.add_argument(
+        "--previous",
+        required=True,
+        help="Previous snapshot JSON",
+    )
+    p_sentinel.set_defaults(func=cmd_sentinel)
+
 
     # period
     pp = sub.add_parser(
@@ -150,6 +171,33 @@ def build_parser() -> argparse.ArgumentParser:
     pa.set_defaults(func=cmd_ai_act)
 
     return p
+
+
+def cmd_sentinel(args):
+    """
+    C-Line: Sentinel v0.2
+    Analisi drift + trasparenza tra due snapshot JSON.
+    """
+    try:
+        with open(args.current, "r", encoding="utf-8") as f:
+            snap_cur = json.load(f)
+        with open(args.previous, "r", encoding="utf-8") as f:
+            snap_prev = json.load(f)
+    except Exception as e:
+        print(f"[FATAL] Cannot read snapshots: {e}")
+        return 3
+
+    cfg = SentinelConfig()
+    out = run_sentinel_v0_2(
+        snapshot_t=snap_cur,
+        snapshot_prev=snap_prev,
+        group_stats=None,
+        state_prev=None,
+        config=cfg,
+    )
+
+    print(json.dumps(out, indent=2, ensure_ascii=False))
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:

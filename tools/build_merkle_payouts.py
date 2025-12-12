@@ -236,7 +236,8 @@ def main() -> None:
         "artifacts": artifacts,
     }
 
-    os.makedirs(os.path.dirname(bundle_out), exist_ok=True)
+    bundle_dir = os.path.dirname(bundle_out) or '.'
+    os.makedirs(bundle_dir, exist_ok=True)
     with open(bundle_out, "w", encoding="utf-8") as f:
         json.dump(bundle, f, indent=2)
     print(f"[MERKLE & TRUST BUNDLE] written {bundle_out}")
