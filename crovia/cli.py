@@ -740,7 +740,7 @@ def cmd_sign(args: argparse.Namespace) -> None:
 def cmd_trace(args: argparse.Namespace) -> None:
     """
     crovia trace <ndjson> [--verify chainfile]
-    → Hashchain write/verify
+    → Hashchain write/verify (REAL, open-core)
     """
     print_header("Trace (Hashchain)")
 
@@ -749,67 +749,105 @@ def cmd_trace(args: argparse.Namespace) -> None:
         print_error(f"Source file not found: {source}")
         sys.exit(1)
 
+    out_path = Path(args.out or f"proofs/hashchain_{source.name}.txt")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
     if args.verify:
         chain = Path(args.verify)
         if not chain.exists():
             print_error(f"Hashchain file not found: {chain}")
             sys.exit(1)
-        print_section("Hashchain verification (demo)")
-        print_ok("Simulated verification: OK — chain is consistent.")
+
+        print_section("Hashchain verification")
+        cmd = [sys.executable, "verify_hashchain.py", "--source", str(source), "--chain", str(chain)]
+        res = subprocess.run(cmd)
+        if res.returncode != 0:
+            print_error("Verification failed.")
+            sys.exit(res.returncode)
+        print_ok("Verification OK.")
     else:
-        print_section("Hashchain generation (demo)")
-        out_path = Path(args.out or f"proofs/hashchain_{source.name}.txt")
-        print_ok(f"(demo) Would generate hashchain at: {out_path}")
+        print_section("Hashchain generation")
+        cmd = [sys.executable, "hashchain_writer.py", "--source", str(source), "--out", str(out_path)]
+        res = subprocess.run(cmd)
+        if res.returncode != 0:
+            print_error("Hashchain generation failed.")
+            sys.exit(res.returncode)
+        print_ok(f"Hashchain written: {out_path}")
 
     print()
     print_section("Next step")
-    print_suggestion("crovia bundle ...  # include the hashchain in the bundle")
+    print_suggestion("Attach the hashchain into your bundle (tools/attach_hashchain_to_bundle.py)")
 
 
 def cmd_explain(args: argparse.Namespace) -> None:
     """
     crovia explain <file.json|.crovia|.signed.json>
-    → Light metacognitive view
+    → Evidence inspector (open-core, public-safe)
     """
-    print_header("Explain (Metacognitive View)")
+    print_header("Explain (Evidence Inspector)")
 
-    path = Path(args.file)
-    if not path.exists():
-        print_error(f"File not found: {path}")
+    p = Path(args.file)
+    if not p.exists():
+        print_error(f"File not found: {p}")
         sys.exit(1)
 
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        print_warn("Could not parse JSON, showing basic file info only.")
-        print_section("Info")
-        print(f"• Path: {path}")
-        print(f"• Size: {path.stat().st_size} bytes")
-        return
+        obj = json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        print_error(f"Invalid JSON: {e}")
+        sys.exit(1)
 
-    print_section("Structure")
-    if isinstance(data, dict):
-        keys = list(data.keys())
+    schema = obj.get("schema", "unknown")
+    period = obj.get("period", "unknown")
+    engine = obj.get("engine", {})
+    demo = bool(obj.get("demo", False))
+
+    # engine can be a dict in our bundles
+    engine_name = engine.get("name") if isinstance(engine, dict) else str(engine)
+    cli_ver = engine.get("cli_version") if isinstance(engine, dict) else None
+
+    print_section("Identity")
+    print(f"• schema: {schema}")
+    print(f"• period: {period}")
+    if engine_name:
+        print(f"• engine: {engine_name}" + (f" (cli {cli_ver})" if cli_ver else ""))
+    print(f"• mode: {'DEMO' if demo else 'STANDARD'}")
+    print()
+
+    # Signature
+    print_section("Integrity")
+    if obj.get("signature"):
+        print_ok("signature: present")
+    else:
+        print_warn("signature: missing")
+
+    # Hashchain binding (if present)
+    meta = obj.get("meta") or {}
+    if isinstance(meta, dict) and meta.get("hashchain_bound"):
+        hc = meta.get("hashchain_sha256", "")
+        print_ok("hashchain: bound")
+        if hc:
+            print(f"  └─ sha256: {hc[:16]}…")
+    else:
+        print_warn("hashchain: not bound")
+
+    # Artifacts
+    arts = obj.get("artifacts", [])
+    if isinstance(arts, list):
+        print(f"• artifacts: {len(arts)}")
+
+    # Optional: basic keys preview
+    if isinstance(obj, dict):
+        keys = list(obj.keys())
+        print()
+        print_section("Structure")
         print("• Type: JSON object")
-        print(f"• Top-level keys: {', '.join(keys[:8])}{'...' if len(keys) > 8 else ''}")
-        if "schema" in data:
-            print(f"• schema: {data['schema']}")
-    else:
-        print("• JSON type: non-object")
+        print(f"• Top-level keys: {', '.join(keys[:10])}{'...' if len(keys) > 10 else ''}")
+
     print()
-
-    print_section("Strengths / weaknesses (demo)")
-    if "signature" in data:
-        print_ok("Signature present (field: signature)")
-    else:
-        print_warn("No signature found (field 'signature' missing)")
-
-    if "hash_model" in data or "hash_data_index" in data:
-        print_ok("Link to model/data index detected")
-    print()
-
-    print_section("Next step")
-    print_suggestion("Extend explain() with real logic for trust bundle / receipts (TODO)")
+    if demo:
+        print_section("Warnings")
+        print("⚠ demo bundle (not for production payouts)")
 
 
 def cmd_mode(args: argparse.Namespace) -> None:
