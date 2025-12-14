@@ -14,5 +14,5 @@ __version__ = "0.1.0"
 
 # NOTE:
 # Do NOT import subpackages (like `from . import semantic`) here.
-# Python will still allow `import crovia.semantic.crovia_dsse_v2` etc.
+# Submodules can still be imported explicitly when installed.
 # but `crovia` itself remains lightweight and safe for CLI bootstrap.

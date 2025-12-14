@@ -88,3 +88,13 @@ crovia_refine.py
 test_providers.json
 tools/build_preview_receipts.py
 tools/make_snapshot.py
+
+# local env / build artifacts
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# PRO-only docs must never land in open
+docs/pro/
