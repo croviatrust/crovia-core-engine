@@ -238,6 +238,32 @@ TRUST_BUNDLE_SCHEMA: Dict[str, Any] = {
 }
 
 # ===========================
+# trust_drift.v1 (drift auditabile tra due bundle/periodi)
+# ===========================
+TRUST_DRIFT_SCHEMA_ID = "trust_drift.v1"
+TRUST_DRIFT_SCHEMA: Dict[str, Any] = {
+    "$id": f"https://contracts.example/{TRUST_DRIFT_SCHEMA_ID}.schema.json",
+    "type": "object",
+    "required": ["schema","dataset_id","from","to","trust_before","trust_after","delta","signals","inputs"],
+    "properties": {
+        "schema": {"const": TRUST_DRIFT_SCHEMA_ID},
+        "dataset_id": {"type": "string", "minLength": 1},
+        "model_id": {"type": "string"},
+        "from": {"type": "string", "pattern": r"^\d{4}-\d{2}$"},
+        "to": {"type": "string", "pattern": r"^\d{4}-\d{2}$"},
+        "trust_before": {"type": "number"},
+        "trust_after": {"type": "number"},
+        "delta": {"type": "number"},
+        "signals": {"type": "object"},
+        "inputs": {"type": "array", "items": {"type": "string"}},
+        "engine": {"type": "object"},
+        "signature": {"type": "string"},
+        "meta": {"type": "object"},
+    },
+    "additionalProperties": True,
+}
+
+# ===========================
 # Registry validatori
 # ===========================
 
@@ -339,6 +365,7 @@ DATA_RECEIPT_SCHEMA = {
     "additionalProperties": True
 }
 _VALIDATORS: Dict[str, Draft202012Validator] = {
+    TRUST_DRIFT_SCHEMA_ID: Draft202012Validator(TRUST_DRIFT_SCHEMA),
     SHAPLEY_SCHEMA_ID: Draft202012Validator(SHAPLEY_SCHEMA),
     PAYOUTS_SCHEMA_ID: Draft202012Validator(PAYOUTS_SCHEMA),
     ROYALTY_SCHEMA_ID: Draft202012Validator(ROYALTY_SCHEMA),
