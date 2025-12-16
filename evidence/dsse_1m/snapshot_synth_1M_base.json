@@ -1,0 +1,8 @@
+{
+  "card_length": 252,
+  "missing_fields_fraction": 0.0,
+  "legal_ambiguity_level": 1.0,
+  "receipts_fraction": 1.0,
+  "records_seen": 1000000,
+  "dsse_engine": "dsse-lite.v1"
+}

@@ -98,3 +98,8 @@ dist/
 
 # PRO-only docs must never land in open
 docs/pro/
+
+# allow publishing curated proof packs
+!evidence/
+!evidence/dsse_1m/
+!evidence/dsse_1m/*
