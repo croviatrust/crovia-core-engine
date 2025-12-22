@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Crovia Evidence Pack Manifest",
+  "type": "object",
+  "required": [
+    "pack_id",
+    "crovia_id",
+    "version",
+    "generated_at",
+    "inputs",
+    "artifacts",
+    "hashes"
+  ],
+  "properties": {
+    "pack_id": { "type": "string", "description": "Unique pack identifier (human-safe)" },
+    "crovia_id": { "type": "string", "description": "Deterministic artifact identity" },
+    "version": { "type": "string", "description": "Pack format version" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "inputs": { "type": "object", "description": "Declared inputs used to build the pack" },
+    "artifacts": { "type": "object", "description": "Relative paths of produced artifacts" },
+    "hashes": { "type": "object", "description": "SHA256 hashes keyed by artifact path" }
+  }
+}
