@@ -1,113 +1,93 @@
 # Crovia Core Engine (Open Core)
-**Verifiable Evidence Packs for AI training transparency**
 
-Crovia is an **open-core evidence pipeline** that produces **audit-ready, offline-verifiable artifacts** from NDJSON receipts/logs.
+**If AI is trained on your data, there should be a receipt.**
 
-Crovia does **not** accuse anyone.
-Crovia records **verifiable structure + integrity** — and makes it possible for third parties to verify the output **without** trusting a dashboard.
+Crovia Core Engine is the **open, verifiable trust and payout layer** for AI training data.
+It produces **deterministic, offline-verifiable evidence artifacts** from declared inputs.
 
----
-
-## What this repo contains
-
-This repository is **Open Core** only:
-
-- Schemas (contracts)
-- Structural validation with Health grading (A/B/C/D)
-- Cryptographic hash-chain proofs over NDJSON
-- Evidence Pack manifest schema
-- Offline verification tools
-
-It intentionally does **not** include proprietary settlement logic.
+This project:
+- does NOT accuse anyone
+- does NOT make legal judgments
+- only produces verifiable technical evidence
 
 ---
 
-## Core concept: Evidence Pack
+## Quickstart (30 seconds)
 
-An **Evidence Pack** is a deterministic container that can be verified offline:
+The following commands run a minimal end-to-end open-core pipeline.
+Everything below is intentionally shown as a **single executable flow**.
 
-- declared `inputs`
-- produced `artifacts`
-- `hashes` (SHA256 keyed by artifact path)
-- a `manifest.json` (validated by the manifest schema)
+1) Validate NDJSON receipts (structure + business rules)
 
-See:
-- `pack/manifest.schema.json`
+python3 validate/validate.py \
+  --in examples/minimal_royalty_receipts.ndjson \
+  --out report.md
 
----
+2) Build an integrity proof (rolling hash-chain)
 
-## Directory map (Open Core)
+python3 proofs/hashchain_writer.py \
+  --source examples/minimal_royalty_receipts.ndjson \
+  --chunk 2
 
-- `schemas/registry.py`
-  - Contract registry (e.g. `royalty_receipt.v1`, `payouts.v1`, `crovia_trust_bundle.v1`, `trust_drift.v1`)
-- `validate/validate.py`
-  - Streaming NDJSON validator + business rules + Health grade (A/B/C/D)
-- `proofs/hashchain_writer.py`
-  - Rolling SHA-256 hash-chain over NDJSON (chunked)
-- `proofs/verify_hashchain.py`
-  - Verifies a hash-chain against the original NDJSON
-- `pack/manifest.schema.json`
-  - Evidence Pack manifest schema
-- `cli/pack.py`, `cli/verify.py`
-  - CLI entrypoints (contract declared; orchestration implementation may be staged)
+3) Verify the proof offline
 
----
+If you change even 1 byte in the NDJSON file, this MUST fail.
 
-## Quickstart (Open Core)
-
-### 1) Validate NDJSON
-Run validation on receipts/logs:
-
-~~bash
-python3 validate/validate.py --help
-python3 validate/validate.py --in data/royalty_receipts.ndjson --out report.md
-~~
-
-Expected behavior:
-- produces a Markdown report with Health grade
-- emits a sample of problematic lines (if any)
-- exit codes encode severity (OK / partial / fail)
-
-### 2) Build a hash-chain proof over NDJSON
-~~bash
-python3 proofs/hashchain_writer.py --source data/royalty_receipts.ndjson --chunk 10000
-~~
-
-Default output:
-- `proofs/hashchain_royalty_receipts.ndjson.txt`
-
-### 3) Verify the proof (offline / third-party)
-~~bash
 python3 proofs/verify_hashchain.py \
-  --source data/royalty_receipts.ndjson \
-  --chain proofs/hashchain_royalty_receipts.ndjson.txt \
-  --chunk 10000
-~~
-
-If the source NDJSON changes by even 1 byte, verification fails.
+  --source examples/minimal_royalty_receipts.ndjson \
+  --chain proofs/hashchain_minimal_royalty_receipts.ndjson.txt \
+  --chunk 2
 
 ---
 
-## Open vs PRO (monetization boundary)
+## Notes
 
-Open Core provides:
-- structure validation + Health grading
-- receipts/payout schema contracts
-- immutable proofs (hash-chain)
+- No network access required
+- Verification is deterministic and reproducible
+- Integrity checks fail on any tampering
+
+---
+
+## What the Open Core Provides
+
+Crovia open-core focuses strictly on verifiable outputs:
+
+- JSON schemas for receipts and bundles (schemas/)
+- Streaming validators with health-style reporting (validate/)
+- Cryptographic integrity proofs (hash-chains) (proofs/)
+- Deterministic Evidence Pack format (pack/)
+- Thin CLI entrypoints (cli/)
+
+---
+
+## Evidence Pack
+
+An Evidence Pack is a reproducible, hash-verifiable bundle produced from declared inputs.
+
+It may contain:
+- validation reports
+- signed receipts (NDJSON)
+- hash-chain proofs
+- derived payout views
+- CEP capsules
+
+See pack/README.md for the formal definition.
+
+---
+
+## Open vs PRO
+
+Open Core is for:
+- structure validation
+- integrity proofs
+- deterministic packaging
 - offline verification
 
-Crovia PRO adds (not in this repo):
-- final settlement (contract-aware payouts)
-- DPI calibration
-- DP noise policy enforcement
-- DSSE semantic weighting
-- risk-adjusted trust scoring
-- policy application that **changes outcomes**, not just structure
+PRO (private repository) is for:
+- settlement engines
+- contract registries
+- DPI and policy calibration
+- enterprise-grade audits
 
-**Open proves what exists. PRO determines what it means.**
-
----
-
-## License
-
-Apache-2.0 (enterprise-friendly).
+Open Core verifies.
+PRO settles.
