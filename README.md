@@ -91,3 +91,18 @@ PRO (private repository) is for:
 
 Open Core verifies.
 PRO settles.
+
+---
+
+## Evidence & Reproducible Proofs
+
+Public, reproducible evidence produced by Crovia is available here:
+
+👉 https://github.com/croviatrust/crovia-evidence-lab
+
+This repository contains:
+- DSSE open proofs on public datasets (LAION, C4, DSSE-1M)
+- Presence / absence observations (Spider)
+- Drift snapshots and hash-anchored artifacts
+
+The Open Core focuses strictly on **verification primitives**.
