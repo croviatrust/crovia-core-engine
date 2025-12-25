@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Crovia Identity v1",
+  "type": "object",
+  "required": [
+    "crovia_id",
+    "entity_type",
+    "declared_at",
+    "fingerprint",
+    "public_keys"
+  ],
+  "properties": {
+    "crovia_id": {
+      "type": "string",
+      "description": "Deterministic Crovia identity (CIDv1)",
+      "pattern": "^cidv1:[a-f0-9]{64}$"
+    },
+    "entity_type": {
+      "type": "string",
+      "enum": ["dataset", "provider", "publisher", "collection"]
+    },
+    "declared_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fingerprint": {
+      "type": "object",
+      "description": "Stable identity fingerprint",
+      "required": ["algo", "value"],
+      "properties": {
+        "algo": {
+          "type": "string",
+          "enum": ["sha256"]
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "public_keys": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kid", "algo", "key"],
+        "properties": {
+          "kid": { "type": "string" },
+          "algo": { "type": "string", "enum": ["ed25519"] },
+          "key": { "type": "string" }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
