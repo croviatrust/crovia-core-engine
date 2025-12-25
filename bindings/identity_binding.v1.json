@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Crovia Identity Binding v1",
+  "description": "Non-invasive binding between CEP capsules and Crovia Identity",
+  "type": "object",
+  "required": [
+    "binding_version",
+    "cep_id",
+    "crovia_id",
+    "binding_hash",
+    "declared_at"
+  ],
+  "properties": {
+    "binding_version": {
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "cep_id": {
+      "type": "string",
+      "pattern": "^CEP-[A-Z0-9\\-]+$"
+    },
+    "crovia_id": {
+      "type": "string",
+      "pattern": "^cidv1:[a-f0-9]{64}$"
+    },
+    "binding_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "declared_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}
