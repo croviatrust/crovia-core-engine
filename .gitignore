@@ -54,3 +54,13 @@ __pycache__/
 # --- local backups (optional) ---
 _cli_backups/
 >>>>>>> 43a7bf8 (fix(cli): make 'crovia sign' actually write signed artifacts; ignore build/)
+
+# --- CROVIA runtime artifacts (do not commit) ---
+core/data/
+core/proofs/
+trust_summary.md
+validate_report.md
+validate_sample_bad.jsonl
+core/README_PAYOUT_*.md
+core/*.bak*
+core/*.pyc
