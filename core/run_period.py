@@ -29,7 +29,11 @@ from typing import List
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
+
 PROOFS_DIR = BASE_DIR / "proofs"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+PROOFS_DIR.mkdir(parents=True, exist_ok=True)
+
 
 
 def parse_args() -> argparse.Namespace:
@@ -194,7 +198,6 @@ def main() -> None:
     )
 
     # 7) Hashchain writer (non-blocking)
-    PROOFS_DIR.mkdir(parents=True, exist_ok=True)
     chain_path = PROOFS_DIR / f"hashchain_royalty_from_faiss.ndjson__{period_compact}_chunk1000.txt"
     run_step(
         "Hashchain writer",
