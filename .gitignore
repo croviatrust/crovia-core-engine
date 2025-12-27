@@ -1,1 +1,56 @@
+<<<<<<< HEAD
 build/
+=======
+# --- WORKSPACE ROOT (NO CODE) ---
+
+# Sub-repositories (must stay independent)
+crovia-core-engine-open/
+crovia-pro-engine/
+crovia-evidence-lab/
+crovia-spider/
+hubble/
+hf_datasets/
+hf_dsse_1m/
+laion_dsse/
+global-ai-training-omissions/
+models/
+
+# Environments
+.venv/
+.venv-publish/
+venv/
+__pycache__/
+
+# Artifacts
+*.zip
+*.tar.gz
+*.log
+*.jsonl
+*.ndjson
+
+# Backups
+*.BACKUP_*
+*.SAFE_*
+*.BROKEN_*
+*.BAK_*
+*.ZERO_*
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# build artifacts
+build/
+
+
+# --- python build artifacts ---
+build/
+dist/
+*.egg-info/
+__pycache__/
+.pytest_cache/
+
+# --- local backups (optional) ---
+_cli_backups/
+>>>>>>> 43a7bf8 (fix(cli): make 'crovia sign' actually write signed artifacts; ignore build/)
