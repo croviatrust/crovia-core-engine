@@ -326,7 +326,7 @@ def main():
 
     if total_receipts == 0 or sum(S.values()) <= 0:
         print(
-            "[PAYOUT] No valid receipts in the period or zero total shares.",
+            "[PAYOUT] Zero payout: no shares declared for this period.",
             file=sys.stderr,
         )
         # Write minimal empty outputs
