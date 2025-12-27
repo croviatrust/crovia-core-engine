@@ -88,7 +88,7 @@ def main() -> None:
     # 1) QA receipts
     run_step(
         "QA receipts",
-        [venv_python, "qa_receipts.py", str(receipts_path)],
+        [venv_python, "-m","model_side.qa_receipts", str(receipts_path)],
     )
 
     # 2) CROVIA trust (aggregate providers)
@@ -96,7 +96,7 @@ def main() -> None:
         "CROVIA trust",
         [
             venv_python,
-            "crovia_trust.py",
+            str(BASE_DIR / "crovia_trust.py"),
             "--input",
             str(receipts_path),
             "--min-appear",
@@ -109,13 +109,13 @@ def main() -> None:
     )
 
     # 3) Validate schema + business (non-blocking, optional script)
-    validate_script = BASE_DIR / "crovia_validate.py"
+    validate_script = BASE_DIR / str(BASE_DIR / "crovia_validate.py")
     if validate_script.exists():
         run_step(
             "Validate schema+business",
             [
                 venv_python,
-                "crovia_validate.py",
+                str(BASE_DIR / "crovia_validate.py"),
                 str(receipts_path),
                 "--out-md",
                 "validate_report.md",
@@ -128,13 +128,13 @@ def main() -> None:
         print("[SKIP] Validate schema+business (crovia_validate.py not present in this edition)")
 
     # 4) Compliance AI Act (non-blocking, optional script)
-    compliance_script = BASE_DIR / "compliance_ai_act.py"
+    compliance_script = BASE_DIR / str(BASE_DIR / "compliance_ai_act.py")
     if compliance_script.exists():
         run_step(
             "Compliance AI Act",
             [
                 venv_python,
-                "compliance_ai_act.py",
+                str(BASE_DIR / "compliance_ai_act.py"),
                 str(receipts_path),
                 "--out-summary",
                 "compliance_summary.md",
@@ -158,7 +158,7 @@ def main() -> None:
         "Payouts calculation",
         [
             venv_python,
-            "payouts_from_royalties.py",
+            str(BASE_DIR / "payouts_from_royalties.py"),
             "--input",
             str(receipts_path),
             "--period",
@@ -182,7 +182,7 @@ def main() -> None:
         "Payout charts",
         [
             venv_python,
-            "make_payout_charts.py",
+            str(BASE_DIR / "make_payout_charts.py"),
             "--period",
             period,
             "--csv",
@@ -200,7 +200,7 @@ def main() -> None:
         "Hashchain writer",
         [
             venv_python,
-            "hashchain_writer.py",
+            str(BASE_DIR / "hashchain_writer.py"),
             "--source",
             str(receipts_path),
             "--chunk",
@@ -216,7 +216,7 @@ def main() -> None:
         "Hashchain verify",
         [
             venv_python,
-            "verify_hashchain.py",
+            str(BASE_DIR / "verify_hashchain.py"),
             "--source",
             str(receipts_path),
             "--chain",
@@ -250,7 +250,7 @@ def main() -> None:
         "Crovian Floors",
         [
             venv_python,
-            "crovia_floor.py",
+            str(BASE_DIR / "crovia_floor.py"),
             "--period",
             period,
             "--eur-total",
@@ -348,20 +348,3 @@ def main(argv=None):
 if __name__ == "__main__":
     main()
 
-# --- FIX LEGACY QA RECEIPTS INVOCATION ---
-def _run_qa_receipts(receipts_path: str):
-    import subprocess, sys
-    cmd = [
-        sys.executable,
-        "-m",
-        "model_side.qa_receipts",
-        receipts_path,
-    ]
-    print(f">>> [QA receipts] {' '.join(cmd)}")
-    r = subprocess.run(cmd)
-    if r.returncode != 0:
-        raise RuntimeError("QA receipts failed")
-    return True
-
-# --- LEGACY PATCH HOOK ---
-import sys as _sys
