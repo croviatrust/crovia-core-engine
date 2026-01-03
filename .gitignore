@@ -64,3 +64,50 @@ validate_sample_bad.jsonl
 core/README_PAYOUT_*.md
 core/*.bak*
 core/*.pyc
+
+# ---- LOCAL / GENERATED (OPEN REPO MUST STAY CLEAN) ----
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# local venvs
+.venv/
+.venv-*/
+venv/
+ENV/
+
+# outputs / artifacts
+data/
+result/
+results/
+charts/
+maps/
+proofs/
+demo_*/
+*.csv
+*.parquet
+*.png
+*.pdf
+
+# scratch / notes
+*_REPO_*.txt
+*_TREE*.txt
+*_CALLS*.txt
+ORPHANS_*.txt
+ALL_REPO_PY.txt
+VENV_*.txt
+REPO_IDENTITY.txt
+CROVIA_MAP.txt
+assumptions_*.json
+
+# backups
+_cli_backups/
+**/*.bak_*
+**/*.broken*
+**/*.bak.*

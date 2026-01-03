@@ -174,7 +174,7 @@ def cmd_legend(args: argparse.Namespace) -> None:
     print("• sign    → HMAC-sign JSON/NDJSON artifacts.")
     print("• trace   → Hashchain generator / verifier.")
     print("• explain → Metacognitive view on any Crovia JSON/.crovia file.")
-    print("• mode    → CLI profile (Tarik Mode, defaults, auto-sign, etc.).")
+    print("• mode    → CLI profile (Operator Mode, defaults, auto-sign, etc.).")
     print()
 
     print_section("If you are completely new, start with")
@@ -627,7 +627,7 @@ def cmd_mode(args: argparse.Namespace) -> None:
         CONFIG["auto_sign"] = True
         CONFIG["prefer_interactive"] = True
         save_config(CONFIG)
-        print_ok("Tarik Mode activated.")
+        print_ok("Operator Mode activated.")
     elif sub == "default":
         CONFIG["mode"] = "default"
         save_config(CONFIG)
@@ -834,7 +834,7 @@ def build_parser() -> argparse.ArgumentParser:
     # mode
     sp = sub.add_parser(
         "mode",
-        help="Manage CLI profile (e.g. Tarik Mode)",
+        help="Manage CLI profile (e.g. Operator Mode)",
     )
     sp.add_argument(
         "action",
