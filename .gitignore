@@ -111,3 +111,6 @@ _cli_backups/
 **/*.bak_*
 **/*.broken*
 **/*.bak.*
+
+# Local generated outputs (do not commit)
+out_*/

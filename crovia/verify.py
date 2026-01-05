@@ -1,58 +1,107 @@
-# crovia/verify.py
+#!/usr/bin/env python3
 """
-Crovia Offline Verification
-
-Verifies:
-- bundle SHA256
-- Crovia ID binding integrity
-- schema correctness
-
-NO network calls.
+crovia.verify — CRC-1 offline verifier (audit-first)
+usage:
+  crovia-verify <CRC-1 directory>
 """
 
 from __future__ import annotations
-
 import json
-import hashlib
+import sys
+import subprocess
 from pathlib import Path
-from typing import Dict, Any
 
+def _fail(msg: str) -> "None":
+    print(f"✖ CRC-1 INVALID: {msg}")
+    raise SystemExit(1)
 
-def _canonical_json_bytes(obj: Dict[str, Any]) -> bytes:
-    return json.dumps(
-        obj,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-    ).encode("utf-8")
+def _ok(msg: str) -> None:
+    print(f"✔ {msg}")
 
+def _find_hashchain_verifier(repo_root: Path) -> Path:
+    # We do NOT guess names; we check the repo for known verifier scripts.
+    candidates = [
+        repo_root / "proofs" / "verify_hashchain.py",
+        repo_root / "proofs" / "hashchain_verify.py",
+        repo_root / "proofs" / "verify.py",
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    _fail(f"No hashchain verifier script found under {repo_root/'proofs'}")
 
-def sha256_of_object(obj: Dict[str, Any]) -> str:
-    return hashlib.sha256(_canonical_json_bytes(obj)).hexdigest()
+def main() -> None:
+    if len(sys.argv) != 2:
+        print("usage: crovia-verify <CRC-1 directory>")
+        raise SystemExit(1)
 
+    crc_dir = Path(sys.argv[1]).resolve()
+    if not crc_dir.exists() or not crc_dir.is_dir():
+        _fail("Provided path is not a directory")
 
-def verify_bundle(
-    *,
-    bundle_path: Path,
-    id_binding_path: Path,
-) -> Dict[str, Any]:
-    if not bundle_path.exists():
-        raise FileNotFoundError(bundle_path)
-    if not id_binding_path.exists():
-        raise FileNotFoundError(id_binding_path)
+    manifest_path = crc_dir / "MANIFEST.json"
+    if not manifest_path.exists():
+        _fail("MANIFEST.json missing")
 
-    bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
-    binding = json.loads(id_binding_path.read_text(encoding="utf-8"))
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        _fail(f"MANIFEST.json invalid JSON: {e}")
 
-    computed = sha256_of_object(bundle)
-    expected = binding.get("bundle_sha256")
+    if manifest.get("schema") != "crovia.manifest.v1":
+        _fail("MANIFEST schema must be crovia.manifest.v1")
+    if manifest.get("contract") != "CRC-1":
+        _fail("MANIFEST contract must be CRC-1")
 
-    ok = computed == expected
+    artifacts = manifest.get("artifacts")
+    if not isinstance(artifacts, dict):
+        _fail("MANIFEST artifacts must be an object")
 
-    return {
-        "crovia_id": binding.get("crovia_id"),
-        "expected_sha256": expected,
-        "computed_sha256": computed,
-        "match": ok,
-        "schema": binding.get("schema"),
-    }
+    # required keys for CRC-1
+    required = ["receipts", "validate_report", "hashchain", "trust_bundle"]
+    for k in required:
+        if k not in artifacts:
+            _fail(f"MANIFEST missing artifacts.{k}")
+
+    # existence checks
+    for k, rel in artifacts.items():
+        p = crc_dir / rel
+        if not p.exists():
+            _fail(f"Missing artifact file: {rel} (from artifacts.{k})")
+    _ok("All artifacts present")
+
+    # Validate JSON of trust bundle
+    try:
+        json.loads((crc_dir / artifacts["trust_bundle"]).read_text(encoding="utf-8"))
+    except Exception as e:
+        _fail(f"trust_bundle invalid JSON: {e}")
+    _ok("trust_bundle JSON valid")
+
+    # Verify hashchain using the REAL verifier present in this repo
+    repo_root = Path(__file__).resolve().parents[1]  # .../crovia
+    repo_root = repo_root.parent                     # .../repo root (crovia-core-engine-open)
+    verifier = _find_hashchain_verifier(repo_root)
+
+    receipts = crc_dir / artifacts["receipts"]
+    chain = crc_dir / artifacts["hashchain"]
+
+    cmd = [
+        sys.executable,
+        str(verifier),
+        "--source", str(receipts),
+        "--chain", str(chain),
+    ]
+
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+        # print the verifier output to help debugging (offline, deterministic)
+        sys.stdout.write(r.stdout)
+        sys.stderr.write(r.stderr)
+        _fail("Hashchain verification failed")
+
+    _ok("Hashchain verified")
+    print("\n✔ CRC-1 VERIFIED")
+    raise SystemExit(0)
+
+if __name__ == "__main__":
+    main()

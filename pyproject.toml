@@ -20,6 +20,7 @@ dependencies = [
 ]
 
 [project.scripts]
+crovia-verify = "crovia.verify:main"
 crovia = "crovia.cli:main"
 crovia-run = "crovia.run:main"
 
