@@ -96,6 +96,12 @@ PRO settles.
 
 ## Evidence & Reproducible Proofs
 
+The **Crovia Evidence Lab** contains *public, reproducible outputs* generated using
+the Open Core primitives defined in this repository.
+
+This repository provides **the tools and verification primitives**.
+The Evidence Lab provides **the publicly verifiable proofs** produced with them.
+
 Public, reproducible evidence produced by Crovia is available here:
 
 👉 https://github.com/croviatrust/crovia-evidence-lab
