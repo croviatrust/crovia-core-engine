@@ -2,116 +2,102 @@
 
 **If AI is trained on your data, there should be a receipt.**
 
-Crovia Core Engine is the **open, verifiable trust and payout layer** for AI training data.
-It produces **deterministic, offline-verifiable evidence artifacts** from declared inputs.
-
-This project:
-- does NOT accuse anyone
-- does NOT make legal judgments
-- only produces verifiable technical evidence
+Crovia is an **offline-verifiable evidence engine** for AI training data.
+It does **not** accuse, infer, or enforce.
+It produces **deterministic artifacts** that anyone can verify independently.
 
 ---
 
-## Quickstart (30 seconds)
+## What Crovia Produces (CRC-1)
 
-The following commands run a minimal end-to-end open-core pipeline.
-Everything below is intentionally shown as a **single executable flow**.
+Crovia generates a **CRC-1 Evidence Pack** — a closed set of files
+that fully describe *what was declared* and *what was produced*.
 
-1) Validate NDJSON receipts (structure + business rules)
+Each pack contains:
 
-python3 validate/validate.py \
-  --in examples/minimal_royalty_receipts.ndjson \
-  --out report.md
+- `receipts.ndjson` — declared training receipts
+- `validate_report.md` — deterministic validation outcome
+- `hashchain.txt` — integrity hash-chain
+- `trust_bundle.json` — normalized trust summary
+- `MANIFEST.json` — authoritative artifact contract
 
-2) Build an integrity proof (rolling hash-chain)
+All files are **offline-verifiable**.
 
-python3 proofs/hashchain_writer.py \
-  --source examples/minimal_royalty_receipts.ndjson \
-  --chunk 2
-
-3) Verify the proof offline
-
-If you change even 1 byte in the NDJSON file, this MUST fail.
-
-python3 proofs/verify_hashchain.py \
-  --source examples/minimal_royalty_receipts.ndjson \
-  --chain proofs/hashchain_minimal_royalty_receipts.ndjson.txt \
-  --chunk 2
+See: `docs/CROVIA_ARTIFACT_SPEC.md`
 
 ---
 
-## Notes
+## 1) Generate Evidence (single command)
 
-- No network access required
-- Verification is deterministic and reproducible
-- Integrity checks fail on any tampering
+Example:
 
----
+crovia-run \
+  --receipts examples/minimal_royalty_receipts.ndjson \
+  --period 2025-11 \
+  --out out_crc1
 
-## What the Open Core Provides
+This creates a complete CRC-1 Evidence Pack in `out_crc1/`.
 
-Crovia open-core focuses strictly on verifiable outputs:
-
-- JSON schemas for receipts and bundles (schemas/)
-- Streaming validators with health-style reporting (validate/)
-- Cryptographic integrity proofs (hash-chains) (proofs/)
-- Deterministic Evidence Pack format (pack/)
-- Thin CLI entrypoints (cli/)
+- No network
+- No secrets
+- Fully deterministic
 
 ---
 
-## Evidence Pack
+## 2) Inspect the Artifacts
 
-CRC-1 (Artifact Contract): see docs/CROVIA_ARTIFACT_SPEC.md
+Example:
 
+ls out_crc1
+cat out_crc1/MANIFEST.json
 
-An Evidence Pack is a reproducible, hash-verifiable bundle produced from declared inputs.
-
-It may contain:
-- validation reports
-- signed receipts (NDJSON)
-- hash-chain proofs
-- derived payout views
-- CEP capsules
-
-See pack/README.md for the formal definition.
+The MANIFEST defines exactly which files must exist.
+Nothing implicit. Nothing hidden.
 
 ---
 
-## Open vs PRO
+## 3) Verify Evidence (offline, by anyone)
 
-Open Core is for:
-- structure validation
-- integrity proofs
-- deterministic packaging
-- offline verification
+Example:
 
-PRO (private repository) is for:
-- settlement engines
-- contract registries
-- DPI and policy calibration
-- enterprise-grade audits
+crovia-verify out_crc1
 
-Open Core verifies.
-PRO settles.
+Expected output:
+
+✔ All artifacts present  
+✔ trust_bundle JSON valid  
+✔ Hashchain verified  
+
+✔ CRC-1 VERIFIED
+
+Verification requires **only the files themselves**.
 
 ---
 
-## Evidence & Reproducible Proofs
+## Design Principles
 
-The **Crovia Evidence Lab** contains *public, reproducible outputs* generated using
-the Open Core primitives defined in this repository.
+- Offline-first
+- Deterministic
+- No attribution claims
+- No enforcement logic
+- Evidence > opinions
 
-This repository provides **the tools and verification primitives**.
-The Evidence Lab provides **the publicly verifiable proofs** produced with them.
+Crovia produces **facts**, not judgments.
 
-Public, reproducible evidence produced by Crovia is available here:
+---
 
-👉 https://github.com/croviatrust/crovia-evidence-lab
+## Repositories
 
-This repository contains:
-- DSSE open proofs on public datasets (LAION, C4, DSSE-1M)
-- Presence / absence observations (Spider)
-- Drift snapshots and hash-anchored artifacts
+Open Core Engine  
+https://github.com/croviatrust/crovia-core-engine
 
-The Open Core focuses strictly on **verification primitives**.
+Public Evidence Lab (verifiable demos)  
+https://github.com/croviatrust/crovia-evidence-lab
+
+---
+
+## License
+
+Apache-2.0  
+CroviaTrust
+
