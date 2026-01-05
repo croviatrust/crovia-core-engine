@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crovia-core-engine-open"
+version = "0.1.0"
+description = "Crovia Core Engine (Open Core) — verifiable evidence & payout primitives for AI training data."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "CroviaTrust" }]
+
+dependencies = [
+  "numpy",
+  "pandas",
+  "rich",
+  "qrcode",
+  "pyyaml",
+]
+
+[project.scripts]
+crovia = "crovia.cli:main"
+crovia-run = "crovia.run:main"
+
+[tool.setuptools]
+packages = ["crovia"]
