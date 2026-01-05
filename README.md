@@ -101,3 +101,23 @@ https://github.com/croviatrust/crovia-evidence-lab
 Apache-2.0  
 CroviaTrust
 
+
+---
+
+## Public Evidence & Verification
+
+Crovia Open Core does **not ship conclusions**.
+
+All publicly inspectable evidence generated with this engine lives in:
+
+👉 https://github.com/croviatrust/crovia-evidence-lab
+
+That repository contains:
+- reproducible CRC-1 capsules
+- offline-verifiable artifacts
+- neutral semantic observations (DSSE)
+- presence / absence observations (Spider)
+
+If you want to **see results**, go there.  
+If you want to **reproduce them**, stay here.
+
