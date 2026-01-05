@@ -62,6 +62,9 @@ Crovia open-core focuses strictly on verifiable outputs:
 
 ## Evidence Pack
 
+CRC-1 (Artifact Contract): see docs/CROVIA_ARTIFACT_SPEC.md
+
+
 An Evidence Pack is a reproducible, hash-verifiable bundle produced from declared inputs.
 
 It may contain:
