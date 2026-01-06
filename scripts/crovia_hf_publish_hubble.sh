@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/opt/crovia/hf_datasets/global-ai-training-omissions"
+LOG="/opt/crovia/logs/hf_publish_hubble.log"
+
+cd "$ROOT"
+
+echo "=== Crovia Hubble publish $(date -Is) ===" | tee -a "$LOG"
+
+# --- Allowlist: SOLO evidenza osservabile ---
+ALLOWLIST=(
+  "EVIDENCE.json"
+  "snapshot_latest.json"
+  "global_ranking.jsonl"
+  "v0.1/EVIDENCE.json"
+  "v0.1/snapshot_latest.json"
+  "v0.1/global_ranking.jsonl"
+  "open/README_STATUS.md"
+  "open/signal/presence_latest.jsonl"
+  "open/signal/ledger_status_latest.json"
+)
+
+# --- 1) Verifica hash dichiarati in EVIDENCE.json ---
+echo "[check] verifying declared sha256 hashes" | tee -a "$LOG"
+
+jq -r '.integrity.sha256 | to_entries[] | "\(.key) \(.value)"' EVIDENCE.json | while read -r file hash; do
+  if [ ! -f "$file" ]; then
+    echo "❌ MISSING FILE: $file" | tee -a "$LOG"
+    exit 1
+  fi
+
+  calc=$(sha256sum "$file" | awk '{print $1}')
+  if [ "$calc" != "$hash" ]; then
+    echo "❌ HASH MISMATCH: $file" | tee -a "$LOG"
+    echo "expected=$hash" | tee -a "$LOG"
+    echo "actual  =$calc" | tee -a "$LOG"
+    exit 1
+  fi
+done
+
+echo "✅ hash verification OK" | tee -a "$LOG"
+
+# --- 2) Stage SOLO allowlist ---
+git reset >/dev/null
+
+for f in "${ALLOWLIST[@]}"; do
+  [ -f "$f" ] && git add "$f"
+done
+
+# --- 3) Verifica cambiamenti reali ---
+if git diff --cached --quiet; then
+  echo "No evidence change detected — skip publish" | tee -a "$LOG"
+  exit 0
+fi
+
+# --- 4) Commit & push ---
+git commit -m "crovia(hubble): publish verified observable evidence $(date -Is)" | tee -a "$LOG"
+git push | tee -a "$LOG"
+
+echo "=== Hubble publish OK ===" | tee -a "$LOG"
