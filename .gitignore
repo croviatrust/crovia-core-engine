@@ -30,3 +30,18 @@ hf_cache/
 # --- OS ---
 .DS_Store
 Thumbs.db
+
+# --- Local workspace noise (never commit) ---
+__LOCAL_TRASH__/
+*.bak
+*.broken
+*.snapshot
+*.tar.gz
+*.tmp
+FETCH_HEAD
+ALL_REPO_PY.txt
+MAPS_REPO_STATUS.txt
+WHO_CALLS_WHAT.txt
+VENV_*.txt
+REPO_IDENTITY.txt
+ORPHANS_CANDIDATES.txt
