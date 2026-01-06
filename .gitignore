@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 build/
-=======
 # --- WORKSPACE ROOT (NO CODE) ---
 
 # Sub-repositories (must stay independent)
@@ -53,7 +51,6 @@ __pycache__/
 
 # --- local backups (optional) ---
 _cli_backups/
->>>>>>> 43a7bf8 (fix(cli): make 'crovia sign' actually write signed artifacts; ignore build/)
 
 # --- CROVIA runtime artifacts (do not commit) ---
 core/data/
