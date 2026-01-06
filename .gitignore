@@ -1,113 +1,32 @@
-build/
-# --- WORKSPACE ROOT (NO CODE) ---
-
-# Sub-repositories (must stay independent)
-crovia-core-engine-open/
-crovia-pro-engine/
-crovia-evidence-lab/
-crovia-spider/
-hubble/
-hf_datasets/
-hf_dsse_1m/
-laion_dsse/
-global-ai-training-omissions/
-models/
-
-# Environments
-.venv/
-.venv-publish/
-venv/
+# --- Python ---
 __pycache__/
-
-# Artifacts
-*.zip
-*.tar.gz
-*.log
-*.jsonl
-*.ndjson
-
-# Backups
-*.BACKUP_*
-*.SAFE_*
-*.BROKEN_*
-*.BAK_*
-*.ZERO_*
-
-# OS / editor
-.DS_Store
-.idea/
-.vscode/
-
-# build artifacts
-build/
-
-
-# --- python build artifacts ---
-build/
-dist/
+*.py[cod]
+*.so
 *.egg-info/
-__pycache__/
-.pytest_cache/
-
-# --- local backups (optional) ---
-_cli_backups/
-
-# --- CROVIA runtime artifacts (do not commit) ---
-core/data/
-core/proofs/
-trust_summary.md
-validate_report.md
-validate_sample_bad.jsonl
-core/README_PAYOUT_*.md
-core/*.bak*
-core/*.pyc
-
-# ---- LOCAL / GENERATED (OPEN REPO MUST STAY CLEAN) ----
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.log
-*.tmp
-*.bak
-*.swp
-*.swo
-
-# local venvs
+.eggs/
 .venv/
-.venv-*/
-venv/
+env/
 ENV/
 
-# outputs / artifacts
-data/
-result/
-results/
-charts/
-maps/
-proofs/
-demo_*/
-*.csv
+# --- Runtime / Generated ---
+logs/
+*.log
+*.tmp
+*.cache
+*.pid
+
+# --- Crovia runtime artifacts ---
+__QUARANTINE__/
+crovia_trust_bundle*.json
+*.signed.json
+*.with_hashchain.json
+
+# --- HF / artifacts ---
+hf_cache/
+.hf/
 *.parquet
-*.png
-*.pdf
+*.arrow
 
-# scratch / notes
-*_REPO_*.txt
-*_TREE*.txt
-*_CALLS*.txt
-ORPHANS_*.txt
-ALL_REPO_PY.txt
-VENV_*.txt
-REPO_IDENTITY.txt
-CROVIA_MAP.txt
-assumptions_*.json
-
-# backups
-_cli_backups/
-**/*.bak_*
-**/*.broken*
-**/*.bak.*
-
-# Local generated outputs (do not commit)
-out_*/
+# --- OS ---
+.DS_Store
+Thumbs.db
