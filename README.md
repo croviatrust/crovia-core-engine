@@ -50,12 +50,25 @@ Specification:
 
 ## Try it (single command)
 
-Generate a complete CRC-1 Evidence Pack, example:
+Generate a complete CRC-1 Evidence Pack:
 
-crovia-run \
+```bash
+# Unified CLI
+crovia run --period 2025-11 --budget 100000
+
+# Or with custom receipts
+crovia run \
   --receipts examples/minimal_royalty_receipts.ndjson \
   --period 2025-11 \
   --out out_crc1
+```
+
+Other commands:
+```bash
+crovia status    # Check system status
+crovia test      # Run module tests
+crovia score     # Calculate Crovia Score
+```
 
 This creates a fully self-contained evidence capsule in `out_crc1/`.
 
