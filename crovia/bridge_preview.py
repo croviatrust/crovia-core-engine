@@ -1,11 +1,6 @@
 """
 CROVIA Bridge Preview - Open Core Teaser
 ========================================
-
-Geniale: Mostra IL POTENZIALE del bridge completo senza rivelare i segreti.
-
-Questo è l'OPEN CORE che invoglia a fare upgrade.
-Mostra cosa è possibile, non come funziona.
 """
 
 from __future__ import annotations
