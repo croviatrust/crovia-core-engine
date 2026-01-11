@@ -3,21 +3,54 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "crovia-core-engine-open"
-version = "0.1.0"
-description = "Crovia Core Engine (Open Core) — verifiable evidence & payout primitives for AI training data."
+name = "crovia"
+version = "0.2.0"
+description = "Crovia — The Global Standard for AI Training Data Attribution. Cryptographic proofs, absence verification, and automatic royalty settlement."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
-authors = [{ name = "CroviaTrust" }]
+authors = [{ name = "CroviaTrust", email = "info@croviatrust.com" }]
+keywords = [
+    "ai",
+    "training-data",
+    "attribution",
+    "cryptography",
+    "provenance",
+    "royalty",
+    "eu-ai-act",
+    "transparency",
+    "merkle",
+    "zk-proofs",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security :: Cryptography",
+]
 
 dependencies = [
-  "numpy",
-  "pandas",
-  "rich",
-  "qrcode",
-  "pyyaml",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "rich>=13.0.0",
+    "qrcode>=7.4.0",
+    "pyyaml>=6.0",
+    "requests>=2.31.0",
 ]
+
+[project.urls]
+Homepage = "https://croviatrust.com"
+Documentation = "https://croviatrust.com/docs"
+Repository = "https://github.com/croviatrust/crovia-core-engine"
+Changelog = "https://github.com/croviatrust/crovia-core-engine/blob/main/CHANGELOG.md"
+Issues = "https://github.com/croviatrust/crovia-core-engine/issues"
 
 [project.scripts]
 crovia-verify = "crovia.verify:main"
