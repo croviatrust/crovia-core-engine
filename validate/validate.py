@@ -14,7 +14,7 @@ Supporta due schemi principali:
 
 Cosa fa:
 - usa (se disponibile) schema.validate_record / schema.is_schema_compatible
-- applica regole business per i royalty receipts (top_k, share, ecc.)
+- applies validation rules for royalty receipts (top_k, share, etc.)
 - per i data receipts applica controlli basilari (provider_id, content_id, timestamp)
 - produce:
   - report Markdown con health score (A/B/C/D)

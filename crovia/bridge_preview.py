@@ -2,10 +2,8 @@
 CROVIA Bridge Preview - Open Core Teaser
 ========================================
 
-Geniale: Mostra IL POTENZIALE del bridge completo senza rivelare i segreti.
-
-Questo è l'OPEN CORE che invoglia a fare upgrade.
-Mostra cosa è possibile, non come funziona.
+Shows compliance potential and PRO upgrade capabilities.
+Open core module that demonstrates value without revealing implementation details.
 """
 
 from __future__ import annotations
@@ -40,9 +38,9 @@ class CompliancePreview:
 
 class CroviaBridgePreview:
     """
-    Preview del bridge PRO per generare adoption.
+    Preview of PRO bridge capabilities for adoption generation.
     
-    Geniale: Mostra il valore, nasconde i segreti, crea desiderio di upgrade.
+    Demonstrates value proposition while protecting proprietary implementation.
     """
     
     def __init__(self):
@@ -117,9 +115,9 @@ class CroviaBridgePreview:
     
     def generate_compliance_preview(self, model_id: str) -> CompliancePreview:
         """
-        Genera preview di compliance per un modello.
+        Generates compliance preview for a model.
         
-        Geniale: Mostra il gap tra open e PRO per creare desire.
+        Shows potential improvement between open and PRO tiers.
         """
         
         # 1. Calcola score base (open capabilities)
@@ -155,9 +153,9 @@ class CroviaBridgePreview:
     
     def demonstrate_capability_preview(self, capability_id: str) -> Dict[str, Any]:
         """
-        Demo preview di una capability PRO.
+        Demo preview of a PRO capability.
         
-        Geniale: Mostra il risultato, non il metodo.
+        Shows results without exposing implementation methods.
         """
         capability = self.capabilities.get(capability_id)
         if not capability or not capability.preview_available:
