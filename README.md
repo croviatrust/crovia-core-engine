@@ -63,11 +63,26 @@ crovia run \
   --out out_crc1
 ```
 
+**Omission Oracle** — Analyze AI models for trust gaps:
+```bash
+crovia oracle scan meta-llama/Llama-3-8B   # Analyze model
+crovia oracle card mistralai/Mistral-7B    # Generate Oracle Card
+crovia oracle batch models.txt             # Batch analysis (PRO)
+```
+
+**License Management**:
+```bash
+crovia license status                      # Show current tier
+crovia license activate CRV-PRO-XXXX-...   # Activate PRO
+```
+
 Other commands:
 ```bash
-crovia status    # Check system status
-crovia test      # Run module tests
-crovia score     # Calculate Crovia Score
+crovia scan      # Spider / dataset attribution
+crovia check     # Validate receipts
+crovia pay       # Compute payouts
+crovia bundle    # Create trust bundle
+crovia trace     # Hashchain operations
 ```
 
 This creates a fully self-contained evidence capsule in `out_crc1/`.
