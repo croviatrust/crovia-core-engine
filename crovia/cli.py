@@ -862,8 +862,47 @@ def build_parser() -> argparse.ArgumentParser:
     ws = wedge_sub.add_parser("explain", help="Explain wedge signals")
     ws.set_defaults(func=lambda args: print_warn("wedge explain not wired yet"))
 
+    # ==========================
+    #  ORACLE (Omission Oracle)
+    # ==========================
+    try:
+        from crovia.oracle import bind_oracle_commands
+        bind_oracle_commands(sub)
+    except ImportError:
+        pass  # Oracle module not available
+
+    # ==========================
+    #  LICENSE (Auth & License Management)
+    # ==========================
+    license_p = sub.add_parser("license", help="Manage Crovia license")
+    license_sub = license_p.add_subparsers(dest="license_cmd")
+
+    ls = license_sub.add_parser("status", help="Show license status")
+    ls.set_defaults(func=lambda args: _cmd_license_status())
+
+    la = license_sub.add_parser("activate", help="Activate a license key")
+    la.add_argument("key", help="License key (CRV-PRO-XXXX-XXXX-XXXX)")
+    la.set_defaults(func=lambda args: _cmd_license_activate(args.key))
 
     return p
+
+
+def _cmd_license_status():
+    try:
+        from crovia.auth import print_license_status
+        print_license_status()
+    except ImportError:
+        print_warn("Auth module not available")
+    return 0
+
+
+def _cmd_license_activate(key):
+    try:
+        from crovia.auth import activate_license
+        return 0 if activate_license(key) else 1
+    except ImportError:
+        print_warn("Auth module not available")
+        return 1
 
 
 def main(argv=None):
