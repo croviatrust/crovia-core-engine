@@ -50,7 +50,20 @@ Specification:
 
 ## Try it (single command)
 
-Generate a complete CRC-1 Evidence Pack:
+### 🚀 ZK-Bridge Preview - Technical Authority for AI Compliance
+
+```bash
+# Preview compliance potential
+crovia bridge preview meta-llama/Llama-3-8B
+
+# List PRO capabilities  
+crovia bridge upgrades
+
+# Demo ZK compliance
+crovia bridge demo zk_compliance
+```
+
+### 📋 Generate CRC-1 Evidence Packs
 
 ```bash
 # Unified CLI
@@ -63,17 +76,17 @@ crovia run \
   --out out_crc1
 ```
 
-**Omission Oracle** — Analyze AI models for trust gaps:
+### 🎯 Oracle Analysis
 ```bash
-crovia oracle scan meta-llama/Llama-3-8B   # Analyze model
-crovia oracle card mistralai/Mistral-7B    # Generate Oracle Card
-crovia oracle batch models.txt             # Batch analysis (PRO)
+# Analyze AI models for trust gaps
+crovia oracle scan meta-llama/Llama-3-8B
+crovia oracle card mistralai/Mistral-7B
 ```
 
-**License Management**:
+### 💎 License Management
 ```bash
-crovia license status                      # Show current tier
-crovia license activate CRV-PRO-XXXX-...   # Activate PRO
+# Check current tier
+crovia license status
 ```
 
 Other commands:

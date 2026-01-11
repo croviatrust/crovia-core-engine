@@ -884,6 +884,124 @@ def build_parser() -> argparse.ArgumentParser:
     la.add_argument("key", help="License key (CRV-PRO-XXXX-XXXX-XXXX)")
     la.set_defaults(func=lambda args: _cmd_license_activate(args.key))
 
+    # ==========================
+    #  ZK-BRIDGE PREVIEW (Open Core Teaser)
+    # ==========================
+
+    bridge = sub.add_parser(
+        "bridge",
+        help="Crovia ZK-Bridge Preview - Technical Authority for AI Compliance",
+    )
+    bridge_sub = bridge.add_subparsers(dest="bridge_cmd")
+
+    # Preview compliance
+    bp = bridge_sub.add_parser("preview", help="Preview compliance potential")
+    bp.add_argument("model", help="Model ID or HuggingFace repo")
+    bp.set_defaults(func=lambda args: cmd_bridge_preview(args))
+
+    # List PRO capabilities
+    bl = bridge_sub.add_parser("upgrades", help="List PRO upgrade capabilities")
+    bl.set_defaults(func=lambda args: cmd_bridge_upgrades(args))
+
+    # Demo PRO capability
+    bd = bridge_sub.add_parser("demo", help="Demo PRO capability")
+    bd.add_argument("capability", help="Capability ID to demo")
+    bd.set_defaults(func=lambda args: cmd_bridge_demo(args))
+
+
+def cmd_bridge_preview(args):
+    """Preview compliance potential for a model."""
+    from .bridge_preview import preview_compliance
+    
+    try:
+        preview = preview_compliance(args.model)
+        
+        print_success(f"🔍 Compliance Preview: {args.model}")
+        print()
+        
+        print(f"📊 Current Score (Open): {preview.preview_score:.1%}")
+        print(f"🚀 Potential Score (PRO): {preview.potential_score:.1%}")
+        print(f"📈 Improvement: +{(preview.potential_score - preview.preview_score):.1%}")
+        print()
+        
+        print("🌍 Global Coverage:")
+        for reg, scores in preview.global_coverage.items():
+            current = scores.get("current", 0)
+            potential = scores.get("potential", 0)
+            print(f"  {reg}: {current:.1%} → {potential:.1%}")
+        print()
+        
+        if preview.missing_capabilities:
+            print("🔓 Missing PRO Capabilities:")
+            for cap in preview.missing_capabilities:
+                print(f"  • {cap}")
+            print()
+        
+        if preview.upgrade_benefits:
+            print("💎 Upgrade Benefits:")
+            for benefit in preview.upgrade_benefits:
+                print(f"  • {benefit}")
+            print()
+        
+        print("💡 Upgrade to crovia-pro for full technical authority")
+        
+    except Exception as e:
+        print_error(f"Preview failed: {e}")
+
+
+def cmd_bridge_upgrades(args):
+    """List all PRO upgrade capabilities."""
+    from .bridge_preview import list_upgrades
+    
+    try:
+        capabilities = list_upgrades()
+        
+        print_success("🚀 Crovia PRO Capabilities")
+        print()
+        
+        for cap in capabilities:
+            print(f"💎 {cap.name}")
+            print(f"   {cap.description}")
+            print(f"   📋 Coverage: {', '.join(cap.regulatory_coverage)}")
+            print(f"   🔍 Evidence: {', '.join(cap.evidence_types)}")
+            print()
+        
+        print("💡 Upgrade to crovia-pro to unlock all capabilities")
+        
+    except Exception as e:
+        print_error(f"Failed to list capabilities: {e}")
+
+
+def cmd_bridge_demo(args):
+    """Demo a PRO capability."""
+    from .bridge_preview import demo_capability
+    
+    try:
+        demo = demo_capability(args.capability)
+        
+        if "error" in demo:
+            print_error(f"Capability not available: {args.capability}")
+            return
+        
+        print_success(f"🎬 Demo: {demo['name']}")
+        print()
+        print(f"📋 Description: {demo['name']}")
+        print(f"🌍 Coverage: {', '.join(demo['regulatory_coverage'])}")
+        print(f"🔍 Evidence Types: {', '.join(demo['evidence_types'])}")
+        print()
+        
+        if "sample_results" in demo:
+            print("📊 Sample Results:")
+            for key, value in demo["sample_results"].items():
+                print(f"  {key}: {value}")
+            print()
+        
+        print(f"💡 {demo['upgrade_message']}")
+        
+    except Exception as e:
+        print_error(f"Demo failed: {e}")
+
+
     return p
 
 
