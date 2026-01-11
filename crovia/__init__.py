@@ -23,7 +23,7 @@ Copyright (c) 2026 CroviaTrust
 Apache License 2.0
 """
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __author__ = "CroviaTrust"
 __email__ = "info@croviatrust.com"
 __license__ = "Apache-2.0"
