@@ -1,0 +1,35 @@
+{
+  "manifest_version": "v1.0.0",
+  "ruleset_id": "dsl-evaluation-v1.0.0",
+  "name": "DSL Evaluation Rules v1",
+  "description": "Procedural compatibility rules for DSL-based claims",
+  "rules": {
+    "temporal_ordering": {
+      "rule_id": "R001",
+      "description": "Claim timestamp must precede evidence timestamp",
+      "required": true
+    },
+    "hash_integrity": {
+      "rule_id": "R002",
+      "description": "All hashes must be valid SHA256 (64 hex chars)",
+      "required": true
+    },
+    "dsl_structure_validation": {
+      "rule_id": "R003",
+      "description": "Claim DSL must conform to v1.0.0 schema",
+      "required": true
+    },
+    "evidence_envelope_validation": {
+      "rule_id": "R004",
+      "description": "Evidence must have valid envelope v1 with signature",
+      "required": true
+    },
+    "deterministic_evaluation": {
+      "rule_id": "R005",
+      "description": "Same inputs must produce identical verdict",
+      "required": true
+    }
+  },
+  "supported_dsl_version": "dsl-v1.0.0",
+  "supported_evidence_envelope": "envelope-v1.0.0"
+}
