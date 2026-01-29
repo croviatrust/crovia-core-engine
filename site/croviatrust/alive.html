@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CROVIA — System is Alive</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background:
+                radial-gradient(900px circle at 18% 0%, rgba(0, 255, 102, 0.10), transparent 60%),
+                radial-gradient(900px circle at 82% 10%, rgba(0, 212, 255, 0.08), transparent 60%),
+                #000;
+            color: #d4d4d4;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 70px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mark {
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .nav a {
+            margin-left: 20px;
+            color: #00d4ff;
+            text-decoration: none;
+            border-bottom: 1px solid #00d4ff;
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .nav a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .hero {
+            border: 1px solid #222;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 18px 18px 16px;
+            margin-bottom: 16px;
+        }
+
+        .title {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .card {
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 14px;
+            background: #000;
+        }
+
+        .card-title {
+            color: #fff;
+            font-size: 13px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .kv {
+            display: grid;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .kv-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .kv-label {
+            color: #777;
+        }
+
+        .kv-value {
+            color: #d4d4d4;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #444;
+            animation: pulse 2s infinite;
+        }
+
+        .dot.ok { background: #00ff66; }
+        .dot.warn { background: #f59e0b; }
+        .dot.down { background: #ef4444; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        .btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        button {
+            border: 1px solid #333;
+            border-radius: 10px;
+            background: #050505;
+            color: #d4d4d4;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        button:hover {
+            border-color: #0f0;
+        }
+
+        .link {
+            color: #0f0;
+            text-decoration: none;
+            border-bottom: 1px solid #0f0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .link:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .snapshots {
+            margin-top: 12px;
+            border-top: 1px solid #222;
+            padding-top: 14px;
+        }
+
+        .snap {
+            border: 1px solid #222;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .snap-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .snap-body {
+            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #999;
+            display: grid;
+            gap: 6px;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        footer {
+            margin-top: 36px;
+            padding-top: 18px;
+            border-top: 1px solid #222;
+            font-size: 11px;
+            color: #666;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        @media (max-width: 720px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav a {
+                margin-left: 0;
+                margin-right: 16px;
+                display: inline-block;
+                margin-top: 10px;
+            }
+
+            .btns {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <img src="/logo.png" alt="Crovia" class="logo">
+                <div class="mark">CROVIA</div>
+                <div class="status">
+                    <span class="dot" id="dot"></span>
+                    <span id="statusText">PROBE: waiting…</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="/">Home</a>
+                <a href="https://registry.croviatrust.com/registry">Registry</a>
+                <a href="https://registry.croviatrust.com/registry/omissions">Omissions</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div class="title">System is Alive</div>
+            <div class="subtitle">This page probes live endpoints over HTTPS same-origin. Save 2 snapshots (5 minutes apart) to verify changes.</div>
+            <div class="btns">
+                <button id="btnProbe">probe now</button>
+                <button id="btnSnapshot">save snapshot</button>
+                <button id="btnClear">clear snapshots</button>
+                <a class="link" href="/api/registry/stats" target="_blank" rel="noopener">/api/registry/stats</a>
+                <a class="link" href="/api/registry/merkle" target="_blank" rel="noopener">/api/registry/merkle</a>
+                <a class="link" href="/api/registry/recent" target="_blank" rel="noopener">/api/registry/recent</a>
+                <a class="link" href="/api/ledger/omissions?days=30" target="_blank" rel="noopener">/api/ledger/omissions</a>
+            </div>
+        </section>
+
+        <section class="grid">
+            <div class="card">
+                <div class="card-title">Registry stats</div>
+                <div class="kv">
+                    <div class="kv-row"><div class="kv-label">total_observations</div><div class="kv-value" id="totalObs">--</div></div>
+                    <div class="kv-row"><div class="kv-label">observations_today_utc</div><div class="kv-value" id="todayObs">--</div></div>
+                    <div class="kv-row"><div class="kv-label">unique_targets</div><div class="kv-value" id="uniqueTargets">--</div></div>
+                    <div class="kv-row"><div class="kv-label">updated_at</div><div class="kv-value" id="updatedAt">--</div></div>
+                    <div class="kv-row"><div class="kv-label">latency</div><div class="kv-value" id="latency">--</div></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Merkle proof</div>
+                <div class="kv">
+                    <div class="kv-row"><div class="kv-label">merkle_root</div><div class="kv-value" id="merkleRoot" title="">--</div></div>
+                    <div class="kv-row"><div class="kv-label">total_observations</div><div class="kv-value" id="merkleTotal">--</div></div>
+                    <div class="kv-row"><div class="kv-label">computed_at</div><div class="kv-value" id="merkleAt">--</div></div>
+                </div>
+                <div style="margin-top: 10px;"><span class="mono" style="color:#777;">click merkle_root to copy full hash</span></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Recent observations</div>
+                <div class="kv" id="recentBox"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Omission ledger (30d)</div>
+                <div class="kv">
+                    <div class="kv-row"><div class="kv-label">count</div><div class="kv-value" id="omCount">--</div></div>
+                    <div class="kv-row"><div class="kv-label">query_timestamp</div><div class="kv-value" id="omAt">--</div></div>
+                </div>
+                <div class="kv" id="omBox" style="margin-top: 10px;"></div>
+            </div>
+        </section>
+
+        <section class="snapshots">
+            <div class="mono" style="color:#999;">Snapshots are stored in your browser (localStorage). They are not sent anywhere.</div>
+            <div id="snapList"></div>
+        </section>
+
+        <footer>
+            <div>&copy; 2026 Crovia Trust</div>
+        </footer>
+
+        <script>
+            (function () {
+                function byId(id) {
+                    return document.getElementById(id);
+                }
+
+                function setDotState(state) {
+                    var dot = byId('dot');
+                    if (!dot) return;
+                    dot.classList.remove('ok', 'warn', 'down');
+                    if (state) dot.classList.add(state);
+                }
+
+                function setText(id, value) {
+                    var el = byId(id);
+                    if (!el) return;
+                    if (value === null || value === undefined || value === '') {
+                        el.textContent = '--';
+                        return;
+                    }
+                    el.textContent = String(value);
+                }
+
+                function fmtIso(iso) {
+                    if (!iso) return '--';
+                    var d = new Date(iso);
+                    if (isNaN(d.getTime())) return String(iso);
+                    return d.toISOString();
+                }
+
+                function minutesSince(iso) {
+                    if (!iso) return null;
+                    var d = new Date(iso);
+                    if (isNaN(d.getTime())) return null;
+                    return Math.round((Date.now() - d.getTime()) / 60000);
+                }
+
+                async function fetchJson(path) {
+                    var t0 = performance.now();
+                    var res = await fetch(path, {
+                        cache: 'no-store',
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    var t1 = performance.now();
+                    if (!res.ok) {
+                        var detail = '';
+                        try {
+                            detail = await res.text();
+                        } catch (e) {
+                            detail = '';
+                        }
+                        throw new Error(path + ' ' + res.status + (detail ? ' ' + detail : ''));
+                    }
+
+                    var json = await res.json();
+                    return { json: json, latency_ms: Math.round(t1 - t0) };
+                }
+
+                function renderLines(box, lines) {
+                    if (!box) return;
+                    box.innerHTML = '';
+                    if (!lines || !lines.length) {
+                        var row = document.createElement('div');
+                        row.className = 'kv-row';
+                        var l = document.createElement('div');
+                        l.className = 'kv-label';
+                        l.textContent = 'info';
+                        var v = document.createElement('div');
+                        v.className = 'kv-value';
+                        v.textContent = '--';
+                        row.appendChild(l);
+                        row.appendChild(v);
+                        box.appendChild(row);
+                        return;
+                    }
+
+                    for (var i = 0; i < lines.length; i++) {
+                        var row = document.createElement('div');
+                        row.className = 'kv-row';
+                        var l = document.createElement('div');
+                        l.className = 'kv-label';
+                        l.textContent = lines[i].label;
+                        var v = document.createElement('div');
+                        v.className = 'kv-value';
+                        v.textContent = lines[i].value;
+                        row.appendChild(l);
+                        row.appendChild(v);
+                        box.appendChild(row);
+                    }
+                }
+
+                function getStore() {
+                    try {
+                        var raw = localStorage.getItem('crovia_alive_snapshots');
+                        var parsed = raw ? JSON.parse(raw) : [];
+                        return Array.isArray(parsed) ? parsed : [];
+                    } catch (e) {
+                        return [];
+                    }
+                }
+
+                function setStore(list) {
+                    try {
+                        localStorage.setItem('crovia_alive_snapshots', JSON.stringify(list));
+                    } catch (e) {
+                    }
+                }
+
+                function summarizeSnapshot(data) {
+                    var stats = data.stats || {};
+                    var merkle = data.merkle || {};
+
+                    return {
+                        captured_at: data.captured_at,
+                        total_observations: stats.total_observations,
+                        updated_at: stats.updated_at,
+                        merkle_root: merkle.merkle_root,
+                        merkle_computed_at: merkle.computed_at
+                    };
+                }
+
+                function diffText(prev, next, key) {
+                    var a = prev ? prev[key] : undefined;
+                    var b = next ? next[key] : undefined;
+                    if (a === undefined && b === undefined) return '--';
+                    if (a === b) return String(b);
+                    return String(a) + ' → ' + String(b);
+                }
+
+                function renderSnapshots() {
+                    var list = getStore();
+                    var root = byId('snapList');
+                    if (!root) return;
+                    root.innerHTML = '';
+
+                    if (!list.length) {
+                        return;
+                    }
+
+                    for (var i = 0; i < list.length; i++) {
+                        var snap = list[i];
+                        var prev = i > 0 ? list[i - 1] : null;
+
+                        var s = document.createElement('div');
+                        s.className = 'snap';
+
+                        var head = document.createElement('div');
+                        head.className = 'snap-head';
+                        var left = document.createElement('div');
+                        left.textContent = 'snapshot #' + (i + 1);
+                        var right = document.createElement('div');
+                        right.style.color = '#777';
+                        right.textContent = snap.captured_at;
+                        head.appendChild(left);
+                        head.appendChild(right);
+
+                        var body = document.createElement('div');
+                        body.className = 'snap-body';
+
+                        var d1 = document.createElement('div');
+                        d1.textContent = 'total_observations: ' + diffText(prev, snap, 'total_observations');
+                        var d2 = document.createElement('div');
+                        d2.textContent = 'updated_at: ' + diffText(prev, snap, 'updated_at');
+                        var d3 = document.createElement('div');
+                        var rootShort = snap.merkle_root && snap.merkle_root.length > 28 ? snap.merkle_root.slice(0, 14) + '…' + snap.merkle_root.slice(-14) : snap.merkle_root;
+                        var prevShort = prev && prev.merkle_root && prev.merkle_root.length > 28 ? prev.merkle_root.slice(0, 14) + '…' + prev.merkle_root.slice(-14) : (prev ? prev.merkle_root : undefined);
+                        if (prev && prev.merkle_root && snap.merkle_root && prev.merkle_root !== snap.merkle_root) {
+                            d3.textContent = 'merkle_root: ' + prevShort + ' → ' + rootShort;
+                        } else {
+                            d3.textContent = 'merkle_root: ' + (rootShort || '--');
+                        }
+                        var d4 = document.createElement('div');
+                        d4.textContent = 'merkle_computed_at: ' + diffText(prev, snap, 'merkle_computed_at');
+
+                        body.appendChild(d1);
+                        body.appendChild(d2);
+                        body.appendChild(d3);
+                        body.appendChild(d4);
+
+                        s.appendChild(head);
+                        s.appendChild(body);
+                        root.appendChild(s);
+                    }
+                }
+
+                async function probe() {
+                    var statusText = byId('statusText');
+                    setDotState('warn');
+                    if (statusText) statusText.textContent = 'PROBE: loading…';
+
+                    try {
+                        var results = await Promise.all([
+                            fetchJson('/api/registry/stats'),
+                            fetchJson('/api/registry/merkle'),
+                            fetchJson('/api/registry/recent?limit=8'),
+                            fetchJson('/api/ledger/omissions?days=30')
+                        ]);
+
+                        var stats = results[0].json || {};
+                        var merkle = results[1].json || {};
+                        var recent = results[2].json || {};
+                        var omissions = results[3].json || {};
+
+                        setText('totalObs', stats.total_observations);
+                        setText('todayObs', stats.observations_today_utc);
+                        setText('uniqueTargets', stats.unique_targets);
+                        setText('updatedAt', fmtIso(stats.updated_at));
+
+                        var lat = stats.latency_ms;
+                        if (lat === undefined || lat === null) {
+                            lat = results[0].latency_ms;
+                        }
+                        setText('latency', String(lat) + 'ms');
+
+                        var root = merkle.merkle_root;
+                        var rootEl = byId('merkleRoot');
+                        if (rootEl) {
+                            if (typeof root === 'string' && root.length) {
+                                var shortRoot = root.length > 28 ? root.slice(0, 14) + '…' + root.slice(-14) : root;
+                                rootEl.textContent = shortRoot;
+                                rootEl.setAttribute('title', root);
+                                rootEl.dataset.full = root;
+                                rootEl.style.cursor = 'copy';
+                            } else {
+                                rootEl.textContent = '--';
+                                rootEl.removeAttribute('title');
+                                rootEl.dataset.full = '';
+                                rootEl.style.cursor = 'default';
+                            }
+                        }
+
+                        setText('merkleTotal', merkle.total_observations);
+                        setText('merkleAt', fmtIso(merkle.computed_at));
+
+                        var recentLines = [];
+                        var obs = recent.observations || [];
+                        for (var i = 0; i < obs.length; i++) {
+                            var o = obs[i] || {};
+                            recentLines.push({
+                                label: String(i + 1),
+                                value: (o.target_id || 'unknown') + ' • ' + (o.observation_type || 'observation') + ' • ' + (o.observed_at ? fmtIso(o.observed_at).slice(0, 19) + 'Z' : '--')
+                            });
+                        }
+                        renderLines(byId('recentBox'), recentLines);
+
+                        setText('omCount', omissions.count);
+                        setText('omAt', fmtIso(omissions.query_timestamp));
+
+                        var omLines = [];
+                        var items = omissions.results || [];
+                        for (var j = 0; j < Math.min(items.length, 8); j++) {
+                            var r = items[j] || {};
+                            omLines.push({
+                                label: String(j + 1),
+                                value: (r.target_id || 'unknown') + ' • last_observed_at ' + (r.last_observed_at ? fmtIso(r.last_observed_at).slice(0, 19) + 'Z' : '--')
+                            });
+                        }
+                        renderLines(byId('omBox'), omLines);
+
+                        var ageMin = minutesSince(stats.updated_at);
+                        var status = 'PROBE: online';
+                        if (ageMin !== null && ageMin !== undefined && isFinite(ageMin)) {
+                            status = status + ' (updated ' + ageMin + 'm ago)';
+                        }
+
+                        if (statusText) statusText.textContent = status;
+                        setDotState('ok');
+                        if (ageMin !== null && ageMin !== undefined && isFinite(ageMin) && ageMin > 240) {
+                            setDotState('warn');
+                        }
+
+                        return { stats: stats, merkle: merkle, recent: recent, omissions: omissions };
+                    } catch (err) {
+                        setDotState('down');
+                        if (statusText) statusText.textContent = 'PROBE: unavailable';
+                        var updatedAtEl = byId('updatedAt');
+                        if (updatedAtEl) updatedAtEl.textContent = String(err && err.message ? err.message : err);
+                        return null;
+                    }
+                }
+
+                function wire() {
+                    var btnProbe = byId('btnProbe');
+                    var btnSnapshot = byId('btnSnapshot');
+                    var btnClear = byId('btnClear');
+
+                    if (btnProbe) {
+                        btnProbe.addEventListener('click', function () {
+                            probe();
+                        });
+                    }
+
+                    if (btnSnapshot) {
+                        btnSnapshot.addEventListener('click', async function () {
+                            var data = await probe();
+                            if (!data) return;
+
+                            var capturedAt = new Date().toISOString();
+                            var record = {
+                                captured_at: capturedAt,
+                                stats: data.stats,
+                                merkle: data.merkle
+                            };
+
+                            var list = getStore();
+                            list.push(summarizeSnapshot(record));
+                            setStore(list);
+                            renderSnapshots();
+                        });
+                    }
+
+                    if (btnClear) {
+                        btnClear.addEventListener('click', function () {
+                            setStore([]);
+                            renderSnapshots();
+                        });
+                    }
+
+                    document.addEventListener('click', async function (e) {
+                        var rootEl = byId('merkleRoot');
+                        if (!rootEl) return;
+                        if (e.target !== rootEl) return;
+                        var full = rootEl.dataset.full;
+                        if (!full) return;
+                        try {
+                            await navigator.clipboard.writeText(full);
+                        } catch (copyErr) {
+                        }
+                    });
+                }
+
+                wire();
+                renderSnapshots();
+                probe();
+            })();
+        </script>
+    </div>
+</body>
+</html>

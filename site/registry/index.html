@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crovia Training Provenance Registry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        header {
+            padding: 32px 0;
+            border-bottom: 1px solid #222;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #8B5CF6;
+        }
+        
+        .nav a {
+            margin-left: 32px;
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .nav a:hover {
+            color: #fff;
+        }
+        
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #00FF0020;
+            border: 1px solid #00FF00;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00FF00;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+        }
+        
+        h1 {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -2px;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            color: #888;
+            margin-bottom: 48px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin: 64px 0;
+        }
+        
+        .stat-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            margin-top: 32px;
+            padding: 16px 32px;
+            background: #8B5CF6;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .cta-button:hover {
+            background: #7C3AED;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #8B5CF6;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .search-section {
+            max-width: 800px;
+            margin: 64px auto;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+        
+        input {
+            flex: 1;
+            padding: 16px 24px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #8B5CF6;
+        }
+        
+        button {
+            padding: 16px 32px;
+            background: #8B5CF6;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #7C3AED;
+        }
+        
+        .submissions-section {
+            margin: 64px 0;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 32px;
+        }
+        
+        .submissions-grid {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .submission-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 24px;
+            transition: border-color 0.2s;
+        }
+        
+        .submission-card:hover {
+            border-color: #8B5CF6;
+        }
+        
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .tpr-id {
+            font-family: 'Courier New', monospace;
+            color: #8B5CF6;
+            font-weight: 600;
+        }
+        
+        .badge {
+            padding: 4px 12px;
+            background: #00FF0020;
+            border: 1px solid #00FF00;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #00FF00;
+            font-weight: 600;
+        }
+        
+        .submission-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            font-size: 14px;
+        }
+        
+        .info-label {
+            color: #666;
+        }
+        
+        .info-value {
+            color: #fff;
+        }
+        
+        .verify-result {
+            margin-top: 32px;
+            padding: 24px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .verify-result.show {
+            display: block;
+        }
+        
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid #222;
+            text-align: center;
+            color: #666;
+            margin-top: 96px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">CROVIA</div>
+                <nav class="nav">
+                    <a href="https://croviatrust.com">Home</a>
+                    <a href="#verify">Verify</a>
+                    <a href="/registry/omissions">Omissions</a>
+                    <a href="https://github.com/croviatrust">GitHub</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="status-badge">● OPERATIONAL</div>
+                <h1>Training Provenance Registry</h1>
+                <p class="subtitle">Public, Immutable, Verifiable AI Training Compliance</p>
+                <a href="/registry/omissions" class="cta-button">→ Public Omission Ledger</a>
+            </div>
+        </section>
+        
+        <section class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-observations">0</div>
+                    <div class="stat-label">Total Observations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="observations-today">0</div>
+                    <div class="stat-label">Today (UTC)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="unique-targets">0</div>
+                    <div class="stat-label">Unique Targets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="latency-ms">--</div>
+                    <div class="stat-label">Query Latency</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="container" style="text-align: center; margin: 64px auto;">
+            <h2 style="font-size: 24px; margin-bottom: 16px;">Verify Observations</h2>
+            <p style="color: #888; margin-bottom: 24px;">Public verification of timestamped observations via cryptographic receipt hash</p>
+            <a href="/registry/verify" class="cta-button">→ Verify Observation</a>
+        </section>
+        
+        <section class="container submissions-section">
+            <div class="section-title">Recent Observations</div>
+            <div class="submissions-grid" id="submissions-list">
+                <div style="text-align: center; padding: 48px; color: #666;">
+                    Loading submissions...
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Crovia. Training Provenance Registry.</p>
+            <p style="margin-top: 8px; font-size: 14px;">Making AI compliance inevitable, not optional.</p>
+        </div>
+    </footer>
+    
+    <script>
+        const API_BASE = window.location.origin;
+        
+        // Fetch and update stats from PostgreSQL
+        async function updateStats() {
+            try {
+                const response = await fetch(`${API_BASE}/api/registry/stats`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                
+                document.getElementById('total-observations').textContent = data.total_observations;
+                document.getElementById('observations-today').textContent = data.observations_today_utc;
+                document.getElementById('unique-targets').textContent = data.unique_targets;
+                document.getElementById('latency-ms').textContent = data.latency_ms + 'ms';
+            } catch (error) {
+                console.error('Failed to fetch stats:', error);
+                document.getElementById('total-observations').textContent = 'DB offline';
+                document.getElementById('observations-today').textContent = '--';
+                document.getElementById('unique-targets').textContent = '--';
+                document.getElementById('latency-ms').textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        // Fetch and display recent observations from PostgreSQL
+        async function loadSubmissions() {
+            try {
+                const response = await fetch(`${API_BASE}/api/registry/recent?limit=10`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                
+                const container = document.getElementById('submissions-list');
+                
+                if (data.observations && data.observations.length > 0) {
+                    // Filter out test/internal files from public display
+                    const publicObservations = data.observations.filter(obs => {
+                        const testPatterns = ['test-', 'croviatrust/crovia-', 'Crovia/global-ai-', 'debug-', 'demo-'];
+                        return !testPatterns.some(pattern => obs.target_id.toLowerCase().includes(pattern.toLowerCase()));
+                    });
+                    
+                    if (publicObservations.length === 0) {
+                        container.innerHTML = '<div style="text-align: center; padding: 48px; color: #666;">Registry online, waiting for public model observations</div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = publicObservations.map(obs => `
+                        <div class="submission-card">
+                            <div class="submission-header">
+                                <span class="tpr-id">${obs.target_id}</span>
+                                <span class="badge" style="${obs.observation_type === 'presence' ? 'background: #00FF0020; border-color: #00FF00; color: #00FF00;' : 'background: #FFA50020; border-color: #FFA500; color: #FFA500;'}">${obs.observation_type.toUpperCase()}</span>
+                            </div>
+                            <div class="submission-info">
+                                <div>
+                                    <div class="info-label">Type</div>
+                                    <div class="info-value">${obs.tipo_target}</div>
+                                </div>
+                                <div>
+                                    <div class="info-label">Source</div>
+                                    <div class="info-value">${obs.source}</div>
+                                </div>
+                                <div>
+                                    <div class="info-label">Observed</div>
+                                    <div class="info-value">${new Date(obs.observed_at).toLocaleString()}</div>
+                                </div>
+                                <div>
+                                    <div class="info-label">Status</div>
+                                    <div class="info-value">${obs.observation_type}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<div style="text-align: center; padding: 48px; color: #666;">Registry online, waiting for observations</div>';
+                }
+            } catch (error) {
+                console.error('Failed to load observations:', error);
+                document.getElementById('submissions-list').innerHTML = 
+                    `<div style="text-align: center; padding: 48px; color: #666;">Database unavailable<br><small style="color: #444; margin-top: 8px; display: block;">${error.message}</small></div>`;
+            }
+        }
+        
+        // Verify observation or submission (auto-detect)
+        async function verifyItem() {
+            const input = document.getElementById('verify-input').value.trim();
+            const resultDiv = document.getElementById('verify-result');
+            
+            if (!input) {
+                resultDiv.innerHTML = '<div style="color: #EF4444;">Please enter a TPR-ID or receipt hash</div>';
+                resultDiv.classList.add('show');
+                return;
+            }
+            
+            try {
+                // Auto-detect: TPR-ID starts with 'TPR-', receipt_hash starts with 'sha256:' or is 64 hex chars
+                const isTprId = input.startsWith('TPR-');
+                const isReceiptHash = input.startsWith('sha256:') || /^[a-f0-9]{64}$/i.test(input);
+                
+                let endpoint;
+                if (isTprId) {
+                    endpoint = `${API_BASE}/api/verify/${input}`;
+                } else if (isReceiptHash) {
+                    endpoint = `${API_BASE}/api/observation/${input}`;
+                } else {
+                    resultDiv.innerHTML = '<div style="color: #EF4444;">Invalid format. Use TPR-2026-XXXXXX or sha256:hash</div>';
+                    resultDiv.classList.add('show');
+                    return;
+                }
+                
+                const response = await fetch(endpoint);
+                
+                if (response.status === 200) {
+                    const data = await response.json();
+                    
+                    // Display for observation (receipt_hash)
+                    if (data.observation_id) {
+                        resultDiv.innerHTML = `
+                            <div style="color: #00FF00; font-size: 18px; font-weight: 600; margin-bottom: 16px;">
+                                ✓ OBSERVATION VERIFIED
+                            </div>
+                            <div style="display: grid; gap: 12px;">
+                                <div><span style="color: #666;">Observation ID:</span> <span style="color: #8B5CF6;">${data.observation_id}</span></div>
+                                <div><span style="color: #666;">Target:</span> ${data.target_id}</div>
+                                <div><span style="color: #666;">Type:</span> ${data.observation_type}</div>
+                                <div><span style="color: #666;">Observed:</span> ${new Date(data.observed_at).toLocaleString()}</div>
+                                <div><span style="color: #666;">Source:</span> ${data.source}</div>
+                                <div><span style="color: #666;">Merkle Anchored:</span> ${data.merkle_anchored ? 'Yes' : 'No'}</div>
+                                <div><span style="color: #666;">Receipt Hash:</span> <span style="font-family: monospace; font-size: 11px; word-break: break-all;">${data.receipt_hash}</span></div>
+                            </div>
+                        `;
+                    } else {
+                        // Display for submission (TPR-ID)
+                        resultDiv.innerHTML = `
+                            <div style="color: #00FF00; font-size: 18px; font-weight: 600; margin-bottom: 16px;">
+                                ✓ SUBMISSION VERIFIED
+                            </div>
+                            <div style="display: grid; gap: 12px;">
+                                <div><span style="color: #666;">TPR-ID:</span> <span style="color: #8B5CF6; font-family: monospace;">${data.tpr_id}</span></div>
+                                <div><span style="color: #666;">Model:</span> ${data.model}</div>
+                                <div><span style="color: #666;">Trainer:</span> ${data.trainer}</div>
+                                <div><span style="color: #666;">Submitted:</span> ${new Date(data.submitted).toLocaleDateString()}</div>
+                                <div><span style="color: #666;">Proof Pack Hash:</span> <span style="font-family: monospace; font-size: 12px;">${data.proof_pack_hash?.substring(0, 32)}...</span></div>
+                            </div>
+                        `;
+                    }
+                    resultDiv.classList.add('show');
+                } else if (response.status === 404) {
+                    resultDiv.innerHTML = '<div style="color: #EF4444;">Not found</div>';
+                    resultDiv.classList.add('show');
+                } else {
+                    resultDiv.innerHTML = '<div style="color: #EF4444;">Verification failed</div>';
+                    resultDiv.classList.add('show');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<div style="color: #EF4444;">Error: ' + error.message + '</div>';
+                resultDiv.classList.add('show');
+            }
+        }
+        
+        // Initialize
+        updateStats();
+        loadSubmissions();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            updateStats();
+            loadSubmissions();
+        }, 30000);
+        
+        // Enter key to verify
+        document.getElementById('verify-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verifyItem();
+        });
+    </script>
+</body>
+</html>

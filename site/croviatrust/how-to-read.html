@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Read Crovia</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: #000;
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 13px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+        
+        h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 40px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            color: #999;
+        }
+        
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            color: #999;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        strong {
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        code {
+            background: #0a0a0a;
+            padding: 2px 6px;
+            border: 1px solid #222;
+            color: #0f0;
+            font-size: 12px;
+        }
+        
+        a {
+            color: #0f0;
+            text-decoration: none;
+            border-bottom: 1px solid #0f0;
+        }
+        
+        a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            color: #666;
+            font-size: 11px;
+        }
+        
+        .back-link:hover {
+            color: #fff;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .note {
+            background: #0a0a0a;
+            border-left: 2px solid #333;
+            padding: 16px;
+            margin: 24px 0;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← back to stream</a>
+        
+        <h1>How to Read Crovia</h1>
+        
+        <div class="section">
+            <h2>What is an observation?</h2>
+            <p>An observation is a timestamped record of:</p>
+            <ul>
+                <li><strong>Presence</strong>: Evidence of training data was found at a public location</li>
+                <li><strong>Absence</strong>: No evidence was found after systematic check</li>
+            </ul>
+            <p>Observations are stored in a PostgreSQL database and exposed via public API. No authentication required.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Why time matters</h2>
+            <p>The duration of an absence is evidence itself.</p>
+            <p>A model with 1,891 days without observed training evidence indicates persistent non-disclosure, not a temporary gap.</p>
+            <p>Time accumulates. Silence becomes measurable.</p>
+        </div>
+        
+        <div class="section">
+            <h2>What "verify yourself" means</h2>
+            <p>Every observation has a SHA-256 hash. You can verify it independently via:</p>
+            <ol>
+                <li>Public API: <code>curl https://registry.croviatrust.com/api/registry/recent</code></li>
+                <li>PostgreSQL dump (if available)</li>
+                <li>HuggingFace dataset snapshot</li>
+                <li>CEP capsule verification (hashchain + signature)</li>
+            </ol>
+            <p>No login required. No trust required. No permission required.</p>
+        </div>
+        
+        <div class="section">
+            <h2>What Crovia does NOT do</h2>
+            <ul>
+                <li>Does NOT audit models</li>
+                <li>Does NOT infer intent</li>
+                <li>Does NOT make legal claims</li>
+                <li>Does NOT enforce compliance</li>
+                <li>Does NOT judge</li>
+            </ul>
+            <p>Crovia observes. Others decide.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Shadow Score</h2>
+            <p>Shadow Score (0-100) measures completeness of trust declarations based on the NEC# Canon (Necessity Canon).</p>
+            <p>It is calculated deterministically from publicly observable metadata:</p>
+            <ul>
+                <li>Data provenance (NEC#1)</li>
+                <li>License attribution (NEC#2)</li>
+                <li>Usage scope (NEC#7)</li>
+                <li>Temporal validity (NEC#10)</li>
+                <li>Accountable entity (NEC#13)</li>
+                <li>+ 15 other necessities</li>
+            </ul>
+            <p>Formula: <code>shadow_score = 100 - Σ(violation_severity × 0.15)</code></p>
+            <p>Verifiable. Reproducible. Public.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Where to verify</h2>
+            <ul>
+                <li><a href="https://registry.croviatrust.com/registry">Live Registry</a> — real-time observations</li>
+                <li><a href="https://registry.croviatrust.com/registry/omissions">Omission Ledger</a> — targets without evidence</li>
+                <li><a href="https://huggingface.co/spaces/Crovia/cep-terminal">CEP Terminal</a> — evidence capsule verification</li>
+                <li><a href="https://huggingface.co/spaces/Crovia/omission-oracle">Omission Oracle</a> — Shadow Score analysis</li>
+                <li><a href="https://huggingface.co/datasets/Crovia/global-ai-training-omissions">Dataset</a> — static snapshots</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Data sources</h2>
+            <p>Observations come from:</p>
+            <ul>
+                <li>HuggingFace model cards</li>
+                <li>Public dataset repositories</li>
+                <li>Training evidence declarations</li>
+                <li>CEP (Crovia Evidence Protocol) capsules</li>
+            </ul>
+            <p>All sources are public. All checks are reproducible.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Limits</h2>
+            <ul>
+                <li>Observations are not exhaustive</li>
+                <li>Absence ≠ proof of wrongdoing</li>
+                <li>Presence ≠ proof of compliance</li>
+                <li>Crovia records facts, not judgments</li>
+            </ul>
+        </div>
+        
+        <div class="note">
+            This is an observation protocol, not an audit system.<br>
+            This is a public registry, not a compliance enforcer.<br>
+            This is evidence, not judgment.
+        </div>
+        
+        <div style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #111; text-align: center;">
+            <a href="/" style="color: #666; font-size: 11px;">back to stream</a>
+        </div>
+    </div>
+</body>
+</html>

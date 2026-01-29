@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Observation - CROVIA Registry</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        header {
+            margin-bottom: 48px;
+        }
+        
+        .back-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+        
+        .back-link:hover { color: #8B5CF6; }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 48px;
+        }
+        
+        .verify-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 48px;
+        }
+        
+        .verify-label {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        input {
+            width: 100%;
+            padding: 20px 24px;
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            font-family: monospace;
+            margin-bottom: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #8B5CF6;
+        }
+        
+        button {
+            width: 100%;
+            padding: 20px;
+            background: #8B5CF6;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        button:hover { background: #7C3AED; }
+        
+        .examples {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+        
+        .examples-title {
+            font-size: 14px;
+            color: #8B5CF6;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .example-item {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .example-hash {
+            font-family: monospace;
+            font-size: 12px;
+            color: #888;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 16px;
+        }
+        
+        .copy-btn {
+            padding: 8px 16px;
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #8B5CF6;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        
+        .copy-btn:hover {
+            background: #8B5CF6;
+            color: #fff;
+        }
+        
+        .result {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 32px;
+            display: none;
+        }
+        
+        .result.show { display: block; }
+        
+        .result-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        
+        .result-title.success { color: #00FF00; }
+        .result-title.error { color: #EF4444; }
+        
+        .result-grid {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .result-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 16px;
+        }
+        
+        .result-label {
+            color: #666;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-value {
+            color: #fff;
+            font-size: 14px;
+            word-break: break-all;
+        }
+        
+        .result-value.mono {
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        footer {
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 1px solid #222;
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/registry" class="back-link">← Back to Registry</a>
+            <h1>Temporal Evidence Explorer</h1>
+            <p class="subtitle">Verify observations, compare temporal patterns, explore merkle timeline</p>
+        </header>
+        
+        <div class="verify-box">
+            <div class="verify-label">Compare Two Targets (Temporal Analysis)</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                <input type="text" id="target1-input" placeholder="meta-llama/Llama-3.1-8B" style="margin-bottom: 0;">
+                <input type="text" id="target2-input" placeholder="openai/gpt-4-turbo" style="margin-bottom: 0;">
+            </div>
+            <button onclick="compareTargets()">Compare Temporal Evidence</button>
+        </div>
+        
+        <div class="examples">
+            <div class="examples-title">Targets with Longest Monitoring History</div>
+            <div id="examples-list">
+                <div style="text-align: center; color: #666;">Loading...</div>
+            </div>
+        </div>
+        
+        <div class="examples">
+            <div class="examples-title">Live Merkle Timeline (Last 10 Snapshots)</div>
+            <div id="merkle-list">
+                <div style="text-align: center; color: #666;">Loading...</div>
+            </div>
+        </div>
+        
+        <div id="result" class="result"></div>
+        
+        <footer>
+            <p>All observations are cryptographically anchored and publicly verifiable.</p>
+            <p style="margin-top: 8px;">API: <code style="color: #8B5CF6;">/api/observation/{receipt_hash}</code></p>
+        </footer>
+    </div>
+    
+    <script>
+        const API_BASE = window.location.origin;
+        
+        async function loadRecentHashes() {
+            try {
+                // Fetch from targets/summary to get real receipt hashes
+                const response = await fetch(`${API_BASE}/api/targets/summary`);
+                const data = await response.json();
+                
+                const container = document.getElementById('examples-list');
+                
+                if (data.targets && data.targets.length > 0) {
+                    // Filter: only targets with multiple observations (have real history)
+                    const targetsWithHistory = data.targets
+                        .filter(t => t.observation_count >= 5 && t.days_monitored > 0)
+                        .slice(0, 10);
+                    
+                    if (targetsWithHistory.length === 0) {
+                        container.innerHTML = '<div style="text-align: center; color: #666;">Loading verifiable observations...</div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = targetsWithHistory.map(t => {
+                        const prefix = t.tipo_target === 'dataset' ? '📊 ' : '';
+                        const typeColor = t.latest_type === 'presence' ? '#00FF00' : '#FFA500';
+                        return `
+                            <div class="example-item">
+                                <div style="flex: 1;">
+                                    <div style="color: #fff; font-size: 14px; margin-bottom: 4px;">${prefix}${t.target_id}</div>
+                                    <div style="color: #666; font-size: 11px;">${t.days_monitored} days · ${t.observation_count} obs · <span style="color: ${typeColor};">${t.latest_type}</span></div>
+                                </div>
+                                <button class="copy-btn" onclick="viewTarget('${t.target_id}')">View</button>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    container.innerHTML = '<div style="text-align: center; color: #666;">No observations available</div>';
+                }
+            } catch (error) {
+                console.error('Failed to load examples:', error);
+                container.innerHTML = '<div style="text-align: center; color: #666;">Error loading observations</div>';
+            }
+        }
+        
+        async function compareTargets() {
+            const target1 = document.getElementById('target1-input').value.trim();
+            const target2 = document.getElementById('target2-input').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!target1 || !target2) {
+                resultDiv.innerHTML = '<div class="result-title error">Please enter both target IDs</div>';
+                resultDiv.classList.add('show');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/targets/summary`);
+                const data = await response.json();
+                
+                const t1 = data.targets.find(t => t.target_id === target1);
+                const t2 = data.targets.find(t => t.target_id === target2);
+                
+                if (!t1 || !t2) {
+                    resultDiv.innerHTML = '<div class="result-title error">One or both targets not found in registry</div>';
+                    resultDiv.classList.add('show');
+                    return;
+                }
+                
+                const prefix1 = t1.tipo_target === 'dataset' ? '📊 ' : '';
+                const prefix2 = t2.tipo_target === 'dataset' ? '📊 ' : '';
+                const color1 = t1.latest_type === 'presence' ? '#00FF00' : '#FFA500';
+                const color2 = t2.latest_type === 'presence' ? '#00FF00' : '#FFA500';
+                
+                resultDiv.innerHTML = `
+                    <div class="result-title success">⚡ TEMPORAL COMPARISON</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px;">
+                        <div>
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #8B5CF6;">${prefix1}${t1.target_id}</div>
+                            <div class="result-grid">
+                                <div class="result-row"><div class="result-label">Type</div><div class="result-value">${t1.tipo_target}</div></div>
+                                <div class="result-row"><div class="result-label">Days Monitored</div><div class="result-value" style="font-size: 24px; font-weight: 700; color: #8B5CF6;">${t1.days_monitored}</div></div>
+                                <div class="result-row"><div class="result-label">Observations</div><div class="result-value">${t1.observation_count}</div></div>
+                                <div class="result-row"><div class="result-label">Obs/Day</div><div class="result-value">${t1.obs_per_day}</div></div>
+                                <div class="result-row"><div class="result-label">Latest State</div><div class="result-value" style="color: ${color1}; text-transform: uppercase; font-weight: 600;">${t1.latest_type}</div></div>
+                                <div class="result-row"><div class="result-label">First Seen</div><div class="result-value mono">${t1.first_seen?.slice(0,10)}</div></div>
+                                <div class="result-row"><div class="result-label">Last Seen</div><div class="result-value mono">${t1.last_seen?.slice(0,10)}</div></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #8B5CF6;">${prefix2}${t2.target_id}</div>
+                            <div class="result-grid">
+                                <div class="result-row"><div class="result-label">Type</div><div class="result-value">${t2.tipo_target}</div></div>
+                                <div class="result-row"><div class="result-label">Days Monitored</div><div class="result-value" style="font-size: 24px; font-weight: 700; color: #8B5CF6;">${t2.days_monitored}</div></div>
+                                <div class="result-row"><div class="result-label">Observations</div><div class="result-value">${t2.observation_count}</div></div>
+                                <div class="result-row"><div class="result-label">Obs/Day</div><div class="result-value">${t2.obs_per_day}</div></div>
+                                <div class="result-row"><div class="result-label">Latest State</div><div class="result-value" style="color: ${color2}; text-transform: uppercase; font-weight: 600;">${t2.latest_type}</div></div>
+                                <div class="result-row"><div class="result-label">First Seen</div><div class="result-value mono">${t2.first_seen?.slice(0,10)}</div></div>
+                                <div class="result-row"><div class="result-label">Last Seen</div><div class="result-value mono">${t2.last_seen?.slice(0,10)}</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 32px; padding: 24px; background: #0a0a0a; border: 1px solid #222; border-radius: 12px;">
+                        <div style="font-size: 14px; font-weight: 600; color: #8B5CF6; margin-bottom: 12px;">TEMPORAL GAP ANALYSIS</div>
+                        <div style="color: #888; font-size: 13px; line-height: 1.8;">
+                            <strong style="color: #fff;">${prefix1}${t1.target_id}</strong> monitored for <strong style="color: #8B5CF6;">${t1.days_monitored} days</strong> with <strong>${t1.observation_count}</strong> observations (latest: <span style="color: ${color1};">${t1.latest_type}</span>).<br>
+                            <strong style="color: #fff;">${prefix2}${t2.target_id}</strong> monitored for <strong style="color: #8B5CF6;">${t2.days_monitored} days</strong> with <strong>${t2.observation_count}</strong> observations (latest: <span style="color: ${color2};">${t2.latest_type}</span>).<br><br>
+                            <strong style="color: #fff;">Temporal difference:</strong> ${Math.abs(t1.days_monitored - t2.days_monitored).toFixed(1)} days<br>
+                            <strong style="color: #fff;">Observation intensity difference:</strong> ${Math.abs(t1.obs_per_day - t2.obs_per_day).toFixed(2)} obs/day
+                        </div>
+                    </div>
+                `;
+                resultDiv.classList.add('show');
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result-title error">Error: ${error.message}</div>`;
+                resultDiv.classList.add('show');
+            }
+        }
+        
+        async function loadMerkleTimeline() {
+            try {
+                const response = await fetch(`${API_BASE}/api/registry/merkle/timeline?limit=10`);
+                const data = await response.json();
+                const container = document.getElementById('merkle-list');
+                
+                if (data.timeline && data.timeline.length > 0) {
+                    container.innerHTML = data.timeline.reverse().map((entry, idx) => {
+                        const hash = entry.merkle_root.substring(0, 16) + '...';
+                        const date = new Date(entry.computed_at).toLocaleString();
+                        return `
+                            <div class="example-item">
+                                <div style="flex: 1;">
+                                    <div style="color: #00FF00; font-family: monospace; font-size: 12px; margin-bottom: 4px;">${hash}</div>
+                                    <div style="color: #666; font-size: 11px;">${date} UTC · ${entry.total_observations} observations</div>
+                                </div>
+                                <button class="copy-btn" onclick="copyHash('${entry.merkle_root}')">Copy Hash</button>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    container.innerHTML = '<div style="text-align: center; color: #666;">No merkle timeline available</div>';
+                }
+            } catch (error) {
+                console.error('Failed to load merkle timeline:', error);
+            }
+        }
+        
+        async function verifyObservation() {
+            const hash = document.getElementById('hash-input').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!hash) {
+                resultDiv.innerHTML = '<div class="result-title error">Please enter a receipt hash</div>';
+                resultDiv.classList.add('show');
+                return;
+            }
+            
+            // Remove 'sha256:' prefix if present for API call
+            const hashClean = hash.replace('sha256:', '');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/observation/${hashClean}`);
+                
+                if (response.status === 200) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `
+                        <div class="result-title success">✓ OBSERVATION VERIFIED</div>
+                        <div class="result-grid">
+                            <div class="result-row">
+                                <div class="result-label">Observation ID</div>
+                                <div class="result-value">${data.observation_id}</div>
+                            </div>
+                            <div class="result-row">
+                                <div class="result-label">Target</div>
+                                <div class="result-value">${data.target_id}</div>
+                            </div>
+                            <div class="result-row">
+                                <div class="result-label">Type</div>
+                                <div class="result-value" style="text-transform: uppercase; color: ${data.observation_type === 'presence' ? '#00FF00' : '#FFA500'};">${data.observation_type}</div>
+                            </div>
+                            <div class="result-row">
+                                <div class="result-label">Observed At</div>
+                                <div class="result-value">${new Date(data.observed_at).toLocaleString()} UTC</div>
+                            </div>
+                            <div class="result-row">
+                                <div class="result-label">Source</div>
+                                <div class="result-value">${data.source}</div>
+                            </div>
+                            <div class="result-row">
+                                <div class="result-label">Merkle Anchored</div>
+                                <div class="result-value">${data.merkle_anchored ? 'Yes' : 'No'}</div>
+                            </div>
+                            <div class="result-row">
+                                <div class="result-label">Receipt Hash</div>
+                                <div class="result-value mono">${data.receipt_hash}</div>
+                            </div>
+                            <div class="result-row">
+                                <div class="result-label">Verified At</div>
+                                <div class="result-value">${new Date(data.verified_at).toLocaleString()} UTC</div>
+                            </div>
+                        </div>
+                    `;
+                    resultDiv.classList.add('show');
+                } else if (response.status === 404) {
+                    resultDiv.innerHTML = '<div class="result-title error">Observation not found</div>';
+                    resultDiv.classList.add('show');
+                } else {
+                    resultDiv.innerHTML = '<div class="result-title error">Verification failed</div>';
+                    resultDiv.classList.add('show');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result-title error">Error: ${error.message}</div>`;
+                resultDiv.classList.add('show');
+            }
+        }
+        
+        function copyHash(text) {
+            navigator.clipboard.writeText(text);
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.style.background = '#00FF00';
+            btn.style.color = '#000';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.style.color = '';
+            }, 2000);
+        }
+        
+        function viewTarget(targetId) {
+            // Redirect to omissions table filtered by this target
+            window.location.href = `/registry/omissions?search=${encodeURIComponent(targetId)}`;
+        }
+        
+        // Initialize
+        loadRecentHashes();
+        loadMerkleTimeline();
+        
+        // Enter key
+        document.getElementById('target1-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') compareTargets();
+        });
+        document.getElementById('target2-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') compareTargets();
+        });
+        
+        // Auto-refresh every 60s
+        setInterval(() => {
+            loadRecentHashes();
+            loadMerkleTimeline();
+        }, 60000);
+    </script>
+</body>
+</html>

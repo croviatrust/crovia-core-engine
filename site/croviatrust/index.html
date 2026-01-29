@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CROVIA — Public Evidence System</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background:
+                radial-gradient(900px circle at 18% 0%, rgba(0, 255, 102, 0.10), transparent 60%),
+                radial-gradient(900px circle at 82% 10%, rgba(0, 212, 255, 0.08), transparent 60%),
+                #000;
+            color: #d4d4d4;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 70px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 56px;
+        }
+
+        .mark {
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 0;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #777;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .live-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #444;
+            animation: pulse 2s infinite;
+        }
+
+        .live-dot.ok { background: #00ff66; }
+        .live-dot.warn { background: #f59e0b; }
+        .live-dot.down { background: #ef4444; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        .nav a {
+            margin-left: 20px;
+            color: #00d4ff;
+            text-decoration: none;
+            border-bottom: 1px solid #00d4ff;
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .nav a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .statements {
+            margin-bottom: 40px;
+        }
+
+        .statement {
+            margin-bottom: 14px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .statement strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .live {
+            border: 1px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #050505;
+            margin-bottom: 24px;
+        }
+
+        .live-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 20px;
+        }
+
+        .live-title {
+            color: #fff;
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            opacity: 0.9;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .live-meta {
+            color: #666;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .live-body {
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .live-card {
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 14px;
+            background: #000;
+        }
+
+        .live-card-title {
+            color: #fff;
+            font-size: 13px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .kv {
+            display: grid;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .kv-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .kv-label {
+            color: #777;
+        }
+
+        .kv-value {
+            color: #d4d4d4;
+            text-align: right;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .live-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .live-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .live-left {
+            color: #d4d4d4;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .live-right {
+            color: #777;
+            white-space: nowrap;
+        }
+
+        .live-link {
+            color: #00d4ff;
+            text-decoration: none;
+            border-bottom: 1px solid #00d4ff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .live-link:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .artifact {
+            border: 1px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .artifact-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 20px;
+        }
+
+        .artifact-title {
+            color: #fff;
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            opacity: 0.9;
+        }
+
+        .artifact-meta {
+            color: #666;
+            font-size: 11px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 520px;
+            border: 0;
+            display: block;
+            background: #000;
+        }
+
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .link-card {
+            border: 1px solid #222;
+            padding: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #ccc;
+            background: #050505;
+        }
+
+        .link-card:hover {
+            border-color: #00d4ff;
+        }
+
+        .link-title {
+            color: #fff;
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .link-desc {
+            font-size: 12px;
+            color: #777;
+        }
+
+        footer {
+            margin-top: 56px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+            font-size: 11px;
+            color: #666;
+        }
+
+        footer a {
+            color: #00d4ff;
+            text-decoration: none;
+            border-bottom: 1px solid #00d4ff;
+        }
+
+        footer a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        @media (max-width: 720px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav a {
+                margin-left: 0;
+                margin-right: 16px;
+                display: inline-block;
+                margin-top: 10px;
+            }
+
+            .live-body {
+                grid-template-columns: 1fr;
+            }
+
+            .kv-value, .live-left {
+                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
+
+            iframe {
+                height: 560px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <img src="/logo.png" alt="Crovia" class="logo">
+                <div class="mark">CROVIA</div>
+                <div class="live-indicator">
+                    <span class="live-dot" id="liveDot"></span>
+                    <span id="liveStatusText">LIVE STATUS: connecting...</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="https://registry.croviatrust.com/registry">Registry</a>
+                <a href="https://registry.croviatrust.com/registry/omissions">Omission Ledger</a>
+                <a href="/how-to-read.html">How to read</a>
+                <a href="/whitepaper.html">Whitepaper</a>
+            </nav>
+        </header>
+
+        <section class="statements">
+            <p class="statement"><strong>CROVIA is a public evidence system</strong> for AI training provenance.</p>
+            <p class="statement">It records timestamped observations of evidence presence and evidence absence.</p>
+            <p class="statement">All artifacts are queryable via public endpoints and reproducible from raw evidence.</p>
+            <p class="statement">This page shows a live artifact. It is not a demo.</p>
+        </section>
+
+        <section class="live">
+            <div class="live-header">
+                <div class="live-title">LIVE STATUS — REGISTRY</div>
+                <div class="live-meta" id="liveMeta">loading...</div>
+            </div>
+            <div class="live-body">
+                <div class="live-card">
+                    <div class="live-card-title">Registry stats</div>
+                    <div class="kv">
+                        <div class="kv-row"><div class="kv-label">total_observations</div><div class="kv-value" id="statTotalObs">--</div></div>
+                        <div class="kv-row"><div class="kv-label">observations_today_utc</div><div class="kv-value" id="statTodayObs">--</div></div>
+                        <div class="kv-row"><div class="kv-label">unique_targets</div><div class="kv-value" id="statUniqueTargets">--</div></div>
+                        <div class="kv-row"><div class="kv-label">updated_at</div><div class="kv-value" id="statUpdatedAt">--</div></div>
+                        <div class="kv-row"><div class="kv-label">latency</div><div class="kv-value" id="statLatency">--</div></div>
+                    </div>
+                    <div style="margin-top: 10px;"><a class="live-link" href="/api/registry/stats" target="_blank" rel="noopener">open json</a></div>
+                </div>
+
+                <div class="live-card">
+                    <div class="live-card-title">Merkle proof</div>
+                    <div class="kv">
+                        <div class="kv-row"><div class="kv-label">merkle_root</div><div class="kv-value" id="merkleRoot" title="">--</div></div>
+                        <div class="kv-row"><div class="kv-label">total_observations</div><div class="kv-value" id="merkleTotalObs">--</div></div>
+                        <div class="kv-row"><div class="kv-label">computed_at</div><div class="kv-value" id="merkleComputedAt">--</div></div>
+                    </div>
+                    <div style="margin-top: 10px;"><a class="live-link" href="/api/registry/merkle" target="_blank" rel="noopener">open json</a></div>
+                </div>
+
+                <div class="live-card">
+                    <div class="live-card-title">Recent observations</div>
+                    <ul class="live-list" id="recentList"></ul>
+                    <div style="margin-top: 10px;"><a class="live-link" href="/api/registry/recent" target="_blank" rel="noopener">open json</a></div>
+                </div>
+
+                <div class="live-card">
+                    <div class="live-card-title">Omission ledger (30d)</div>
+                    <div class="kv">
+                        <div class="kv-row"><div class="kv-label">count</div><div class="kv-value" id="omissionsCount">--</div></div>
+                        <div class="kv-row"><div class="kv-label">query_timestamp</div><div class="kv-value" id="omissionsQueriedAt">--</div></div>
+                    </div>
+                    <ul class="live-list" id="omissionsList" style="margin-top: 10px;"></ul>
+                    <div style="margin-top: 10px;"><a class="live-link" href="/api/ledger/omissions?days=30" target="_blank" rel="noopener">open json</a></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="artifact">
+            <div class="artifact-header">
+                <div class="artifact-title">LIVE ARTIFACT — ABSENCE CLOCK</div>
+                <div class="artifact-meta">source: /api/ledger/omissions</div>
+            </div>
+            <iframe src="/absence-clock.html" title="CROVIA Absence Clock"></iframe>
+        </section>
+
+        <section class="links">
+            <a class="link-card" href="https://registry.croviatrust.com/registry">
+                <div class="link-title">Training Provenance Registry</div>
+                <div class="link-desc">Public stream of observations.</div>
+            </a>
+            <a class="link-card" href="/alive.html">
+                <div class="link-title">System is Alive</div>
+                <div class="link-desc">Live endpoint probe + local snapshot verifier.</div>
+            </a>
+            <a class="link-card" href="https://registry.croviatrust.com/registry/omissions">
+                <div class="link-title">Public Omission Ledger</div>
+                <div class="link-desc">Targets with no evidence observed in period.</div>
+            </a>
+            <a class="link-card" href="/how-to-read.html">
+                <div class="link-title">How to Read Crovia</div>
+                <div class="link-desc">Notarial interpretation and verification method.</div>
+            </a>
+            <a class="link-card" href="/whitepaper.html">
+                <div class="link-title">Whitepaper</div>
+                <div class="link-desc">Architecture, protocol, and scope.</div>
+            </a>
+        </section>
+
+        <footer>
+            <div>&copy; 2026 Crovia Trust</div>
+            <div style="margin-top: 8px;">GitHub: <a href="https://github.com/croviatrust">github.com/croviatrust</a></div>
+        </footer>
+
+        <script>
+            (function () {
+                function byId(id) {
+                    return document.getElementById(id);
+                }
+
+                var liveDot = byId('liveDot');
+                var liveStatusText = byId('liveStatusText');
+                var liveMeta = byId('liveMeta');
+
+                function setDotState(state) {
+                    if (!liveDot) return;
+                    liveDot.classList.remove('ok', 'warn', 'down');
+                    if (state) liveDot.classList.add(state);
+                }
+
+                function setText(id, value) {
+                    var el = byId(id);
+                    if (!el) return;
+                    if (value === null || value === undefined || value === '') {
+                        el.textContent = '--';
+                        return;
+                    }
+                    el.textContent = String(value);
+                }
+
+                function fmtIso(iso) {
+                    if (!iso) return '--';
+                    var d = new Date(iso);
+                    if (isNaN(d.getTime())) return String(iso);
+                    return d.toISOString();
+                }
+
+                function minutesSince(iso) {
+                    if (!iso) return null;
+                    var d = new Date(iso);
+                    if (isNaN(d.getTime())) return null;
+                    return Math.round((Date.now() - d.getTime()) / 60000);
+                }
+
+                async function fetchJson(path) {
+                    var res = await fetch(path, {
+                        cache: 'no-store',
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (!res.ok) {
+                        var detail = '';
+                        try {
+                            detail = await res.text();
+                        } catch (e) {
+                            detail = '';
+                        }
+                        throw new Error(path + ' ' + res.status + (detail ? ' ' + detail : ''));
+                    }
+
+                    return await res.json();
+                }
+
+                function renderRecent(list, observations) {
+                    if (!list) return;
+                    list.innerHTML = '';
+
+                    if (!observations || !observations.length) {
+                        var empty = document.createElement('li');
+                        empty.className = 'live-item';
+                        var leftEmpty = document.createElement('div');
+                        leftEmpty.className = 'live-left';
+                        leftEmpty.textContent = 'no observations returned';
+                        var rightEmpty = document.createElement('div');
+                        rightEmpty.className = 'live-right';
+                        rightEmpty.textContent = '';
+                        empty.appendChild(leftEmpty);
+                        empty.appendChild(rightEmpty);
+                        list.appendChild(empty);
+                        return;
+                    }
+
+                    for (var i = 0; i < observations.length; i++) {
+                        var o = observations[i] || {};
+                        var targetId = o.target_id || 'unknown';
+                        
+                        // Skip Crovia internal files
+                        if (targetId.toLowerCase().indexOf('crovia') !== -1) continue;
+
+                        var li = document.createElement('li');
+                        li.className = 'live-item';
+
+                        var left = document.createElement('div');
+                        left.className = 'live-left';
+                        var obsType = o.observation_type || 'observation';
+                        left.textContent = targetId + ' (' + obsType + ')';
+
+                        var right = document.createElement('div');
+                        right.className = 'live-right';
+                        right.textContent = o.observed_at ? fmtIso(o.observed_at).replace('T', ' ').slice(0, 19) + 'Z' : '--';
+
+                        li.appendChild(left);
+                        li.appendChild(right);
+                        list.appendChild(li);
+                    }
+                }
+
+                function renderOmissions(list, results) {
+                    if (!list) return;
+                    list.innerHTML = '';
+                    var items = results && results.length ? results.slice(0, 8) : [];
+
+                    if (!items.length) {
+                        var empty = document.createElement('li');
+                        empty.className = 'live-item';
+                        var leftEmpty = document.createElement('div');
+                        leftEmpty.className = 'live-left';
+                        leftEmpty.textContent = 'no omissions returned';
+                        var rightEmpty = document.createElement('div');
+                        rightEmpty.className = 'live-right';
+                        rightEmpty.textContent = '';
+                        empty.appendChild(leftEmpty);
+                        empty.appendChild(rightEmpty);
+                        list.appendChild(empty);
+                        return;
+                    }
+
+                    for (var i = 0; i < items.length; i++) {
+                        var r = items[i] || {};
+                        var targetId = r.target_id || 'unknown';
+                        
+                        // Skip Crovia internal files
+                        if (targetId.toLowerCase().indexOf('crovia') !== -1) continue;
+
+                        var li = document.createElement('li');
+                        li.className = 'live-item';
+
+                        var left = document.createElement('div');
+                        left.className = 'live-left';
+                        left.textContent = targetId;
+
+                        var right = document.createElement('div');
+                        right.className = 'live-right';
+                        right.textContent = r.last_observed_at ? fmtIso(r.last_observed_at).replace('T', ' ').slice(0, 19) + 'Z' : '--';
+
+                        li.appendChild(left);
+                        li.appendChild(right);
+                        list.appendChild(li);
+                    }
+                }
+
+                var running = false;
+
+                async function refresh() {
+                    if (running) return;
+                    running = true;
+
+                    var started = Date.now();
+                    setDotState('warn');
+                    if (liveStatusText) liveStatusText.textContent = 'LIVE STATUS: loading...';
+
+                    try {
+                        var results = await Promise.all([
+                            fetchJson('/api/registry/stats'),
+                            fetchJson('/api/registry/merkle'),
+                            fetchJson('/api/registry/recent?limit=8'),
+                            fetchJson('/api/ledger/omissions?days=30')
+                        ]);
+
+                        var stats = results[0] || {};
+                        var merkle = results[1] || {};
+                        var recent = results[2] || {};
+                        var omissions = results[3] || {};
+
+                        setText('statTotalObs', stats.total_observations);
+                        setText('statTodayObs', stats.observations_today_utc);
+                        setText('statUniqueTargets', stats.unique_targets);
+                        setText('statUpdatedAt', fmtIso(stats.updated_at));
+                        setText('statLatency', stats.latency_ms !== undefined && stats.latency_ms !== null ? String(stats.latency_ms) + 'ms' : '--');
+
+                        var root = merkle.merkle_root;
+                        var rootEl = byId('merkleRoot');
+                        if (rootEl) {
+                            if (typeof root === 'string' && root.length) {
+                                var shortRoot = root.length > 28 ? root.slice(0, 14) + '…' + root.slice(-14) : root;
+                                rootEl.textContent = shortRoot;
+                                rootEl.setAttribute('title', root);
+                                rootEl.dataset.full = root;
+                                rootEl.style.cursor = 'copy';
+                            } else {
+                                rootEl.textContent = '--';
+                                rootEl.removeAttribute('title');
+                                rootEl.dataset.full = '';
+                                rootEl.style.cursor = 'default';
+                            }
+                        }
+
+                        setText('merkleTotalObs', merkle.total_observations);
+                        setText('merkleComputedAt', fmtIso(merkle.computed_at));
+
+                        renderRecent(byId('recentList'), recent.observations);
+
+                        setText('omissionsCount', omissions.count);
+                        setText('omissionsQueriedAt', fmtIso(omissions.query_timestamp));
+                        renderOmissions(byId('omissionsList'), omissions.results);
+
+                        var ageMin = minutesSince(stats.updated_at);
+                        var status = 'LIVE STATUS: online';
+                        if (ageMin !== null && ageMin !== undefined && isFinite(ageMin)) {
+                            status = status + ' (updated ' + ageMin + 'm ago)';
+                        }
+                        if (liveStatusText) liveStatusText.textContent = status;
+
+                        setDotState('ok');
+                        if (ageMin !== null && ageMin !== undefined && isFinite(ageMin) && ageMin > 240) {
+                            setDotState('warn');
+                        }
+
+                        if (liveMeta) liveMeta.textContent = 'refresh ok • ' + (Date.now() - started) + 'ms • ' + new Date().toISOString();
+                    } catch (err) {
+                        setDotState('down');
+                        if (liveStatusText) liveStatusText.textContent = 'LIVE STATUS: unavailable';
+                        if (liveMeta) liveMeta.textContent = String(err && err.message ? err.message : err);
+                    } finally {
+                        running = false;
+                    }
+                }
+
+                document.addEventListener('click', async function (e) {
+                    var rootEl = byId('merkleRoot');
+                    if (!rootEl) return;
+                    if (e.target !== rootEl) return;
+                    var full = rootEl.dataset.full;
+                    if (!full) return;
+                    try {
+                        await navigator.clipboard.writeText(full);
+                        if (liveMeta) liveMeta.textContent = 'merkle_root copied • ' + new Date().toISOString();
+                    } catch (copyErr) {
+                        if (liveMeta) liveMeta.textContent = 'copy failed • ' + new Date().toISOString();
+                    }
+                });
+
+                refresh();
+                setInterval(refresh, 60000);
+            })();
+        </script>
+    </div>
+</body>
+</html>

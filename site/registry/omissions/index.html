@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registry Observer - CROVIA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+        
+        .registry-name {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 24px;
+        }
+        
+        .statement {
+            font-size: 16px;
+            color: #000000;
+            margin-bottom: 12px;
+            line-height: 1.8;
+        }
+        
+        .sub-statement {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 32px;
+        }
+        
+        .filter {
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #666666;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .filter input {
+            width: 60px;
+            padding: 4px 8px;
+            border: 1px solid #cccccc;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .filter button {
+            padding: 6px 14px;
+            border: 1px solid #cccccc;
+            background: #ffffff;
+            cursor: pointer;
+            font-size: 13px;
+            border-radius: 4px;
+        }
+        
+        .filter button:hover {
+            background: #f5f5f5;
+        }
+        
+        .verify-link {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        
+        .verify-link:hover {
+            text-decoration: underline;
+        }
+        
+        .search-filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            align-items: center;
+        }
+        
+        .search-box {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #cccccc;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #cccccc;
+            font-size: 14px;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .results-count {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            background: #ffffff;
+        }
+        
+        th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid #000000;
+            font-weight: 500;
+            font-size: 13px;
+            color: #000000;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+            color: #000000;
+        }
+        
+        tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .empty-state {
+            padding: 40px;
+            text-align: center;
+            color: #666666;
+            font-size: 14px;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 13px;
+            color: #666666;
+        }
+        
+        footer a {
+            color: #000000;
+            text-decoration: none;
+            border-bottom: 1px solid #cccccc;
+        }
+        
+        footer a:hover {
+            border-bottom-color: #000000;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: #666666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .back-link:hover {
+            color: #000000;
+        }
+        
+        .footer-section {
+            margin-bottom: 16px;
+        }
+        
+        .loading {
+            padding: 40px;
+            text-align: center;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/registry" class="back-link">← Back to Registry</a>
+            <h1>Registry Observer</h1>
+            <div class="registry-name">CROVIA Training Provenance Registry</div>
+            
+            <p class="statement">CROVIA is a public, immutable registry of observations that records what evidence exists and what evidence is absent.</p>
+        </header>
+        
+        <div class="filter">
+            <span>Showing recent observations (limit:</span>
+            <input type="number" id="limit-input" value="100" min="10" max="500" style="width: 80px;">
+            <span>)</span>
+            <button onclick="loadLedger()">Refresh</button>
+            <button onclick="exportCSV()">Export CSV</button>
+        </div>
+        
+        <div class="search-filter-bar">
+            <input type="text" id="search-input" class="search-box" placeholder="Search by target ID (e.g., meta-llama, openai, anthropic...)" onkeyup="filterResults()">
+            <select id="type-filter" class="filter-select" onchange="filterResults()">
+                <option value="all">All Types</option>
+                <option value="model">Models Only</option>
+                <option value="dataset">Datasets Only</option>
+                <option value="repo">Repositories Only</option>
+            </select>
+            <select id="obs-type-filter" class="filter-select" onchange="filterResults()">
+                <option value="all">All Observations</option>
+                <option value="presence">Presence Only</option>
+                <option value="absence">Absence Only</option>
+            </select>
+            <select id="sort-filter" class="filter-select" onchange="filterResults()">
+                <option value="alpha">Sort: A-Z</option>
+                <option value="date">Sort: Most Recent</option>
+            </select>
+        </div>
+        
+        <div class="results-count" id="results-count"></div>
+        
+        <div id="ledger-content">
+            <div class="loading">Loading observations...</div>
+        </div>
+        
+        <footer>
+            <div class="footer-section">
+                <strong>Target selection:</strong> Mechanical criterion (models: downloads ≥10,000 · datasets: downloads ≥5,000)
+            </div>
+            <div class="footer-section">
+                <strong>API endpoint:</strong> <a href="/api/targets/summary">/api/targets/summary</a>
+            </div>
+            <div class="footer-section">
+                <strong>Note:</strong> All observations are timestamped and verifiable. Sorted by days monitored (temporal ordering, not ranking).
+            </div>
+            <div class="footer-section">
+                <strong>Registry:</strong> <a href="/registry">Back to Registry Home</a>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        let allResults = [];
+        
+        async function loadLedger() {
+            const limit = document.getElementById('limit-input').value || 100;
+            const contentDiv = document.getElementById('ledger-content');
+            
+            contentDiv.innerHTML = '<div class="loading">Loading observations...</div>';
+            
+            try {
+                const response = await fetch(`/api/targets/summary`);
+                const data = await response.json();
+                
+                if (!data.targets || data.targets.length === 0) {
+                    contentDiv.innerHTML = '<div class="empty-state">No targets found.</div>';
+                    document.getElementById('results-count').textContent = '';
+                    return;
+                }
+                
+                // Filter out test/internal files
+                const testPatterns = ['test-', 'croviatrust/crovia-', 'Crovia/global-ai-', 'debug-', 'demo-'];
+                allResults = data.targets.filter(item => {
+                    return !testPatterns.some(pattern => item.target_id.toLowerCase().includes(pattern.toLowerCase()));
+                });
+                
+                filterResults();
+                
+            } catch (error) {
+                contentDiv.innerHTML = '<div class="empty-state">Nessuna omissione osservata nel periodo selezionato.<br><br>Il registro viene popolato automaticamente tramite osservazione continua.</div>';
+                console.error('Ledger load error:', error);
+            }
+        }
+        
+        function filterResults() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const typeFilter = document.getElementById('type-filter').value;
+            const obsTypeFilter = document.getElementById('obs-type-filter').value;
+            const sortFilter = document.getElementById('sort-filter').value;
+            const contentDiv = document.getElementById('ledger-content');
+            
+            // Apply filters
+            let filtered = allResults.filter(item => {
+                const matchesSearch = !searchTerm || item.target_id.toLowerCase().includes(searchTerm);
+                const matchesType = typeFilter === 'all' || item.tipo_target === typeFilter;
+                const matchesObsType = obsTypeFilter === 'all' || item.observation_type === obsTypeFilter;
+                return matchesSearch && matchesType && matchesObsType;
+            });
+            
+            // Apply sorting
+            if (sortFilter === 'alpha') {
+                filtered.sort((a, b) => a.target_id.localeCompare(b.target_id));
+            } else if (sortFilter === 'date') {
+                filtered.sort((a, b) => new Date(b.observed_at) - new Date(a.observed_at));
+            }
+            
+            // Update results count
+            document.getElementById('results-count').textContent = 
+                `Showing ${filtered.length} of ${allResults.length} targets`;
+            
+            if (filtered.length === 0) {
+                contentDiv.innerHTML = '<div class="empty-state">No results match your filters.</div>';
+                return;
+            }
+            
+            // Data already aggregated by server
+            const aggregatedRows = filtered;
+            
+            // Build table
+            let html = '<table>';
+            html += '<thead><tr>';
+            html += '<th>Target ID</th>';
+            html += '<th>First Seen</th>';
+            html += '<th style="font-weight: 700;">Days Monitored</th>';
+            html += '<th>Obs Count</th>';
+            html += '<th>Obs/Day</th>';
+            html += '<th>Latest Type</th>';
+            html += '</tr></thead>';
+            html += '<tbody>';
+            
+            for (const row of aggregatedRows) {
+                const obsTypeColor = row.latest_type === 'presence' ? '#22c55e' : '#ef4444';
+                html += '<tr>';
+                const prefix = row.tipo_target === 'dataset' ? '📊 ' : '';
+                html += `<td><a href="https://huggingface.co/${row.target_id}" target="_blank" style="color: #000; text-decoration: none; border-bottom: 1px solid #ccc;">${prefix}${escapeHtml(row.target_id)}</a></td>`;
+                html += `<td style="font-size: 12px; color: #666;">${row.first_seen ? row.first_seen.slice(0,10) : 'N/A'}</td>`;
+                html += `<td style="font-weight: 700; background: #f9f9f9;">${row.days_monitored}</td>`;
+                html += `<td>${row.observation_count || row.obs_count || 0}</td>`;
+                html += `<td style="font-size: 12px;">${row.obs_per_day}</td>`;
+                html += `<td><span style="font-weight: 600; color: ${obsTypeColor}; text-transform: uppercase;">${escapeHtml(row.latest_type)}</span></td>`;
+                html += '</tr>';
+            }
+            
+            html += '</tbody></table>';
+            contentDiv.innerHTML = html;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function calculateDaysSince(timestamp) {
+            if (!timestamp) return 9999;
+            const then = new Date(timestamp);
+            const now = new Date();
+            return Math.floor((now - then) / (1000 * 60 * 60 * 24));
+        }
+        
+        function exportCSV() {
+            if (allResults.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            let csv = 'Target ID,Type,Observation Type,Observed At,Source\n';
+            allResults.forEach(item => {
+                csv += `"${item.target_id}","${item.tipo_target}","${item.observation_type}","${item.observed_at}","${item.source}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `crovia-observations-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Load on page load
+        loadLedger();
+    </script>
+</body>
+</html>

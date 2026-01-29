@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whitepaper | Crovia</title>
+    <meta name="description" content="Crovia Whitepaper: Cryptographic Attribution Infrastructure for AI Training Data">
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0b14;
+            --bg-secondary: #0f1119;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #00d4ff;
+            --green: #10b981;
+            --purple: #a855f7;
+            --border: #1e293b;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+        
+        .back-link:hover { text-decoration: underline; }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header img {
+            height: 60px;
+            margin-bottom: 24px;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        
+        .header .version {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 48px 0 20px;
+            color: var(--accent);
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 32px 0 16px;
+        }
+        
+        p {
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        
+        strong { color: var(--text); }
+        
+        ul, ol {
+            margin: 16px 0 16px 24px;
+            color: var(--text-muted);
+        }
+        
+        li { margin-bottom: 8px; }
+        
+        .highlight {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            padding: 20px 24px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight p { margin: 0; color: var(--text); }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            color: var(--text);
+            font-weight: 600;
+            background: var(--bg-secondary);
+        }
+        
+        td { color: var(--text-muted); }
+        
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+        
+        .toc {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 32px;
+            margin-bottom: 48px;
+        }
+        
+        .toc h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .toc a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            color: var(--accent);
+        }
+        
+        .footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 28px; }
+            h2 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Home
+        </a>
+        
+        <div class="header">
+            <img src="/logo.png" alt="Crovia">
+            <h1>CROVIA</h1>
+            <p class="subtitle">Cryptographic Attribution Infrastructure for AI Training Data</p>
+            <p class="version">Version 1.0 | January 2026</p>
+        </div>
+        
+        <div class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#executive-summary">Executive Summary</a></li>
+                <li><a href="#problem">The Problem</a></li>
+                <li><a href="#solution">The Solution</a></li>
+                <li><a href="#architecture">Technical Architecture</a></li>
+                <li><a href="#innovations">Key Innovations</a></li>
+                <li><a href="#use-cases">Use Cases</a></li>
+                <li><a href="#comparison">Competitive Analysis</a></li>
+                <li><a href="#business">Business Model</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+            </ol>
+        </div>
+        
+        <h2 id="executive-summary">1. Executive Summary</h2>
+        
+        <p>Crovia is the first cryptographic infrastructure that enables <strong>verifiable AI training data attribution</strong> with legally binding proofs of inclusion, exclusion, and settlement.</p>
+        
+        <p>Unlike existing solutions that focus only on content provenance or opt-out registries, Crovia provides a complete attribution stack:</p>
+        
+        <ul>
+            <li><strong>Proof of contribution</strong>: ZK proofs that data was used in training</li>
+            <li><strong>Proof of absence</strong>: Cryptographic proof that data was NOT used</li>
+            <li><strong>Model DNA</strong>: Genetic fingerprint certificates for AI models</li>
+            <li><strong>Automatic settlement</strong>: Royalty distribution with immutable audit trail</li>
+        </ul>
+        
+        <div class="highlight">
+            <p><strong>Crovia answers the fundamental question:</strong> "Was my data used to train this AI, and was I compensated fairly?"</p>
+        </div>
+        
+        <h2 id="problem">2. The Problem</h2>
+        
+        <h3>Current State of AI Training</h3>
+        
+        <p>AI training today happens without verifiable records. There is no standard way to:</p>
+        
+        <ul>
+            <li>Prove which data was used to train a model</li>
+            <li>Verify that opt-out requests were honored</li>
+            <li>Distribute royalties fairly to data contributors</li>
+            <li>Defend against copyright infringement claims</li>
+        </ul>
+        
+        <h3>Market Reality</h3>
+        
+        <table>
+            <tr>
+                <th>Challenge</th>
+                <th>Impact</th>
+            </tr>
+            <tr>
+                <td>No training receipts</td>
+                <td>$50B+ content at risk of unauthorized use</td>
+            </tr>
+            <tr>
+                <td>Unverifiable opt-outs</td>
+                <td>GDPR fines up to 4% of global revenue</td>
+            </tr>
+            <tr>
+                <td>No settlement mechanism</td>
+                <td>Creators receive $0 from AI training</td>
+            </tr>
+            <tr>
+                <td>Legal exposure</td>
+                <td>$150K+ per infringement (US statutory damages)</td>
+            </tr>
+        </table>
+        
+        <h3>Regulatory Pressure</h3>
+        
+        <p>The EU AI Act requires training data transparency by 2026. Companies without attribution infrastructure face significant compliance risk.</p>
+        
+        <h2 id="solution">3. The Solution</h2>
+        
+        <p>Crovia provides a four-layer cryptographic stack that handles the complete attribution lifecycle:</p>
+        
+        <div class="code-block">
+CROVIA STACK
+============
+
+Layer 4: Settlement      CPCS Seal, CFIC Certificates
+Layer 3: Attribution     ZK Proofs, Model DNA
+Layer 2: Evidence        Push Receipts, Merkle Trees
+Layer 1: Identity        Provider KYC, Crovia ID
+        </div>
+        
+        <p>Each layer builds on the one below, creating a complete chain of custody from data contribution to royalty payment.</p>
+        
+        <h2 id="architecture">4. Technical Architecture</h2>
+        
+        <h3>Cryptographic Primitives</h3>
+        
+        <table>
+            <tr>
+                <th>Component</th>
+                <th>Algorithm</th>
+                <th>Standard</th>
+            </tr>
+            <tr>
+                <td>Hashing</td>
+                <td>SHA-256, BLAKE3</td>
+                <td>FIPS 180-4</td>
+            </tr>
+            <tr>
+                <td>Signatures</td>
+                <td>Ed25519</td>
+                <td>RFC 8032</td>
+            </tr>
+            <tr>
+                <td>ZK Proofs</td>
+                <td>Groth16 (BN254)</td>
+                <td>zkSNARK</td>
+            </tr>
+            <tr>
+                <td>Timestamps</td>
+                <td>RFC 3161</td>
+                <td>ITU-T X.509</td>
+            </tr>
+            <tr>
+                <td>Merkle Trees</td>
+                <td>SHA-256</td>
+                <td>Bitcoin standard</td>
+            </tr>
+        </table>
+        
+        <h3>Performance</h3>
+        
+        <table>
+            <tr>
+                <th>Operation</th>
+                <th>Throughput</th>
+                <th>Latency</th>
+            </tr>
+            <tr>
+                <td>Semantic Hash</td>
+                <td>1M docs/sec</td>
+                <td>&lt;1ms</td>
+            </tr>
+            <tr>
+                <td>ZK Proof Generation</td>
+                <td>10K proofs/sec</td>
+                <td>100ms</td>
+            </tr>
+            <tr>
+                <td>Merkle Verification</td>
+                <td>100M nodes/sec</td>
+                <td>&lt;1μs</td>
+            </tr>
+            <tr>
+                <td>Settlement (1M providers)</td>
+                <td>N/A</td>
+                <td>&lt;5sec</td>
+            </tr>
+        </table>
+        
+        <h2 id="innovations">5. Key Innovations</h2>
+        
+        <h3>Absence Proofs (Patent Pending)</h3>
+        
+        <p>Crovia can cryptographically prove that specific data was <strong>NOT used</strong> in training. This is critical for:</p>
+        
+        <ul>
+            <li>GDPR right to erasure compliance</li>
+            <li>Opt-out verification for content creators</li>
+            <li>Legal defense for AI companies</li>
+        </ul>
+        
+        <p>No other system provides verifiable absence proofs.</p>
+        
+        <h3>Model DNA</h3>
+        
+        <p>Every AI model receives a cryptographic "birth certificate" that records:</p>
+        
+        <ul>
+            <li>Contributing data sources</li>
+            <li>Excluded data (honored opt-outs)</li>
+            <li>Compliance score</li>
+            <li>Provenance chain</li>
+        </ul>
+        
+        <h3>Zero-Knowledge Attribution</h3>
+        
+        <p>Crovia uses ZK proofs to verify attribution <strong>without revealing</strong>:</p>
+        
+        <ul>
+            <li>Training data contents</li>
+            <li>Model weights</li>
+            <li>Provider identities (optional)</li>
+        </ul>
+        
+        <h3>Automatic Settlement</h3>
+        
+        <p>The Crovia Production Commit Seal (CPCS) enables:</p>
+        
+        <ul>
+            <li>Merkle tree of all contributor payouts</li>
+            <li>Cryptographic payment commitments</li>
+            <li>Immutable audit trail</li>
+            <li>RFC 3161 legal timestamps</li>
+        </ul>
+        
+        <h2 id="use-cases">6. Use Cases</h2>
+        
+        <h3>For AI Companies</h3>
+        
+        <p><strong>Problem:</strong> Legal exposure from training on copyrighted data.</p>
+        <p><strong>Solution:</strong> Crovia Score certification, absence proofs for opt-outs, Model DNA for transparency.</p>
+        <p><strong>ROI:</strong> Reduce legal risk by 90%+.</p>
+        
+        <h3>For Content Creators</h3>
+        
+        <p><strong>Problem:</strong> No way to track or monetize AI training usage.</p>
+        <p><strong>Solution:</strong> Push receipts for contributions, automatic royalty settlement, opt-out verification.</p>
+        <p><strong>ROI:</strong> New revenue stream from AI training.</p>
+        
+        <h3>For Regulators</h3>
+        
+        <p><strong>Problem:</strong> No way to audit AI training compliance.</p>
+        <p><strong>Solution:</strong> Model DNA certificates, immutable audit trail, GDPR-compliant absence proofs.</p>
+        <p><strong>ROI:</strong> Enforceable AI transparency.</p>
+        
+        <h2 id="comparison">7. Competitive Analysis</h2>
+        
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Crovia</th>
+                <th>C2PA</th>
+                <th>Spawning</th>
+                <th>Fairly Trained</th>
+            </tr>
+            <tr>
+                <td>Contribution Proofs</td>
+                <td style="color: var(--green);">Yes</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Absence Proofs</td>
+                <td style="color: var(--green);">Yes</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>ZK Privacy</td>
+                <td style="color: var(--green);">Yes</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Model DNA</td>
+                <td style="color: var(--green);">Yes</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Auto Settlement</td>
+                <td style="color: var(--green);">Yes</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Legal Timestamps</td>
+                <td style="color: var(--green);">Yes</td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+        </table>
+        
+        <h2 id="business">8. Business Model</h2>
+        
+        <h3>Pricing Tiers</h3>
+        
+        <table>
+            <tr>
+                <th>Tier</th>
+                <th>Price</th>
+                <th>Includes</th>
+            </tr>
+            <tr>
+                <td>Starter</td>
+                <td>Free</td>
+                <td>1K proofs/month, community support</td>
+            </tr>
+            <tr>
+                <td>Pro</td>
+                <td>$499/month</td>
+                <td>100K proofs, Model DNA, priority support</td>
+            </tr>
+            <tr>
+                <td>Enterprise</td>
+                <td>By Invitation</td>
+                <td>Unlimited, on-premise, custom SLA</td>
+            </tr>
+        </table>
+        
+        <h3>Revenue Streams</h3>
+        
+        <ul>
+            <li><strong>API Usage:</strong> Per-proof pricing at scale</li>
+            <li><strong>Settlement Fees:</strong> 0.5% of royalty distributions</li>
+            <li><strong>Certification:</strong> Crovia Score badges for marketing</li>
+            <li><strong>Enterprise Licenses:</strong> On-premise deployment</li>
+        </ul>
+        
+        <h2 id="roadmap">9. Roadmap</h2>
+        
+        <table>
+            <tr>
+                <th>Phase</th>
+                <th>Timeline</th>
+                <th>Milestones</th>
+            </tr>
+            <tr>
+                <td>Foundation</td>
+                <td>Q1 2026</td>
+                <td>Core engine, API, SDK, Documentation</td>
+            </tr>
+            <tr>
+                <td>Growth</td>
+                <td>Q2 2026</td>
+                <td>First enterprise clients, Dashboard UI, SOC 2</td>
+            </tr>
+            <tr>
+                <td>Scale</td>
+                <td>Q3 2026</td>
+                <td>EU AI Act certification partner, 10+ enterprises</td>
+            </tr>
+            <tr>
+                <td>Leadership</td>
+                <td>Q4 2026</td>
+                <td>1B+ proofs processed, industry standard adoption</td>
+            </tr>
+        </table>
+        
+        <div class="footer">
+            <p>© 2026 CroviaTrust. All rights reserved.</p>
+            <p style="margin-top: 8px;"><a href="mailto:info@croviatrust.com" style="color: var(--accent);">info@croviatrust.com</a></p>
+        </div>
+    </div>
+</body>
+</html>
