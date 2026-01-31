@@ -151,28 +151,12 @@
         </div>
         
         <div class="section">
-            <h2>Shadow Score</h2>
-            <p>Shadow Score (0-100) measures completeness of trust declarations based on the NEC# Canon (Necessity Canon).</p>
-            <p>It is calculated deterministically from publicly observable metadata:</p>
-            <ul>
-                <li>Data provenance (NEC#1)</li>
-                <li>License attribution (NEC#2)</li>
-                <li>Usage scope (NEC#7)</li>
-                <li>Temporal validity (NEC#10)</li>
-                <li>Accountable entity (NEC#13)</li>
-                <li>+ 15 other necessities</li>
-            </ul>
-            <p>Formula: <code>shadow_score = 100 - Σ(violation_severity × 0.15)</code></p>
-            <p>Verifiable. Reproducible. Public.</p>
-        </div>
-        
-        <div class="section">
             <h2>Where to verify</h2>
             <ul>
                 <li><a href="https://registry.croviatrust.com/registry">Live Registry</a> — real-time observations</li>
                 <li><a href="https://registry.croviatrust.com/registry/omissions">Omission Ledger</a> — targets without evidence</li>
                 <li><a href="https://huggingface.co/spaces/Crovia/cep-terminal">CEP Terminal</a> — evidence capsule verification</li>
-                <li><a href="https://huggingface.co/spaces/Crovia/omission-oracle">Omission Oracle</a> — Shadow Score analysis</li>
+                <li><a href="https://huggingface.co/spaces/Crovia/omission-oracle">Registry Observer</a> — verifiable observations (no scoring)</li>
                 <li><a href="https://huggingface.co/datasets/Crovia/global-ai-training-omissions">Dataset</a> — static snapshots</li>
             </ul>
         </div>

@@ -18,6 +18,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
+import yaml
+
 try:
     from huggingface_hub import HfApi
     HF_AVAILABLE = True
@@ -62,6 +64,58 @@ NECESSITY_CANON = {
         "eu_ai_act": "Article 16"
     },
 }
+
+
+def _find_public_nec_canon_path() -> Optional[Path]:
+    candidates = []
+    for parent in list(Path(__file__).resolve().parents)[:8]:
+        candidates.append(parent / "canon" / "necessities.v1.yaml")
+        candidates.append(parent.parent / "canon" / "necessities.v1.yaml")
+
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def _load_public_nec_canon(path: Path) -> Dict[str, Dict[str, Any]]:
+    with open(path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    nec_list = (data or {}).get("necessities") or []
+    out: Dict[str, Dict[str, Any]] = {}
+    for nec in nec_list:
+        nec_id = (nec or {}).get("id")
+        if not nec_id:
+            continue
+        out[str(nec_id)] = nec
+    return out
+
+
+def _maybe_override_nec_display_fields_from_public_canon() -> None:
+    path = _find_public_nec_canon_path()
+    if not path:
+        return
+
+    try:
+        public = _load_public_nec_canon(path)
+    except Exception:
+        return
+
+    for nec_id, entry in NECESSITY_CANON.items():
+        pub = public.get(nec_id)
+        if not pub:
+            continue
+
+        pub_name = pub.get("name")
+        pub_summary = pub.get("summary")
+
+        if pub_name:
+            entry["name"] = pub_name
+        if pub_summary:
+            entry["description"] = pub_summary
+
+
+_maybe_override_nec_display_fields_from_public_canon()
 
 # ============================================================
 # COLORS
