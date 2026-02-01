@@ -16,9 +16,15 @@ ALLOWLIST=(
   "v0.1/EVIDENCE.json"
   "v0.1/snapshot_latest.json"
   "v0.1/global_ranking.jsonl"
+  "open/README.md"
   "open/README_STATUS.md"
+  "open/README_PRO_SHADOW.md"
   "open/signal/presence_latest.jsonl"
+  "open/signal/verdict_matrix_latest.jsonl"
   "open/signal/ledger_status_latest.json"
+  "open/signal/pro_shadow_pressure_latest.json"
+  "open/forensic/absence_receipts_7d.jsonl"
+  "open/temporal/temporal_pressure_30d.jsonl"
 )
 
 # --- 1) Verifica hash dichiarati in EVIDENCE.json ---
