@@ -23,6 +23,8 @@ ALLOWLIST=(
   "open/signal/verdict_matrix_latest.jsonl"
   "open/signal/ledger_status_latest.json"
   "open/signal/pro_shadow_pressure_latest.json"
+  "open/drift/ddf_snapshots_latest.jsonl"
+  "open/drift/ddf_drift_events_30d.jsonl"
   "open/forensic/absence_receipts_7d.jsonl"
   "open/temporal/temporal_pressure_30d.jsonl"
 )
