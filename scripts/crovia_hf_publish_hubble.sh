@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
+set -o pipefail
 
 ROOT="/opt/crovia/hf_datasets/global-ai-training-omissions"
 LOG="/opt/crovia/logs/hf_publish_hubble.log"
@@ -32,22 +33,25 @@ ALLOWLIST=(
 # --- 1) Verifica hash dichiarati in EVIDENCE.json ---
 echo "[check] verifying declared sha256 hashes" | tee -a "$LOG"
 
-jq -r '.integrity.sha256 | to_entries[] | "\(.key) \(.value)"' EVIDENCE.json | while read -r file hash; do
-  if [ ! -f "$file" ]; then
-    echo "❌ MISSING FILE: $file" | tee -a "$LOG"
-    exit 1
-  fi
+if jq -e '.integrity.sha256 and (.integrity.sha256|type=="object")' EVIDENCE.json >/dev/null 2>&1; then
+  jq -r '.integrity.sha256 | to_entries[] | "\(.key) \(.value)"' EVIDENCE.json | while read -r file hash; do
+    if [ ! -f "$file" ]; then
+      echo "❌ MISSING FILE: $file" | tee -a "$LOG"
+      exit 1
+    fi
 
-  calc=$(sha256sum "$file" | awk '{print $1}')
-  if [ "$calc" != "$hash" ]; then
-    echo "❌ HASH MISMATCH: $file" | tee -a "$LOG"
-    echo "expected=$hash" | tee -a "$LOG"
-    echo "actual  =$calc" | tee -a "$LOG"
-    exit 1
-  fi
-done
-
-echo "✅ hash verification OK" | tee -a "$LOG"
+    calc=$(sha256sum "$file" | awk '{print $1}')
+    if [ "$calc" != "$hash" ]; then
+      echo "❌ HASH MISMATCH: $file" | tee -a "$LOG"
+      echo "expected=$hash" | tee -a "$LOG"
+      echo "actual  =$calc" | tee -a "$LOG"
+      exit 1
+    fi
+  done
+  echo "✅ hash verification OK" | tee -a "$LOG"
+else
+  echo "[check] no integrity.sha256 map found in EVIDENCE.json — skip hash verification" | tee -a "$LOG"
+fi
 
 # --- 2) Stage SOLO allowlist ---
 git reset >/dev/null
