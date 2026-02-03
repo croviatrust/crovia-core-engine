@@ -28,6 +28,8 @@ ALLOWLIST=(
   "open/drift/ddf_drift_events_30d.jsonl"
   "open/forensic/absence_receipts_7d.jsonl"
   "open/temporal/temporal_pressure_30d.jsonl"
+  "open/temporal/statement_timeline_30d.jsonl"
+  "open/temporal/statement_timeline_index.json"
 )
 
 # --- 1) Verifica hash dichiarati in EVIDENCE.json ---
