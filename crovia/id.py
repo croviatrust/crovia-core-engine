@@ -20,7 +20,7 @@ import hashlib
 import json
 import random
 import string
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any
 
@@ -93,7 +93,7 @@ def bind_id_to_bundle(
         "crovia_id": crovia_id,
         "bundle_sha256": bundle_hash,
         "bundle_file": bundle_path.name,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat() + "Z",
         "schema": "crovia_id_binding.v1",
     }
 
