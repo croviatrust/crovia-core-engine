@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 #!/usr/bin/env python3
 """
 crovia_validate.py
@@ -24,7 +23,7 @@ import os
 import sys
 from collections import Counter, defaultdict
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, List, Optional
 
 

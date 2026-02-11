@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import List, Optional
 
 ROOT = Path(__file__).resolve().parent.parent
-ENGINE_ROOT = ROOT / "crovia-core-engine-open" / "core"
+ENGINE_ROOT = ROOT / "core"
 PRO_ENGINE_ROOT = ROOT / "crovia-pro-engine"
 
 

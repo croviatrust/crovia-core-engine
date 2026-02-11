@@ -113,7 +113,7 @@ def main() -> None:
     )
 
     # 3) Validate schema + business (non-blocking, optional script)
-    validate_script = BASE_DIR / str(BASE_DIR / "crovia_validate.py")
+    validate_script = BASE_DIR / "crovia_validate.py"
     if validate_script.exists():
         run_step(
             "Validate schema+business",
@@ -132,7 +132,7 @@ def main() -> None:
         print("[SKIP] Validate schema+business (crovia_validate.py not present in this edition)")
 
     # 4) Compliance AI Act (non-blocking, optional script)
-    compliance_script = BASE_DIR / str(BASE_DIR / "compliance_ai_act.py")
+    compliance_script = BASE_DIR / "compliance_ai_act.py"
     if compliance_script.exists():
         run_step(
             "Compliance AI Act",
@@ -281,72 +281,6 @@ def main() -> None:
         print("[SKIP] Augment trust bundle (augment_trust_bundle.py not present in this edition)")
 
 
-
-if __name__ == "__main__":
-    main()
-
-# --- CROVIA CLI ADAPTER (append-only) ---
-def main(argv=None):
-    import argparse
-    import inspect
-
-    parser = argparse.ArgumentParser(prog="run_period")
-    parser.add_argument("--period", required=True)
-    parser.add_argument("--eur-total", type=float, required=True)
-    parser.add_argument("--receipts", required=True)
-    parser.add_argument("--min-appear", type=int, default=1)
-    args = parser.parse_args(argv)
-
-    candidates = [
-        "run_period",
-        "build_period",
-        "period",
-        "run",
-    ]
-
-    last_err = None
-    for name in candidates:
-        fn = globals().get(name)
-        if not callable(fn):
-            continue
-        try:
-            sig = inspect.signature(fn)
-            kwargs = {}
-
-            mapping = {
-                "period": args.period,
-                "eur_total": args.eur_total,
-                "total_eur": args.eur_total,
-                "receipts": args.receipts,
-                "receipts_path": args.receipts,
-                "min_appear": args.min_appear,
-            }
-
-            for p in sig.parameters.values():
-                if p.kind in (p.VAR_POSITIONAL, p.VAR_KEYWORD):
-                    continue
-                if p.name in mapping:
-                    kwargs[p.name] = mapping[p.name]
-
-            if kwargs:
-                return fn(**kwargs)
-            else:
-                return fn(
-                    args.period,
-                    args.eur_total,
-                    args.receipts,
-                    args.min_appear,
-                )
-
-        except Exception as e:
-            last_err = e
-            continue
-
-    print("=== CROVIA PERIOD RUN COMPLETED ===")
-    raise SystemExit(0)
-    return 0
-
-# DEV-REMOVED:     raise SystemExit(f"[run_period] No compatible entrypoint found. Last error: {last_err!r}")
 
 if __name__ == "__main__":
     main()

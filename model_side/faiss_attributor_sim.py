@@ -14,13 +14,6 @@
 
 
 # model_side/faiss_attributor_sim.py — FAISS → CIM-lite (+Shapley-2) → royalty_receipt.v1
-import argparse, json, os, hashlib, sys
-import numpy as np, faiss
-
-from cim_estimator import cim_estimate
-
-#!/usr/bin/env python3
-# faiss_attributor_sim.py - FAISS - CIM-lite+Shapley2 - royalty_receipt.v1
 import argparse, json, os, sys, hashlib
 import numpy as np, faiss
 
@@ -103,28 +96,34 @@ def main():
                 "share": float(round(float(shares[j]), 6))
             })
 
-    rec = {
-        "schema": "royalty_receipt.v1",
-        "output_id": f"sim_{args.period}_{i:06d}",
-        "model_id": args.model_id,
-        "timestamp": "2025-11-12T00:00:00Z",
-        "attribution_scope": "completion",
-        "usage": {"input_tokens": int(rng.integers(40, 200)),
-                  "output_tokens": int(rng.integers(60, 400))},
-        "top_k": tk,
-        "hash_model": hash_model,
-        "hash_data_index": hash_data_index,
-        "meta": {
-            "cim_method_id": "CIM:FAISS-SHAP2-2025-11",
-            "cim_k_candidates": args.M,
-            "cim_k_top": args.K,
-            "alpha": args.alpha,
-            "synergy_frac": args.syn
+        rec = {
+            "schema": "royalty_receipt.v1",
+            "output_id": f"sim_{args.period}_{i:06d}",
+            "model_id": args.model_id,
+            "timestamp": "2025-11-12T00:00:00Z",
+            "attribution_scope": "completion",
+            "usage": {"input_tokens": int(rng.integers(40, 200)),
+                      "output_tokens": int(rng.integers(60, 400))},
+            "top_k": tk,
+            "hash_model": hash_model,
+            "hash_data_index": hash_data_index,
+            "meta": {
+                "cim_method_id": "CIM:FAISS-SHAP2-2025-11",
+                "cim_k_candidates": args.M,
+                "cim_k_top": args.K,
+                "alpha": args.alpha,
+                "synergy_frac": args.syn
+            }
         }
-    }
-    # scrivi epsilon_dp solo se > 0
-    if args.epsilon > 0:
-       rec["epsilon_dp"] = float(args.epsilon)
+        # scrivi epsilon_dp solo se > 0
+        if args.epsilon > 0:
+            rec["epsilon_dp"] = float(args.epsilon)
+
+        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+    f.close()
+    print(f"[ATTRIBUTOR] {args.outputs} receipts written to {args.out}")
+
 
 if __name__ == "__main__":
     main()

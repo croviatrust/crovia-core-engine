@@ -733,6 +733,115 @@ def cmd_verify_pack(args: argparse.Namespace) -> None:
         raise SystemExit(r.returncode)
 
 
+# ==========================
+#  RUN — OPEN CORE ORCHESTRATOR
+# ==========================
+
+def cmd_run(args: argparse.Namespace) -> None:
+    """
+    crovia run
+    → Deterministic open-core end-to-end pipeline
+    """
+
+    print_header("Run (Open-Core Orchestrator)")
+
+    receipts = Path(args.receipts)
+    if not receipts.exists():
+        print_error(f"Receipts file not found: {receipts}")
+        sys.exit(1)
+
+    period = args.period
+    budget = args.budget
+    out_dir = Path(args.out)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    print_section("Inputs")
+    print(f"• Receipts: {receipts}")
+    print(f"• Period:   {period}")
+    print(f"• Budget:   {budget}")
+    print(f"• Output:   {out_dir}")
+    print()
+
+    # 1) Validate
+    print_section("Step 1/5 — Validate")
+    validate_md = out_dir / "validate_report.md"
+    subprocess.run([
+        sys.executable,
+        "validate/validate.py",
+        "--in", str(receipts),
+        "--out", str(validate_md),
+    ], check=True)
+    print_ok("Validation completed")
+
+    # 2) Payouts
+    print_section("Step 2/5 — Payouts")
+    payouts = out_dir / "payouts.ndjson"
+    subprocess.run([
+        sys.executable,
+        "payouts/payout_engine.py",
+        "--in", str(receipts),
+        "--period", period,
+        "--budget", str(budget),
+        "--out", str(payouts),
+    ], check=True)
+    print_ok("Payouts computed")
+
+    # 3) Trust bundle
+    print_section("Step 3/5 — Trust bundle")
+    bundle = out_dir / "trust_bundle.json"
+    subprocess.run([
+        sys.executable,
+        "pack/build_bundle.py",
+        "--receipts", str(receipts),
+        "--payouts", str(payouts),
+        "--out", str(bundle),
+    ], check=True)
+    print_ok("Trust bundle created")
+
+    # 4) Hashchain
+    print_section("Step 4/5 — Hashchain")
+    hashchain = out_dir / "hashchain.txt"
+    subprocess.run([
+        sys.executable,
+        "proofs/hashchain_writer.py",
+        "--source", str(receipts),
+        "--out", str(hashchain),
+    ], check=True)
+    print_ok("Hashchain generated")
+
+    # 5) Manifest
+    print_section("Step 5/5 — Manifest")
+    manifest = out_dir / "manifest.json"
+    manifest.write_text(json.dumps({
+        "schema": "crovia.manifest.v1",
+        "period": period,
+        "budget": budget,
+        "artifacts": {
+            "receipts": receipts.name,
+            "validate_report": validate_md.name,
+            "payouts": payouts.name,
+            "trust_bundle": bundle.name,
+            "hashchain": hashchain.name,
+        }
+    }, indent=2), encoding="utf-8")
+
+    print_ok("Manifest written")
+    print()
+    print_ok("crovia run completed successfully")
+    print_suggestion(f"Inspect output: {out_dir}")
+
+
+# ---- argparse binding for run ----
+def _bind_run(sub):
+    p = sub.add_parser("run", help="Run full open-core pipeline")
+    p.add_argument("--receipts", required=True, help="Input receipts NDJSON")
+    p.add_argument("--period", required=True, help="Period (e.g. 2025-11)")
+    p.add_argument("--budget", required=True, type=float, help="Total budget (EUR)")
+    p.add_argument("--out", required=True, help="Output directory")
+    p.set_defaults(func=cmd_run)
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="crovia",
@@ -908,6 +1017,11 @@ def build_parser() -> argparse.ArgumentParser:
     bd.add_argument("capability", help="Capability ID to demo")
     bd.set_defaults(func=lambda args: cmd_bridge_demo(args))
 
+    # run (open-core orchestrator)
+    _bind_run(sub)
+
+    return p
+
 
 def cmd_bridge_preview(args):
     """Preview compliance potential for a model."""
@@ -916,7 +1030,7 @@ def cmd_bridge_preview(args):
     try:
         preview = preview_compliance(args.model)
         
-        print_success(f"🔍 Compliance Preview: {args.model}")
+        print_ok(f"🔍 Compliance Preview: {args.model}")
         print()
         
         print(f"📊 Current Score (Open): {preview.preview_score:.1%}")
@@ -956,7 +1070,7 @@ def cmd_bridge_upgrades(args):
     try:
         capabilities = list_upgrades()
         
-        print_success("🚀 Crovia PRO Capabilities")
+        print_ok("🚀 Crovia PRO Capabilities")
         print()
         
         for cap in capabilities:
@@ -983,7 +1097,7 @@ def cmd_bridge_demo(args):
             print_error(f"Capability not available: {args.capability}")
             return
         
-        print_success(f"🎬 Demo: {demo['name']}")
+        print_ok(f"🎬 Demo: {demo['name']}")
         print()
         print(f"📋 Description: {demo['name']}")
         print(f"🌍 Coverage: {', '.join(demo['regulatory_coverage'])}")
@@ -1000,9 +1114,6 @@ def cmd_bridge_demo(args):
         
     except Exception as e:
         print_error(f"Demo failed: {e}")
-
-
-    return p
 
 
 def _cmd_license_status():
@@ -1039,110 +1150,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     raise SystemExit(main())
-# ==========================
-#  RUN — OPEN CORE ORCHESTRATOR
-# ==========================
-
-def cmd_run(args: argparse.Namespace) -> None:
-    """
-    crovia run
-    → Deterministic open-core end-to-end pipeline
-    """
-
-    print_header("Run (Open-Core Orchestrator)")
-
-    receipts = Path(args.receipts)
-    if not receipts.exists():
-        print_error(f"Receipts file not found: {receipts}")
-        sys.exit(1)
-
-    period = args.period
-    budget = args.budget
-    out_dir = Path(args.out)
-
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    print_section("Inputs")
-    print(f"• Receipts: {receipts}")
-    print(f"• Period:   {period}")
-    print(f"• Budget:   {budget}")
-    print(f"• Output:   {out_dir}")
-    print()
-
-    # 1) Validate
-    print_section("Step 1/5 — Validate")
-    validate_md = out_dir / "validate_report.md"
-    subprocess.run([
-        sys.executable,
-        "validate/validate.py",
-        "--in", str(receipts),
-        "--out", str(validate_md),
-    ], check=True)
-    print_ok("Validation completed")
-
-    # 2) Payouts
-    print_section("Step 2/5 — Payouts")
-    payouts = out_dir / "payouts.ndjson"
-    subprocess.run([
-        sys.executable,
-        "payouts/payout_engine.py",
-        "--in", str(receipts),
-        "--period", period,
-        "--budget", str(budget),
-        "--out", str(payouts),
-    ], check=True)
-    print_ok("Payouts computed")
-
-    # 3) Trust bundle
-    print_section("Step 3/5 — Trust bundle")
-    bundle = out_dir / "trust_bundle.json"
-    subprocess.run([
-        sys.executable,
-        "pack/build_bundle.py",
-        "--receipts", str(receipts),
-        "--payouts", str(payouts),
-        "--out", str(bundle),
-    ], check=True)
-    print_ok("Trust bundle created")
-
-    # 4) Hashchain
-    print_section("Step 4/5 — Hashchain")
-    hashchain = out_dir / "hashchain.txt"
-    subprocess.run([
-        sys.executable,
-        "proofs/hashchain_writer.py",
-        "--source", str(receipts),
-        "--out", str(hashchain),
-    ], check=True)
-    print_ok("Hashchain generated")
-
-    # 5) Manifest
-    print_section("Step 5/5 — Manifest")
-    manifest = out_dir / "manifest.json"
-    manifest.write_text(json.dumps({
-        "schema": "crovia.manifest.v1",
-        "period": period,
-        "budget": budget,
-        "artifacts": {
-            "receipts": receipts.name,
-            "validate_report": validate_md.name,
-            "payouts": payouts.name,
-            "trust_bundle": bundle.name,
-            "hashchain": hashchain.name,
-        }
-    }, indent=2), encoding="utf-8")
-
-    print_ok("Manifest written")
-    print()
-    print_ok("crovia run completed successfully")
-    print_suggestion(f"Inspect output: {out_dir}")
-
-
-# ---- argparse binding for run ----
-def _bind_run(sub):
-    p = sub.add_parser("run", help="Run full open-core pipeline")
-    p.add_argument("--receipts", required=True, help="Input receipts NDJSON")
-    p.add_argument("--period", required=True, help="Period (e.g. 2025-11)")
-    p.add_argument("--budget", required=True, type=float, help="Total budget (EUR)")
-    p.add_argument("--out", required=True, help="Output directory")
-    p.set_defaults(func=cmd_run)
