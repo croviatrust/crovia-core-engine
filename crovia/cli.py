@@ -16,6 +16,7 @@ import json
 import os
 import sys
 import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 
 # ==========================
@@ -766,37 +767,52 @@ def cmd_run(args: argparse.Namespace) -> None:
     # 1) Validate
     print_section("Step 1/5 — Validate")
     validate_md = out_dir / "validate_report.md"
+    validate_bad = out_dir / "validate_bad.ndjson"
     subprocess.run([
         sys.executable,
         "validate/validate.py",
-        "--in", str(receipts),
-        "--out", str(validate_md),
+        str(receipts),
+        "--out-md", str(validate_md),
+        "--out-bad", str(validate_bad),
     ], check=True)
     print_ok("Validation completed")
 
     # 2) Payouts
     print_section("Step 2/5 — Payouts")
-    payouts = out_dir / "payouts.ndjson"
+    payouts_ndjson = out_dir / "payouts.ndjson"
+    payouts_csv = out_dir / "payouts.csv"
     subprocess.run([
         sys.executable,
-        "payouts/payout_engine.py",
-        "--in", str(receipts),
+        "core/payouts_from_royalties.py",
+        "--input", str(receipts),
         "--period", period,
-        "--budget", str(budget),
-        "--out", str(payouts),
+        "--eur-total", str(budget),
+        "--out-ndjson", str(payouts_ndjson),
+        "--out-csv", str(payouts_csv),
     ], check=True)
     print_ok("Payouts computed")
 
-    # 3) Trust bundle
+    # 3) Trust bundle (built inline — aggregates artifacts + hashes)
     print_section("Step 3/5 — Trust bundle")
     bundle = out_dir / "trust_bundle.json"
-    subprocess.run([
-        sys.executable,
-        "pack/build_bundle.py",
-        "--receipts", str(receipts),
-        "--payouts", str(payouts),
-        "--out", str(bundle),
-    ], check=True)
+    def _file_sha256(p):
+        if not p.exists():
+            return None
+        return hashlib.sha256(p.read_bytes()).hexdigest()
+
+    bundle_doc = {
+        "schema": "crovia_trust_bundle.v1",
+        "period": period,
+        "budget_eur": budget,
+        "artifacts": {
+            "receipts": {"file": receipts.name, "sha256": _file_sha256(receipts)},
+            "payouts_ndjson": {"file": payouts_ndjson.name, "sha256": _file_sha256(payouts_ndjson)},
+            "payouts_csv": {"file": payouts_csv.name, "sha256": _file_sha256(payouts_csv)},
+            "validate_report": {"file": validate_md.name, "sha256": _file_sha256(validate_md)},
+        },
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    }
+    bundle.write_text(json.dumps(bundle_doc, indent=2, ensure_ascii=False), encoding="utf-8")
     print_ok("Trust bundle created")
 
     # 4) Hashchain
@@ -820,7 +836,8 @@ def cmd_run(args: argparse.Namespace) -> None:
         "artifacts": {
             "receipts": receipts.name,
             "validate_report": validate_md.name,
-            "payouts": payouts.name,
+            "payouts_ndjson": payouts_ndjson.name,
+            "payouts_csv": payouts_csv.name,
             "trust_bundle": bundle.name,
             "hashchain": hashchain.name,
         }
