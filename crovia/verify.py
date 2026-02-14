@@ -78,8 +78,7 @@ def main() -> None:
     _ok("trust_bundle JSON valid")
 
     # Verify hashchain using the REAL verifier present in this repo
-    repo_root = Path(__file__).resolve().parents[1]  # .../crovia
-    repo_root = repo_root.parent                     # .../repo root (crovia-core-engine-open)
+    repo_root = Path(__file__).resolve().parents[1]  # .../crovia-core-engine (repo root)
     verifier = _find_hashchain_verifier(repo_root)
 
     receipts = crc_dir / artifacts["receipts"]

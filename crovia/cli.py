@@ -14,6 +14,7 @@ import hashlib
 import hmac
 import json
 import os
+import shutil
 import sys
 import subprocess
 from datetime import datetime, timezone
@@ -757,6 +758,11 @@ def cmd_run(args: argparse.Namespace) -> None:
 
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    # Copy receipts into output dir (CRC-1 requires self-contained pack)
+    receipts_copy = out_dir / "receipts.ndjson"
+    shutil.copyfile(receipts, receipts_copy)
+    receipts = receipts_copy
+
     print_section("Inputs")
     print(f"• Receipts: {receipts}")
     print(f"• Period:   {period}")
@@ -828,9 +834,10 @@ def cmd_run(args: argparse.Namespace) -> None:
 
     # 5) Manifest
     print_section("Step 5/5 — Manifest")
-    manifest = out_dir / "manifest.json"
+    manifest = out_dir / "MANIFEST.json"
     manifest.write_text(json.dumps({
         "schema": "crovia.manifest.v1",
+        "contract": "CRC-1",
         "period": period,
         "budget": budget,
         "artifacts": {
