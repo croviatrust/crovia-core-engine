@@ -549,23 +549,51 @@ def cmd_trace(args: argparse.Namespace) -> None:
         print_error(f"Source file not found: {source}")
         sys.exit(1)
 
+    # Locate hashchain scripts relative to this file
+    _cli_dir = Path(__file__).parent.parent
+    hashchain_writer = _cli_dir / "proofs" / "hashchain_writer.py"
+    hashchain_verifier = _cli_dir / "proofs" / "verify_hashchain.py"
+
     if args.verify:
         chain = Path(args.verify)
         if not chain.exists():
             print_error(f"Hashchain file not found: {chain}")
             sys.exit(1)
-        print_section("Hashchain verification (demo)")
-        # TODO: subprocess.run([...], check=True)
-        print_ok("Simulated verification: OK — chain is consistent.")
+        if hashchain_verifier.exists():
+            print_section("Hashchain verification")
+            r = subprocess.run([sys.executable, str(hashchain_verifier),
+                "--source", str(source), "--chain", str(chain)], capture_output=True, text=True)
+            print(r.stdout.strip())
+            if r.returncode == 0:
+                print_ok("Hashchain verified — chain is consistent.")
+            else:
+                print_error("Hashchain verification FAILED")
+                if r.stderr: print(r.stderr.strip())
+                sys.exit(1)
+        else:
+            print_error("hashchain verifier not found in proofs/")
+            sys.exit(1)
     else:
-        print_section("Hashchain generation (demo)")
         out_path = Path(args.out or f"proofs/hashchain_{source.name}.txt")
-        # TODO: subprocess.run([...], check=True)
-        print_ok(f"(demo) Would generate hashchain at: {out_path}")
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        if hashchain_writer.exists():
+            print_section("Hashchain generation")
+            r = subprocess.run([sys.executable, str(hashchain_writer),
+                "--source", str(source), "--out", str(out_path)], capture_output=True, text=True)
+            print(r.stdout.strip())
+            if r.returncode == 0:
+                print_ok(f"Hashchain written: {out_path}")
+            else:
+                print_error("Hashchain generation failed")
+                if r.stderr: print(r.stderr.strip())
+                sys.exit(1)
+        else:
+            print_error("hashchain_writer.py not found in proofs/")
+            sys.exit(1)
 
     print()
     print_section("Next step")
-    print_suggestion("crovia bundle ...  # include the hashchain in the bundle")
+    print_suggestion(f"crovia trace {source} --verify {args.out or f'proofs/hashchain_{source.name}.txt'}  # verify the chain")
 
 
 def cmd_explain(args: argparse.Namespace) -> None:
@@ -580,39 +608,59 @@ def cmd_explain(args: argparse.Namespace) -> None:
         print_error(f"File not found: {path}")
         sys.exit(1)
 
-    # Demo: if JSON, show a quick top-level summary
+    text = path.read_text(encoding="utf-8", errors="replace")
+    is_ndjson = path.suffix.lower() == ".ndjson" or ("\n" in text and not text.lstrip().startswith("{"))
+
+    if is_ndjson:
+        lines = [l for l in text.splitlines() if l.strip()]
+        records = []
+        errors = 0
+        for l in lines:
+            try: records.append(json.loads(l))
+            except Exception: errors += 1
+        print_section("Structure")
+        print(f"  Type:    NDJSON")
+        print(f"  Lines:   {len(lines)} total, {len(records)} valid, {errors} unparseable")
+        if records:
+            sample = records[0]
+            keys = list(sample.keys()) if isinstance(sample, dict) else []
+            print(f"  Schema:  {sample.get('schema', sample.get('type', 'unknown'))}")
+            print(f"  Fields:  {', '.join(keys[:8])}{'...' if len(keys) > 8 else ''}")
+        print()
+        print_section("Integrity")
+        signed = sum(1 for r in records if isinstance(r, dict) and "signature" in r)
+        if signed == len(records) and len(records) > 0:
+            print_ok(f"All {signed} records signed")
+        elif signed > 0:
+            print_warn(f"{signed}/{len(records)} records signed")
+        else:
+            print_warn("No signatures found — run: crovia sign <file>")
+        return
+
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(text)
     except Exception:
-        print_warn("Could not parse JSON, showing basic file info only.")
-        print_section("Info")
-        print(f"• Path: {path}")
-        print(f"• Size: {path.stat().st_size} bytes")
+        print_warn("Could not parse file as JSON or NDJSON.")
+        print(f"  Path: {path}")
+        print(f"  Size: {path.stat().st_size} bytes")
         return
 
     print_section("Structure")
     if isinstance(data, dict):
         keys = list(data.keys())
-        print("• Type: JSON object")
-        print(f"• Top-level keys: {', '.join(keys[:8])}{'...' if len(keys) > 8 else ''}")
-        if "schema" in data:
-            print(f"• schema: {data['schema']}")
-    else:
-        print("• JSON type: non-object")
-
+        print(f"  Type:    JSON object")
+        print(f"  Schema:  {data.get('schema', 'not declared')}")
+        print(f"  Fields:  {', '.join(keys[:8])}{'...' if len(keys) > 8 else ''}")
     print()
-    print_section("Strengths / weaknesses (demo)")
+    print_section("Integrity")
     if "signature" in data:
-        print_ok("Signature present (field: signature)")
+        print_ok("Signature present")
     else:
-        print_warn("No signature found (field 'signature' missing)")
-
-    if "hash_model" in data or "hash_data_index" in data:
-        print_ok("Link to model/data index detected")
-    print()
-
-    print_section("Next step")
-    print_suggestion("Extend explain() with real logic for trust bundle / receipts (TODO)")
+        print_warn("No signature — run: crovia sign <file>")
+    if "hashchain" in data.get("artifacts", {}):
+        print_ok("Hashchain reference present")
+    if "schema" not in data:
+        print_warn("No schema field declared")
 
 
 def cmd_mode(args: argparse.Namespace) -> None:
