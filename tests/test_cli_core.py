@@ -237,7 +237,47 @@ def test_verifier_rejects_non_hex_digest():
 
 
 # ---------------------------------------------------------------------------
-# 6. NDJSONWriter — filename-only path regression
+# 6. trust_bundle_validator — double-count regression
+# ---------------------------------------------------------------------------
+
+TRUST_VALIDATOR_SCRIPT = REPO / "core" / "trust_bundle_validator.py"
+
+
+def test_trust_bundle_validator_single_error_per_artifact():
+    """Artifact with both size and hash mismatch must count as 1 error, not 2."""
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d)
+        # Create a real artifact file
+        artifact = d / "receipts.ndjson"
+        artifact.write_text('{"schema":"royalty_receipt.v1"}\n')
+        real_size = artifact.stat().st_size
+        # Build bundle with wrong bytes AND wrong sha256
+        bundle = {
+            "schema": "crovia.trust_bundle.v1",
+            "period": "2025-11",
+            "artifacts": {
+                "receipts": {
+                    "path": "receipts.ndjson",
+                    "bytes": real_size + 999,           # wrong size
+                    "sha256": "a" * 64,                 # wrong hash
+                }
+            }
+        }
+        bundle_path = d / "trust_bundle.json"
+        bundle_path.write_text(json.dumps(bundle))
+        r = subprocess.run(
+            [sys.executable, str(TRUST_VALIDATOR_SCRIPT),
+             "--bundle", str(bundle_path), "--base-dir", str(d)],
+            capture_output=True, text=True
+        )
+        assert r.returncode != 0, "Bundle with mismatch should fail"
+        assert "1 error(s)" in r.stdout, f"Expected '1 error(s)', got:\n{r.stdout}"
+        assert "SIZE_MISMATCH" in r.stdout
+        assert "HASH_MISMATCH" in r.stdout
+
+
+# ---------------------------------------------------------------------------
+# 7. NDJSONWriter — filename-only path regression
 # ---------------------------------------------------------------------------
 
 def test_ndjson_writer_filename_only():

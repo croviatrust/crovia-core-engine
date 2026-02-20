@@ -99,13 +99,16 @@ def validate_bundle(bundle_path: Path, base_dir: Path) -> int:
         size = file_path.stat().st_size
         sha = sha256_hex(file_path)
 
-        status = "OK"
+        status_parts = []
         if expected_bytes is not None and size != expected_bytes:
-            status = "SIZE_MISMATCH"
-            errors += 1
+            status_parts.append("SIZE_MISMATCH")
         if expected_sha256 and sha != expected_sha256:
-            status = "HASH_MISMATCH"
+            status_parts.append("HASH_MISMATCH")
+        if status_parts:
+            status = "+".join(status_parts)
             errors += 1
+        else:
+            status = "OK"
 
         print(f"- {name}")
         print(f"    path: {path_str}")
