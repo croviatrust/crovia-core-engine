@@ -24,6 +24,18 @@ try:
 except ImportError:
     HF_AVAILABLE = False
 
+import requests as _requests
+
+def _fetch_model_http(model_id: str) -> Dict[str, Any]:
+    """Fallback: fetch model metadata via public HTTP (no token needed)."""
+    try:
+        r = _requests.get(f"https://huggingface.co/api/models/{model_id}", timeout=15)
+        if r.status_code == 200:
+            return r.json()
+    except Exception:
+        pass
+    return {}
+
 from crovia.auth import check_rate_limit, increment_usage, get_license_status, LicenseStatus
 
 # ============================================================
@@ -90,21 +102,37 @@ def analyze_model(model_id: str) -> Dict[str, Any]:
     Returns:
         Dict with score, badge, violations, and evidence hash.
     """
-    if not HF_AVAILABLE:
-        return {"error": "huggingface_hub not installed. Run: pip install huggingface_hub"}
-    
     try:
-        api = HfApi()
-        info = api.model_info(model_id)
-        
-        card_data = info.card_data or {}
-        license_val = card_data.get("license") or getattr(info, "license", None)
-        datasets = card_data.get("datasets", []) or []
-        author = info.author or ""
-        tags = info.tags or []
-        downloads = info.downloads or 0
-        likes = info.likes or 0
-        created = getattr(info, "created_at", None)
+        # Try HfApi first, fall back to public HTTP
+        card_data = {}
+        if HF_AVAILABLE:
+            try:
+                api = HfApi()
+                info = api.model_info(model_id)
+                card_data = info.card_data or {}
+                license_val = card_data.get("license") or getattr(info, "license", None)
+                datasets = card_data.get("datasets", []) or []
+                author = info.author or ""
+                tags = info.tags or []
+                downloads = info.downloads or 0
+                likes = info.likes or 0
+                created = getattr(info, "created_at", None)
+            except Exception:
+                card_data = None  # signal fallback needed
+
+        if not HF_AVAILABLE or card_data is None:
+            raw = _fetch_model_http(model_id)
+            if not raw:
+                return {"error": f"Cannot fetch model info for {model_id}"}
+            cd = raw.get("cardData", {}) or {}
+            license_val = cd.get("license") or raw.get("license", "")
+            datasets = cd.get("datasets", []) or []
+            author = raw.get("author", "")
+            tags = raw.get("tags", []) or []
+            downloads = raw.get("downloads", 0) or 0
+            likes = raw.get("likes", 0) or 0
+            created = raw.get("createdAt", None)
+            card_data = cd
         
         violations = []
         
