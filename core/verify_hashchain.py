@@ -106,12 +106,6 @@ def main() -> None:
     print(f"[VERIFY] chunk size: {args.chunk} lines")
 
     chain_entries = parse_chain_file(args.chain)
-    if not chain_entries:
-        print(
-            f"[FATAL] No valid entries found in chain file: {args.chain}",
-            file=sys.stderr,
-        )
-        sys.exit(2)
 
     prev = b"\x00" * 32          # initial anchor (must match hashchain_writer.py)
     h = hashlib.sha256()
@@ -209,6 +203,18 @@ def main() -> None:
                 )
                 ok = False
             entry_idx += 1
+
+    # Empty source is valid only when chain is also empty.
+    if count == 0:
+        if not chain_entries:
+            print("[VERIFY] OK — empty source and empty chain (nothing to verify).")
+            sys.exit(0)
+        else:
+            print(
+                f"[FATAL] Source has no lines but chain has {len(chain_entries)} entry/entries.",
+                file=sys.stderr,
+            )
+            sys.exit(2)
 
     # Reject trailing extra entries not consumed during replay.
     # This check must be unconditional: when count is an exact multiple of chunk,

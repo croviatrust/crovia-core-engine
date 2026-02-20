@@ -173,6 +173,30 @@ def _run_verifier(source, chain, chunk=10000):
     )
 
 
+def test_verifier_accepts_empty_source_and_chain():
+    """Empty source + empty chain must be accepted as valid (consistent with writer)."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        chain = Path(d) / "chain.txt"
+        src.write_text("")   # empty source
+        chain.write_text("") # empty chain
+        r = _run_verifier(src, chain, chunk=3)
+        assert r.returncode == 0, f"Empty source+chain should be OK:\n{r.stderr}"
+        assert "OK" in r.stdout
+
+
+def test_verifier_rejects_empty_source_with_nonempty_chain():
+    """Empty source + non-empty chain must be rejected."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        chain = Path(d) / "chain.txt"
+        src.write_text("")
+        chain.write_text("0\t1\t" + "a" * 64 + "\n")
+        r = _run_verifier(src, chain, chunk=3)
+        assert r.returncode != 0, "Empty source with non-empty chain should fail"
+        assert "FATAL" in r.stderr
+
+
 def test_verifier_valid_chain():
     """A correctly built chain must verify OK."""
     with tempfile.TemporaryDirectory() as d:
