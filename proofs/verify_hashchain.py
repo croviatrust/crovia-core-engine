@@ -206,14 +206,16 @@ def main() -> None:
                 ok = False
             entry_idx += 1
 
-        # Reject trailing extra entries not consumed during replay
-        if ok and entry_idx != len(chain_entries):
-            print(
-                f"[VERIFY] ERROR – chain has {len(chain_entries) - entry_idx} "
-                f"extra trailing entry/entries (expected {entry_idx} total).",
-                file=sys.stderr,
-            )
-            ok = False
+    # Reject trailing extra entries not consumed during replay.
+    # This check must be unconditional: when count is an exact multiple of chunk,
+    # the partial-block branch above is skipped, so trailing entries would go undetected.
+    if ok and entry_idx != len(chain_entries):
+        print(
+            f"[VERIFY] ERROR – chain has {len(chain_entries) - entry_idx} "
+            f"extra trailing entry/entries (expected {entry_idx} total).",
+            file=sys.stderr,
+        )
+        ok = False
 
     if ok:
         print(

@@ -234,3 +234,27 @@ def test_verifier_rejects_non_hex_digest():
         r = _run_verifier(src, chain, chunk=3)
         # Entry is skipped → chain appears shorter → must fail
         assert r.returncode != 0, "Verifier should reject chain with non-hex digest"
+
+
+def test_verifier_rejects_trailing_entries_exact_boundary():
+    """Trailing entries must be rejected even when count is an exact multiple of chunk.
+
+    Regression for the bug where the trailing-entry check was inside the
+    'if (count % chunk) != 0' branch and was silently skipped at exact boundaries.
+    6 lines, chunk=3 → 2 complete blocks, no partial block → trailing entry must still fail.
+    """
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        chain = Path(d) / "chain.txt"
+        # Exactly 6 lines with chunk=3 → 2 complete blocks, count % chunk == 0
+        src.write_text("\n".join(json.dumps({"i": i}) for i in range(6)) + "\n")
+        _build_valid_chain(src, chain, chunk=3)
+        # Sanity: valid chain must pass
+        r = _run_verifier(src, chain, chunk=3)
+        assert r.returncode == 0, f"Valid exact-boundary chain failed:\n{r.stderr}"
+        # Append spurious trailing entry
+        with open(chain, "a") as cf:
+            cf.write("99\t9999\t" + "a" * 64 + "\n")
+        r = _run_verifier(src, chain, chunk=3)
+        assert r.returncode != 0, "Verifier should reject trailing entries at exact block boundary"
+        assert "extra trailing" in r.stderr
