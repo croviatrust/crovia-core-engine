@@ -78,8 +78,8 @@ def save_config(cfg: dict) -> None:
 CONFIG = load_config()
 
 
-def is_tarik_mode() -> bool:
-    return CONFIG.get("mode") == "tarik"
+def is_operator_mode() -> bool:
+    return CONFIG.get("mode") == "operator"
 
 
 # ==========================
@@ -621,8 +621,8 @@ def cmd_mode(args: argparse.Namespace) -> None:
         print(json.dumps(CONFIG, indent=2))
         return
 
-    if sub == "tarik":
-        CONFIG["mode"] = "tarik"
+    if sub == "operator":
+        CONFIG["mode"] = "operator"
         if CONFIG.get("default_budget") is None:
             CONFIG["default_budget"] = 1_000_000
         CONFIG["auto_hashchain"] = True
@@ -971,7 +971,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sp.add_argument(
         "action",
-        choices=["show", "tarik", "default", "reset"],
+        choices=["show", "operator", "default", "reset"],
         help="Action to apply to the current profile",
     )
     sp.set_defaults(func=cmd_mode)
