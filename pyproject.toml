@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "crovia"
-version = "1.2.0"
+version = "1.2.1"
 description = "Crovia — The Global Standard for AI Training Data Attribution. Cryptographic proofs, absence verification, and automatic royalty settlement."
 readme = "README.md"
 requires-python = ">=3.10"

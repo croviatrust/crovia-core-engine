@@ -12,6 +12,16 @@ Crovia produces **deterministic artifacts** that anyone can verify independently
 
 ---
 
+## Install
+
+```bash
+pip install crovia
+```
+
+Requires Python 3.10+. No external dependencies for the core pipeline.
+
+---
+
 ## Read this first (30 seconds)
 
 If you read only one thing, read this:
@@ -43,9 +53,6 @@ Each CRC-1 pack contains:
 
 All files are **offline-verifiable**.
 
-Specification:  
-`docs/CROVIA_ARTIFACT_SPEC.md`
-
 ---
 
 ## Try it (single command)
@@ -54,11 +61,7 @@ Specification:
 
 ```bash
 # Full pipeline — receipts in, evidence pack out
-crovia run \
-  --receipts examples/minimal_royalty_receipts.ndjson \
-  --period 2025-11 \
-  --budget 1000000 \
-  --out out_crc1
+crovia run --receipts examples/minimal_royalty_receipts.ndjson --period 2025-11 --budget 1000000 --out out_crc1
 ```
 
 This creates a fully self-contained evidence capsule in `out_crc1/`.
@@ -107,10 +110,15 @@ crovia legend                      # full command reference
 
 ## Inspect the artifacts
 
-Example:
+```bash
+# Linux / macOS
+ls out_crc1
+cat out_crc1/MANIFEST.json
 
-ls out_crc1  
-cat out_crc1/MANIFEST.json  
+# Windows
+dir out_crc1
+type out_crc1\MANIFEST.json
+```
 
 `MANIFEST.json` defines exactly which files must exist.
 
@@ -125,7 +133,9 @@ Verification requires **only the files themselves**.
 
 Example:
 
+```bash
 crovia-verify out_crc1
+```
 
 Expected result:
 
@@ -172,6 +182,12 @@ That repository contains:
 
 If you want to see results, go there.  
 If you want to reproduce them, stay here.
+
+---
+
+## Source
+
+https://github.com/croviatrust/crovia-core-engine
 
 ---
 
