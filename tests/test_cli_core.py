@@ -21,12 +21,20 @@ MINIMAL_RECEIPTS = EXAMPLES / "minimal_royalty_receipts.ndjson"
 # Helpers
 # ---------------------------------------------------------------------------
 
+def _repo_env():
+    """Return a copy of os.environ with REPO prepended to PYTHONPATH."""
+    env = os.environ.copy()
+    existing = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = str(REPO) + (os.pathsep + existing if existing else "")
+    return env
+
+
 def run_cli(*args, cwd=None, env=None):
     """Run crovia CLI as subprocess, return CompletedProcess."""
     return subprocess.run(
         [sys.executable, "-m", "crovia.cli", *args],
         capture_output=True, text=True,
-        cwd=str(cwd or REPO), env=env or os.environ.copy()
+        cwd=str(cwd or REPO), env=env if env is not None else _repo_env()
     )
 
 
@@ -119,6 +127,7 @@ def test_run_from_external_cwd():
             ],
             capture_output=True, text=True,
             cwd=str(external_dir),   # NOT the repo root
+            env=_repo_env(),
         )
         assert r.returncode == 0, f"crovia run failed from external cwd:\n{r.stdout}\n{r.stderr}"
         assert (out_dir / "MANIFEST.json").exists(), "MANIFEST.json not produced"
