@@ -236,6 +236,55 @@ def test_verifier_rejects_non_hex_digest():
         assert r.returncode != 0, "Verifier should reject chain with non-hex digest"
 
 
+# ---------------------------------------------------------------------------
+# 6. payouts_from_royalties — invalid period regression
+# ---------------------------------------------------------------------------
+
+PAYOUTS_SCRIPT = REPO / "core" / "payouts_from_royalties.py"
+
+
+def test_payouts_invalid_period_fatal():
+    """Invalid --period must exit non-zero and create no output files."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "receipts.ndjson"
+        src.write_text('{"schema":"royalty_receipt.v1","timestamp":"2025-11-01T00:00:00Z"}\n')
+        out_ndjson = Path(d) / "payouts.ndjson"
+        out_csv = Path(d) / "payouts.csv"
+        r = subprocess.run(
+            [sys.executable, str(PAYOUTS_SCRIPT),
+             "--input", str(src),
+             "--period", "not-a-period",
+             "--eur-total", "1000",
+             "--out-ndjson", str(out_ndjson),
+             "--out-csv", str(out_csv)],
+            capture_output=True, text=True
+        )
+        assert r.returncode != 0, "Invalid period should exit non-zero"
+        assert "FATAL" in r.stderr, "Should print FATAL error message"
+        assert not out_ndjson.exists(), "No output NDJSON should be created on invalid period"
+        assert not out_csv.exists(), "No output CSV should be created on invalid period"
+
+
+def test_payouts_invalid_month_fatal():
+    """Month out of range (e.g. 2025-13) must also exit non-zero."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "receipts.ndjson"
+        src.write_text('{"schema":"royalty_receipt.v1"}\n')
+        out_ndjson = Path(d) / "payouts.ndjson"
+        out_csv = Path(d) / "payouts.csv"
+        r = subprocess.run(
+            [sys.executable, str(PAYOUTS_SCRIPT),
+             "--input", str(src),
+             "--period", "2025-13",
+             "--eur-total", "1000",
+             "--out-ndjson", str(out_ndjson),
+             "--out-csv", str(out_csv)],
+            capture_output=True, text=True
+        )
+        assert r.returncode != 0, "Month 13 should exit non-zero"
+        assert "FATAL" in r.stderr
+
+
 def test_verifier_rejects_trailing_entries_exact_boundary():
     """Trailing entries must be rejected even when count is an exact multiple of chunk.
 

@@ -250,17 +250,19 @@ def main():
 
     # Parse period
     try:
-        year, month = map(int, args.period.split("-"))
-        assert 1 <= month <= 12
-    except Exception:
-        # For sandbox / CLI misconfiguration we don't hard-fail:
-        # fall back to a safe example period.
+        parts = args.period.split("-")
+        if len(parts) != 2:
+            raise ValueError("expected YYYY-MM")
+        year, month = int(parts[0]), int(parts[1])
+        if not (1 <= month <= 12):
+            raise ValueError(f"month {month} out of range 1-12")
+    except Exception as exc:
         print(
-            "[WARN] Invalid --period value, falling back to example period '2025-11'",
+            f"[FATAL] Invalid --period value {args.period!r}: {exc}. "
+            "Expected format: YYYY-MM (e.g. 2025-11).",
             file=sys.stderr,
         )
-        args.period = "2025-11"
-        year, month = 2025, 11
+        sys.exit(2)
 
     if not os.path.exists(args.input):
         print(f"[FATAL] Input NDJSON not found: {args.input}", file=sys.stderr)
