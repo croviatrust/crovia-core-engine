@@ -237,7 +237,44 @@ def test_verifier_rejects_non_hex_digest():
 
 
 # ---------------------------------------------------------------------------
-# 6. crovia.verify — path traversal regression
+# 6. hashchain writer/verifier — invalid --chunk regression
+# ---------------------------------------------------------------------------
+
+WRITER_SCRIPT = REPO / "core" / "hashchain_writer.py"
+VERIFIER_SCRIPT = REPO / "core" / "verify_hashchain.py"
+
+
+def test_hashchain_writer_rejects_chunk_zero():
+    """hashchain_writer --chunk 0 must exit non-zero with FATAL message."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        src.write_text('{"i":0}\n')
+        r = subprocess.run(
+            [sys.executable, str(WRITER_SCRIPT), "--source", str(src), "--chunk", "0"],
+            capture_output=True, text=True
+        )
+        assert r.returncode != 0, "chunk=0 should exit non-zero"
+        assert "FATAL" in r.stderr
+
+
+def test_hashchain_verifier_rejects_negative_chunk():
+    """verify_hashchain --chunk -5 must exit non-zero with FATAL message."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        chain = Path(d) / "chain.txt"
+        src.write_text('{"i":0}\n')
+        chain.write_text("0\t1\t" + "a" * 64 + "\n")
+        r = subprocess.run(
+            [sys.executable, str(VERIFIER_SCRIPT),
+             "--source", str(src), "--chain", str(chain), "--chunk", "-5"],
+            capture_output=True, text=True
+        )
+        assert r.returncode != 0, "chunk=-5 should exit non-zero"
+        assert "FATAL" in r.stderr
+
+
+# ---------------------------------------------------------------------------
+# 7. crovia.verify — path traversal regression
 # ---------------------------------------------------------------------------
 
 def test_verify_rejects_artifact_path_traversal():

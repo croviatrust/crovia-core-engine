@@ -90,6 +90,10 @@ def main() -> None:
     )
     args = ap.parse_args()
 
+    if args.chunk <= 0:
+        print(f"[FATAL] --chunk must be a positive integer, got {args.chunk}.", file=sys.stderr)
+        sys.exit(2)
+
     if not os.path.exists(args.source):
         print(f"[FATAL] Source NDJSON not found: {args.source}", file=sys.stderr)
         sys.exit(2)
