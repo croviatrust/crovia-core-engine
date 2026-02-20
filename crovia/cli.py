@@ -201,56 +201,27 @@ def cmd_legend(args: argparse.Namespace) -> None:
 def cmd_scan(args: argparse.Namespace) -> None:
     """
     crovia scan <dataset>
-    → Spider / attribution / demo receipts
+    [ROADMAP] Attribution spider — generates royalty_receipt.v1 from raw datasets.
+    Requires FAISS index + shard sketch pipeline (not yet in open core).
     """
-    print_header("Scan (Attribution Spider)")
-
-    dataset = Path(args.dataset)
-    if not dataset.exists():
-        print_error(f"Dataset not found: {dataset}")
-        sys.exit(1)
-
-    print_section("Input")
-    print(f"• Dataset: {dataset}")
+    print_header("Scan (Attribution Spider) [ROADMAP]")
+    print_warn("crovia scan requires the FAISS attribution pipeline which is not yet")
+    print_warn("included in the open core. It will be released in a future version.")
     print()
-
-    # Here you could inspect the first N lines to enrich the output.
-    # For now, just a placeholder:
-    print_section("Detection (demo)")
-    print("• Type: NDJSON (guessed)")
-    print("• Schema: raw / spider")
+    print_section("What scan will do (roadmap)")
+    print("  1. Build shard sketches from your dataset")
+    print("  2. Query FAISS index of known training corpora")
+    print("  3. Output royalty_receipt.v1 NDJSON with attribution scores")
     print()
-
-    choice = ask_menu(
-        "What do you want to do next?",
-        [
-            "Generate receipts (royalty_receipt.v1)",
-            "Extract provenance signals only",
-            "Interactive inspection (TODO)",
-            "Cancel",
-        ],
-    )
-
-    if choice == 1:
-        # TODO: integrate shard_sketch_gen.py + build_faiss_index.py + faiss_attributor_sim.py
-        # e.g. subprocess.run([...]) or direct imports.
-        out_path = args.out or "data/royalty_from_scan.ndjson"
-        print_ok(f"(demo) Would generate receipts at: {out_path}")
-        print()
-        print_suggestion(f"crovia check {out_path}")
-
-    elif choice == 2:
-        print_warn("Provenance signal extraction: TODO implementation.")
-    elif choice == 3:
-        print_warn("Interactive inspection: TODO implementation.")
-    else:
-        print_warn("Cancelled by user.")
+    print_section("In the meantime")
+    print_suggestion("Use the example receipts: crovia check examples/minimal_royalty_receipts.ndjson")
+    print_suggestion("Or run the full pipeline: crovia run --receipts <file> --period YYYY-MM --budget N --out <dir>")
 
 
 def cmd_check(args: argparse.Namespace) -> None:
     """
     crovia check <receipts.ndjson>
-    → Validation + basic AI Act compliance view
+    -> Validation + basic AI Act compliance view
     """
     print_header("Check (Integrity & Compliance)")
 
@@ -260,35 +231,39 @@ def cmd_check(args: argparse.Namespace) -> None:
         sys.exit(1)
 
     print_section("Input")
-    print(f"• File: {path}")
+    print(f"  File: {path}")
     print()
 
-    # TODO: call crovia_validate.py + QA script + compliance_ai_act.py for real.
-    # Example (subprocess):
-    # subprocess.run([sys.executable, "crovia_validate.py", "--in", str(path)], check=True)
+    _cli_dir = Path(__file__).parent.parent
+    validate_py = _cli_dir / "validate" / "validate.py"
+    if not validate_py.exists():
+        print_error(f"validate.py not found at {validate_py}")
+        sys.exit(1)
 
-    # For now, demo of how results are presented:
-    print_section("Integrity (demo)")
-    print_ok("JSON structure: valid (simulated)")
-    print_ok("Schema: royalty_receipt.v1 consistent (simulated)")
-    print_warn("84 lines with share_sum out of tolerance (simulated)")
-    print_warn("11 lines with unordered rank (simulated)")
+    out_md = Path(args.out) if getattr(args, 'out', None) else path.with_suffix('.validate_report.md')
+    out_bad = path.with_suffix('.validate_bad.ndjson')
+
+    print_section("Running validator")
+    r = subprocess.run(
+        [sys.executable, str(validate_py), str(path),
+         "--out-md", str(out_md), "--out-bad", str(out_bad)],
+        capture_output=True, text=True
+    )
+    if r.stdout.strip():
+        print(r.stdout.strip())
+    if r.returncode == 0:
+        print_ok("Health: A/B — file is valid")
+    elif r.returncode == 2:
+        print_warn("Health: C — some issues found, check report")
+    else:
+        print_warn("Health: D — significant issues found")
+    if r.stderr.strip():
+        print(r.stderr.strip())
     print()
-
-    print_section("Compliance (demo)")
-    print_ok("ISO8601 timestamps present (simulated)")
-    print_warn("Partial license_refs in 22 lines (simulated)")
-    print()
-
-    print_section("Short explanation")
-    print("share_sum out of tolerance -> strong synergy between top shards or aggressive rounding.")
-    print()
-
     print_section("Generated outputs")
-    print("• validate_report.md (TODO)")
-    print("• validate_sample_bad.jsonl (TODO)")
+    print(f"  Report:  {out_md}")
+    print(f"  Bad recs: {out_bad}")
     print()
-
     print_section("Next step")
     print_suggestion(f"crovia refine {path}")
 
@@ -296,7 +271,7 @@ def cmd_check(args: argparse.Namespace) -> None:
 def cmd_refine(args: argparse.Namespace) -> None:
     """
     crovia refine <receipts.ndjson>
-    → Auto-fix (share_sum, rank, etc.)
+    -> Auto-fix share_sum normalization and rank ordering.
     """
     print_header("Refine (Auto-fix Heuristics)")
 
@@ -305,45 +280,79 @@ def cmd_refine(args: argparse.Namespace) -> None:
         print_error(f"File not found: {path}")
         sys.exit(1)
 
+    text = path.read_text(encoding="utf-8", errors="replace")
+    lines_raw = [l for l in text.splitlines() if l.strip()]
+    records, parse_errors = [], 0
+    for l in lines_raw:
+        try: records.append(json.loads(l))
+        except Exception: parse_errors += 1
+
     print_section("Input")
-    print(f"• File: {path}")
+    print(f"  File:   {path}")
+    print(f"  Lines:  {len(records)} valid, {parse_errors} unparseable")
     print()
 
-    # In the future you could run a first pass to count inconsistencies.
-    print_section("Detected inconsistencies (demo)")
-    print("• Incorrect share_sum in 84 lines (simulated)")
-    print("• Unsorted rank in 11 lines (simulated)")
+    # Detect issues
+    bad_sum, bad_rank = [], []
+    TOL = 0.02
+    for i, r in enumerate(records):
+        if not isinstance(r, dict): continue
+        top_k = r.get("top_k", [])
+        if isinstance(top_k, list) and top_k:
+            s = sum(e.get("share", 0) for e in top_k if isinstance(e, dict))
+            if abs(s - 1.0) > TOL: bad_sum.append(i)
+            ranks = [e.get("rank", 0) for e in top_k if isinstance(e, dict)]
+            if ranks != sorted(ranks): bad_rank.append(i)
+
+    print_section("Detected issues")
+    if bad_sum: print_warn(f"{len(bad_sum)} records with share_sum out of tolerance (>{TOL})")
+    else: print_ok("All share_sum values within tolerance")
+    if bad_rank: print_warn(f"{len(bad_rank)} records with unsorted rank")
+    else: print_ok("All rank fields correctly ordered")
     print()
 
-    choice = ask_menu(
-        "How do you want to fix them?",
-        [
-            "Renormalize share_sum",
-            "Reorder rank",
-            "Both",
-            "Report only (no changes)",
-        ],
+    if not bad_sum and not bad_rank:
+        print_ok("No fixes needed.")
+        return
+
+    out_path = Path(args.out or str(path.with_suffix('')) + ".refined.ndjson")
+
+    # Apply fixes
+    fixed = 0
+    out_records = []
+    for i, r in enumerate(records):
+        if not isinstance(r, dict):
+            out_records.append(r); continue
+        top_k = r.get("top_k", [])
+        if isinstance(top_k, list) and top_k:
+            if i in bad_rank:
+                top_k = sorted(top_k, key=lambda e: e.get("rank", 0) if isinstance(e, dict) else 0)
+                r["top_k"] = top_k
+            if i in bad_sum:
+                total = sum(e.get("share", 0) for e in top_k if isinstance(e, dict))
+                if total > 0:
+                    for e in top_k:
+                        if isinstance(e, dict) and "share" in e:
+                            e["share"] = round(e["share"] / total, 8)
+                fixed += 1
+        out_records.append(r)
+
+    out_path.write_text(
+        "\n".join(json.dumps(r, ensure_ascii=False) for r in out_records) + "\n",
+        encoding="utf-8"
     )
-
-    if choice in (1, 2, 3):
-        out_path = args.out or f"{path.with_suffix('')}.refined.ndjson"
-        # TODO: implement actual fixes (read NDJSON, fix, write)
-        print_ok(f"(demo) Would apply fixes and save to: {out_path}")
-        print()
-        print_section("Next step")
-        print_suggestion(f"crovia check {out_path}")
-    elif choice == 4:
-        print_warn("No changes applied (report only).")
-    else:
-        print_warn("Cancelled by user.")
+    print_ok(f"Fixed {fixed} records -> {out_path}")
+    print()
+    print_section("Next step")
+    print_suggestion(f"crovia check {out_path}")
 
 
 def cmd_pay(args: argparse.Namespace) -> None:
     """
     crovia pay <receipts.ndjson> --period YYYY-MM --budget EUR
-    → Payouts + charts
+    -> Compute payouts for a given period.
     """
-    print_header("Pay (Payout Engine v1.1)")
+    print_header("Pay (Payout Engine)")
 
     path = Path(args.file)
     if not path.exists():
@@ -353,41 +362,51 @@ def cmd_pay(args: argparse.Namespace) -> None:
     period = args.period
     budget = args.budget or CONFIG.get("default_budget")
 
-    print_section("Input")
-    print(f"• Receipts file: {path}")
-    print(f"• Period: {period}")
-    print(f"• Budget: {budget} EUR")
-    print()
-
     if budget is None:
         print_warn("No budget specified and no default_budget in config.")
         print_suggestion("Re-run with --budget or set default_budget in ~/.crovia/config.json")
         return
 
-    # TODO: call payouts_from_royalties.py + make_payout_charts.py
-    # subprocess.run([...], check=True)
-
-    print_section("Preliminary analysis (demo)")
-    print("• 18,430 valid receipts (simulated)")
-    print("• 42 providers (simulated)")
-    print("• Cap top1: 0.55 / cap top3: 0.80 (default)")
+    print_section("Input")
+    print(f"  Receipts: {path}")
+    print(f"  Period:   {period}")
+    print(f"  Budget:   {budget} EUR")
     print()
 
-    choice = ask_menu(
-        "Proceed with these parameters?",
-        ["Yes", "Change parameters (TODO)", "Cancel"],
+    _cli_dir = Path(__file__).parent.parent
+    pay_py = _cli_dir / "core" / "payouts_from_royalties.py"
+    if not pay_py.exists():
+        print_error(f"payouts_from_royalties.py not found at {pay_py}")
+        sys.exit(1)
+
+    payouts_ndjson = Path(args.out or f"payouts_{period}.ndjson")
+    payouts_csv = payouts_ndjson.with_suffix(".csv")
+    assumptions = payouts_ndjson.with_name(payouts_ndjson.stem + "_assumptions.json")
+
+    print_section("Computing payouts")
+    r = subprocess.run(
+        [sys.executable, str(pay_py),
+         "--input", str(path),
+         "--period", period,
+         "--eur-total", str(budget),
+         "--out-ndjson", str(payouts_ndjson),
+         "--out-csv", str(payouts_csv),
+         "--out-assumptions", str(assumptions),
+        ],
+        capture_output=True, text=True
     )
-    if choice == 1:
-        payouts_path = Path(args.out or f"payouts_{period}.ndjson")
-        print_ok(f"(demo) Would compute payouts at: {payouts_path}")
-        print_ok(f"(demo) Would also generate charts/ and README_PAYOUT_{period}.md")
-        print()
-        print_section("Next step")
-        print_suggestion(f"crovia bundle --receipts {path} --payouts {payouts_path}")
-    elif choice == 2:
-        print_warn("Change-parameters UI: TODO.")
+    if r.stdout.strip(): print(r.stdout.strip())
+    if r.returncode == 0:
+        print_ok(f"Payouts written: {payouts_ndjson}")
+        print_ok(f"CSV:             {payouts_csv}")
+        print_ok(f"Assumptions:     {assumptions}")
     else:
-        print_warn("Cancelled by user.")
+        print_error("Payout computation failed")
+        if r.stderr.strip(): print(r.stderr.strip())
+        sys.exit(1)
+    print()
+    print_section("Next step")
+    print_suggestion(f"crovia bundle --receipts {path} --payouts {payouts_ndjson}")
 
 
 def cmd_bundle(args: argparse.Namespace) -> None:
@@ -418,16 +437,35 @@ def cmd_bundle(args: argparse.Namespace) -> None:
         print("• Compliance pack: none")
     print()
 
-    # TODO: integrate trust_from_receipts.py + bundle builder
     out_path = Path(args.out or "crovia_trust_bundle.json")
 
-    print_section("Expected content (demo)")
-    print_ok("Period metadata (simulated)")
-    print_ok("Provider distribution (simulated)")
-    print_warn("Hashchain not included (unless you ran crovia trace)")
-    print()
+    def _sha256(p):
+        import hashlib
+        if not p.exists(): return None
+        return hashlib.sha256(p.read_bytes()).hexdigest()
 
-    print_ok(f"(demo) Would write bundle to: {out_path}")
+    artifacts = {
+        "receipts": {"file": str(receipts), "sha256": _sha256(receipts)},
+        "payouts": {"file": str(payouts), "sha256": _sha256(payouts)},
+    }
+    if compliance:
+        artifacts["compliance"] = {"file": str(compliance), "sha256": _sha256(compliance)}
+
+    # Check for existing hashchain
+    chain_candidates = list(Path(".").glob(f"*hashchain*{receipts.stem}*")) + \
+                       list(Path("proofs").glob(f"*{receipts.stem}*")) if Path("proofs").exists() else \
+                       list(Path(".").glob(f"*hashchain*{receipts.stem}*"))
+    if chain_candidates:
+        artifacts["hashchain"] = {"file": str(chain_candidates[0]), "sha256": _sha256(chain_candidates[0])}
+
+    bundle_doc = {
+        "schema": "crovia_trust_bundle.v1",
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "artifacts": artifacts,
+    }
+    out_path.write_text(json.dumps(bundle_doc, indent=2, ensure_ascii=False), encoding="utf-8")
+    print_ok(f"Bundle written: {out_path}")
+    print(f"  Artifacts included: {', '.join(artifacts.keys())}")
     print()
     print_section("Next step")
     if CONFIG.get("auto_sign"):
@@ -922,6 +960,113 @@ def _bind_run(sub):
     p.set_defaults(func=cmd_run)
 
 
+# ==========================
+#  WEDGE COMMANDS
+# ==========================
+
+_WEDGE_PRIMARY = [
+    "EVIDENCE.json",
+    "trust_bundle.v1.json",
+    "cep_capsule.v1.json",
+    "crovia_manifest.json",
+    "crovia_trust_bundle.json",
+]
+_WEDGE_SECONDARY = [
+    "receipts*.ndjson",
+    "payouts*.ndjson",
+    "hashchain*.txt",
+    ".crovia/cfic_certificate.json",
+    "CFIC.json",
+]
+
+
+def _wedge_check(root: Path):
+    """Scan a directory for Crovia evidence artifacts. Returns (found, status, details)."""
+    found = []
+    for name in _WEDGE_PRIMARY:
+        if (root / name).exists():
+            found.append(name)
+    # glob for receipts/payouts/hashchain
+    for pattern in ["receipts*.ndjson", "payouts*.ndjson", "hashchain*.txt"]:
+        matches = list(root.glob(pattern))
+        if matches:
+            found.append(f"{pattern} ({len(matches)} file(s))")
+    # CFIC
+    for marker in [".crovia/cfic_certificate.json", "CFIC.json"]:
+        if (root / marker).exists():
+            found.append(f"[CFIC] {marker}")
+    # gap_index
+    gap_index = root / "gaps" / "gap_index.jsonl"
+    critical = 0
+    if gap_index.exists():
+        for line in gap_index.read_text(encoding="utf-8").splitlines():
+            try:
+                o = json.loads(line)
+                if o.get("severity", 0) >= 0.8:
+                    critical += 1
+            except Exception:
+                pass
+    status = "GREEN" if found and critical == 0 else ("RED" if not found else "YELLOW")
+    return found, status, critical
+
+
+def cmd_wedge_scan(args: argparse.Namespace) -> None:
+    print_header("Wedge — Evidence Presence Scan")
+    root = Path(getattr(args, "path", ".")).resolve()
+    mode = getattr(args, "mode", "warn")
+    print_section("Scanning")
+    print(f"  Directory: {root}")
+    print()
+    found, status, critical = _wedge_check(root)
+    print_section("Evidence artifacts found")
+    if found:
+        for f in found:
+            print_ok(f)
+    else:
+        print_warn("No Crovia evidence artifacts detected in this directory.")
+    print()
+    print_section("Verdict")
+    if status == "GREEN":
+        print_ok("GREEN — Auditable training evidence present.")
+    elif status == "YELLOW":
+        print_warn(f"YELLOW — Evidence present but {critical} critical gap(s) detected.")
+    else:
+        print_warn("RED — No auditable training evidence detected.")
+    print()
+    if status == "RED" and mode == "fail":
+        print_error("Exiting with code 1 (--mode fail)")
+        sys.exit(1)
+    print_suggestion("Run 'crovia run' to generate a full evidence pack for this directory.")
+
+
+def cmd_wedge_status(args: argparse.Namespace) -> None:
+    root = Path(getattr(args, "path", ".")).resolve()
+    found, status, critical = _wedge_check(root)
+    color = GREEN if status == "GREEN" else (YELLOW if status == "YELLOW" else RED)
+    print(c(f"[WEDGE] {status}", color + BOLD), f"| {len(found)} artifact(s) | {critical} critical gap(s) | {root}")
+
+
+def cmd_wedge_explain(args: argparse.Namespace) -> None:
+    print_header("Wedge — Evidence Artifacts Reference")
+    print_section("Primary artifacts (any one is sufficient)")
+    for name in _WEDGE_PRIMARY:
+        print(f"  {name}")
+    print()
+    print_section("Secondary artifacts (strengthen the evidence)")
+    for name in _WEDGE_SECONDARY:
+        print(f"  {name}")
+    print()
+    print_section("How to generate them")
+    print_suggestion("crovia run --receipts <file> --period YYYY-MM --budget N --out <dir>")
+    print_suggestion("crovia sign <trust_bundle.json>")
+    print_suggestion("crovia trace <receipts.ndjson>")
+    print()
+    print_section("Verdict logic")
+    print("  GREEN  = at least one primary artifact found, no critical gaps")
+    print("  YELLOW = artifacts found but critical gaps detected")
+    print("  RED    = no artifacts found")
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="crovia",
@@ -1042,14 +1187,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     wedge_sub = wedge.add_subparsers(dest="wedge_cmd")
 
-    ws = wedge_sub.add_parser("scan", help="Run wedge scan on inputs")
-    ws.set_defaults(func=lambda args: print_warn("wedge scan not wired yet"))
+    ws = wedge_sub.add_parser("scan", help="Scan current directory for evidence artifacts")
+    ws.add_argument("--path", default=".", help="Directory to scan (default: current)")
+    ws.add_argument("--mode", choices=["warn", "fail"], default="warn", help="Fail on RED status")
+    ws.set_defaults(func=cmd_wedge_scan)
 
-    ws = wedge_sub.add_parser("status", help="Show wedge status")
-    ws.set_defaults(func=lambda args: print_warn("wedge status not wired yet"))
+    ws = wedge_sub.add_parser("status", help="Show wedge status of current directory")
+    ws.add_argument("--path", default=".", help="Directory to check (default: current)")
+    ws.set_defaults(func=cmd_wedge_status)
 
-    ws = wedge_sub.add_parser("explain", help="Explain wedge signals")
-    ws.set_defaults(func=lambda args: print_warn("wedge explain not wired yet"))
+    ws = wedge_sub.add_parser("explain", help="Explain what evidence artifacts Crovia looks for")
+    ws.set_defaults(func=cmd_wedge_explain)
 
     # ==========================
     #  ORACLE (Omission Oracle)
