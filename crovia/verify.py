@@ -11,12 +11,19 @@ import sys
 import subprocess
 from pathlib import Path
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 def _fail(msg: str) -> "None":
-    print(f"✖ CRC-1 INVALID: {msg}")
+    print(f"[FAIL] CRC-1 INVALID: {msg}")
     raise SystemExit(1)
 
 def _ok(msg: str) -> None:
-    print(f"✔ {msg}")
+    print(f"[OK] {msg}")
 
 def _find_hashchain_verifier(repo_root: Path) -> Path:
     # We do NOT guess names; we check the repo for known verifier scripts.
@@ -99,7 +106,7 @@ def main() -> None:
         _fail("Hashchain verification failed")
 
     _ok("Hashchain verified")
-    print("\n✔ CRC-1 VERIFIED")
+    print("\n[OK] CRC-1 VERIFIED")
     raise SystemExit(0)
 
 if __name__ == "__main__":
