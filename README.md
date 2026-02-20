@@ -50,55 +50,54 @@ Specification:
 
 ## Try it (single command)
 
-### 🚀 ZK-Bridge Preview - Technical Authority for AI Compliance
+### Generate CRC-1 Evidence Packs
 
 ```bash
-# Preview compliance potential
-crovia bridge preview meta-llama/Llama-3-8B
-
-# List PRO capabilities  
-crovia bridge upgrades
-
-# Demo ZK compliance
-crovia bridge demo zk_compliance
-```
-
-### 📋 Generate CRC-1 Evidence Packs
-
-```bash
-# Unified CLI
-crovia run --period 2025-11 --budget 100000
-
-# Or with custom receipts
+# Full pipeline — receipts in, evidence pack out
 crovia run \
   --receipts examples/minimal_royalty_receipts.ndjson \
   --period 2025-11 \
+  --budget 1000000 \
   --out out_crc1
 ```
 
-### 🎯 Oracle Analysis
-```bash
-# Analyze AI models for trust gaps
-crovia oracle scan meta-llama/Llama-3-8B
-crovia oracle card mistralai/Mistral-7B
-```
-
-### 💎 License Management
-```bash
-# Check current tier
-crovia license status
-```
-
-Other commands:
-```bash
-crovia scan      # Spider / dataset attribution
-crovia check     # Validate receipts
-crovia pay       # Compute payouts
-crovia bundle    # Create trust bundle
-crovia trace     # Hashchain operations
-```
-
 This creates a fully self-contained evidence capsule in `out_crc1/`.
+
+### Disclosure Scanner — check a model's disclosure gaps
+
+```bash
+# Scan a HuggingFace model for missing training data declarations
+crovia oracle scan meta-llama/Llama-3-8B
+crovia oracle scan mistralai/Mistral-7B-v0.1
+```
+
+### Evidence Wedge — check a directory for evidence artifacts
+
+```bash
+crovia wedge scan              # scan current directory
+crovia wedge scan --path ./my-project
+crovia wedge status            # one-line status
+crovia wedge explain           # what artifacts Crovia looks for
+```
+
+### Other commands
+
+```bash
+crovia check   <receipts.ndjson>   # validate receipts (real)
+crovia refine  <receipts.ndjson>   # fix share_sum / rank issues
+crovia pay     <receipts.ndjson> --period YYYY-MM --budget N  # compute payouts
+crovia bundle  --receipts X --payouts Y  # assemble trust bundle
+crovia sign    <file>              # HMAC-sign any artifact
+crovia trace   <file>              # generate / verify hashchain
+crovia explain <file>              # inspect any Crovia JSON/NDJSON
+crovia license status              # check tier (OPEN / PRO)
+crovia bridge  preview <model>     # PRO capability preview
+crovia mode    show                # show CLI config
+crovia legend                      # full command reference
+```
+
+> `crovia scan` (attribution spider) requires the FAISS corpus index — not yet in open core.  
+> Run `crovia scan <file>` for details.
 
 - No network  
 - No secrets  
@@ -130,11 +129,13 @@ crovia-verify out_crc1
 
 Expected result:
 
-✔ All artifacts present  
-✔ trust_bundle JSON valid  
-✔ Hashchain verified  
+```
+[OK] All artifacts present
+[OK] trust_bundle JSON valid
+[OK] Hashchain verified
 
-✔ CRC-1 VERIFIED
+[OK] CRC-1 VERIFIED
+```
 
 If verification fails, the evidence is invalid.
 
