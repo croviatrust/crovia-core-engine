@@ -461,6 +461,47 @@ def test_payouts_invalid_period_fatal():
         assert not out_csv.exists(), "No output CSV should be created on invalid period"
 
 
+def test_payouts_eur_total_nan_fatal():
+    """--eur-total nan must exit non-zero with FATAL message."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "receipts.ndjson"
+        src.write_text('{"schema":"royalty_receipt.v1","timestamp":"2025-11-01T00:00:00Z"}\n')
+        r = subprocess.run(
+            [sys.executable, str(PAYOUTS_SCRIPT),
+             "--input", str(src),
+             "--period", "2025-11",
+             "--eur-total", "nan",
+             "--out-csv", str(Path(d) / "out.csv"),
+             "--out-ndjson", str(Path(d) / "out.ndjson"),
+             "--out-assumptions", str(Path(d) / "assumptions.json"),
+             ],
+            capture_output=True, text=True
+        )
+        assert r.returncode != 0, "--eur-total nan should be rejected"
+        assert "FATAL" in r.stderr
+
+
+def test_payouts_cap_top1_out_of_range_fatal():
+    """--cap-top1 1.2 (> 1) must exit non-zero with FATAL message."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "receipts.ndjson"
+        src.write_text('{"schema":"royalty_receipt.v1","timestamp":"2025-11-01T00:00:00Z"}\n')
+        r = subprocess.run(
+            [sys.executable, str(PAYOUTS_SCRIPT),
+             "--input", str(src),
+             "--period", "2025-11",
+             "--eur-total", "1000",
+             "--cap-top1", "1.2",
+             "--out-csv", str(Path(d) / "out.csv"),
+             "--out-ndjson", str(Path(d) / "out.ndjson"),
+             "--out-assumptions", str(Path(d) / "assumptions.json"),
+             ],
+            capture_output=True, text=True
+        )
+        assert r.returncode != 0, "--cap-top1 1.2 should be rejected"
+        assert "FATAL" in r.stderr
+
+
 def test_payouts_period_requires_zero_padded_month_fatal():
     """--period 2025-1 (non-zero-padded) must exit non-zero with FATAL message."""
     with tempfile.TemporaryDirectory() as d:

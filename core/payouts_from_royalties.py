@@ -264,6 +264,32 @@ def main():
         )
         sys.exit(2)
 
+    # Validate numeric parameters
+    if not math.isfinite(args.eur_total) or args.eur_total < 0:
+        print(
+            f"[FATAL] --eur-total must be a finite non-negative number, got {args.eur_total!r}.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    if not math.isfinite(args.min_amount) or args.min_amount < 0:
+        print(
+            f"[FATAL] --min-amount must be a finite non-negative number, got {args.min_amount!r}.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    if args.cap_top1 is not None and (not math.isfinite(args.cap_top1) or not (0.0 <= args.cap_top1 <= 1.0)):
+        print(
+            f"[FATAL] --cap-top1 must be a finite value in [0, 1], got {args.cap_top1!r}.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    if args.cap_top3 is not None and (not math.isfinite(args.cap_top3) or not (0.0 <= args.cap_top3 <= 1.0)):
+        print(
+            f"[FATAL] --cap-top3 must be a finite value in [0, 1], got {args.cap_top3!r}.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+
     if not os.path.exists(args.input):
         print(f"[FATAL] Input NDJSON not found: {args.input}", file=sys.stderr)
         sys.exit(2)
