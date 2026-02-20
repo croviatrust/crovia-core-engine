@@ -8,7 +8,9 @@ except Exception:
 
 class NDJSONWriter:
     def __init__(self, path: str):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        dirpath = os.path.dirname(path)
+        if dirpath:
+            os.makedirs(dirpath, exist_ok=True)
         fd = os.open(path, os.O_CREAT | os.O_APPEND | os.O_WRONLY, 0o644)
         self.f: TextIO = os.fdopen(fd, "a", buffering=1, encoding="utf-8")
     def write(self, rec: Dict):

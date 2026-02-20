@@ -237,7 +237,30 @@ def test_verifier_rejects_non_hex_digest():
 
 
 # ---------------------------------------------------------------------------
-# 6. hashchain writer/verifier — invalid --chunk regression
+# 6. NDJSONWriter — filename-only path regression
+# ---------------------------------------------------------------------------
+
+def test_ndjson_writer_filename_only():
+    """NDJSONWriter must not crash when path has no directory component (e.g. 'events.ndjson')."""
+    import sys
+    sys.path.insert(0, str(REPO / "core"))
+    from ndjson_io import NDJSONWriter
+    with tempfile.TemporaryDirectory() as d:
+        orig_dir = os.getcwd()
+        try:
+            os.chdir(d)
+            w = NDJSONWriter("events.ndjson")
+            w.write({"schema": "test", "value": 42})
+            w.close()
+            content = (Path(d) / "events.ndjson").read_text()
+            rec = json.loads(content.strip())
+            assert rec["value"] == 42
+        finally:
+            os.chdir(orig_dir)
+
+
+# ---------------------------------------------------------------------------
+# 7. hashchain writer/verifier — invalid --chunk regression
 # ---------------------------------------------------------------------------
 
 WRITER_SCRIPT = REPO / "core" / "hashchain_writer.py"
