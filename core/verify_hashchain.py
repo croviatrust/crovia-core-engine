@@ -56,6 +56,14 @@ def parse_chain_file(path: str) -> List[Tuple[int, int, str]]:
                     file=sys.stderr,
                 )
                 continue
+            try:
+                bytes.fromhex(dg)
+            except ValueError:
+                print(
+                    f"[VERIFY] Invalid digest (not hex) at chain line {lineno}: {dg!r}",
+                    file=sys.stderr,
+                )
+                continue
             entries.append((blk, upto, dg))
     return entries
 
@@ -133,6 +141,15 @@ def main() -> None:
 
                 blk, upto, expected_dg = chain_entries[entry_idx]
 
+                # Sanity check: block_idx must match the expected sequential index
+                if blk != entry_idx:
+                    print(
+                        f"[VERIFY] block_idx mismatch at entry {entry_idx}: "
+                        f"expected {entry_idx}, got {blk}",
+                        file=sys.stderr,
+                    )
+                    ok = False
+
                 # Sanity check: upto_line must match the global line counter
                 if upto != count:
                     print(
@@ -166,6 +183,13 @@ def main() -> None:
             ok = False
         else:
             blk, upto, expected_dg = chain_entries[entry_idx]
+            if blk != entry_idx:
+                print(
+                    f"[VERIFY] block_idx mismatch at final entry {entry_idx}: "
+                    f"expected {entry_idx}, got {blk}",
+                    file=sys.stderr,
+                )
+                ok = False
             if upto != count:
                 print(
                     f"[VERIFY] Mismatch in 'upto_line' at final block={blk}: "
@@ -180,6 +204,16 @@ def main() -> None:
                     file=sys.stderr,
                 )
                 ok = False
+            entry_idx += 1
+
+        # Reject trailing extra entries not consumed during replay
+        if ok and entry_idx != len(chain_entries):
+            print(
+                f"[VERIFY] ERROR – chain has {len(chain_entries) - entry_idx} "
+                f"extra trailing entry/entries (expected {entry_idx} total).",
+                file=sys.stderr,
+            )
+            ok = False
 
     if ok:
         print(

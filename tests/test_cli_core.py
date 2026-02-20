@@ -1,6 +1,7 @@
 """
 Minimal pytest suite for crovia-core-engine open core.
-Covers: CLI entry point, CRC-1 pipeline (run + verify), validator, ask_menu CI safety.
+Covers: CLI entry point, CRC-1 pipeline (run + verify), validator, ask_menu CI safety,
+        verify_hashchain security regressions.
 """
 import json
 import os
@@ -127,3 +128,109 @@ def test_run_and_verify():
         )
         assert r2.returncode == 0, f"crovia-verify failed:\n{r2.stdout}\n{r2.stderr}"
         assert "CRC-1 VERIFIED" in r2.stdout
+
+
+# ---------------------------------------------------------------------------
+# 5. verify_hashchain security regressions
+# ---------------------------------------------------------------------------
+
+VERIFIER = REPO / "core" / "verify_hashchain.py"
+
+
+def _build_valid_chain(source_path: Path, chain_path: Path, chunk: int = 10000):
+    """Build a valid chain file for the given source using the same logic as hashchain_writer."""
+    import hashlib
+    prev = b"\x00" * 32
+    h = hashlib.sha256()
+    count = 0
+    entries = []
+    with open(source_path, "r", encoding="utf-8-sig") as f:
+        for raw in f:
+            s = raw.rstrip("\n")
+            if not s:
+                continue
+            h.update(prev)
+            h.update(s.encode("utf-8"))
+            count += 1
+            if (count % chunk) == 0:
+                digest = h.hexdigest()
+                entries.append((len(entries), count, digest))
+                prev = bytes.fromhex(digest)
+                h = hashlib.sha256()
+    if (count % chunk) != 0 and count > 0:
+        digest = h.hexdigest()
+        entries.append((len(entries), count, digest))
+    with open(chain_path, "w") as cf:
+        for blk, upto, dg in entries:
+            cf.write(f"{blk}\t{upto}\t{dg}\n")
+    return count
+
+
+def _run_verifier(source, chain, chunk=10000):
+    return subprocess.run(
+        [sys.executable, str(VERIFIER), "--source", str(source), "--chain", str(chain), "--chunk", str(chunk)],
+        capture_output=True, text=True
+    )
+
+
+def test_verifier_valid_chain():
+    """A correctly built chain must verify OK."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        chain = Path(d) / "chain.txt"
+        src.write_text("\n".join(json.dumps({"i": i}) for i in range(5)) + "\n")
+        _build_valid_chain(src, chain, chunk=3)
+        r = _run_verifier(src, chain, chunk=3)
+        assert r.returncode == 0, f"Valid chain failed:\n{r.stderr}"
+        assert "[VERIFY] OK" in r.stdout
+
+
+def test_verifier_rejects_trailing_entries():
+    """Chain with extra trailing entries must be rejected (was accepted before fix)."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        chain = Path(d) / "chain.txt"
+        src.write_text("\n".join(json.dumps({"i": i}) for i in range(5)) + "\n")
+        _build_valid_chain(src, chain, chunk=3)
+        # Append a spurious extra entry
+        with open(chain, "a") as cf:
+            cf.write("99\t9999\t" + "a" * 64 + "\n")
+        r = _run_verifier(src, chain, chunk=3)
+        assert r.returncode != 0, "Verifier should reject chain with trailing extra entries"
+        assert "extra trailing" in r.stderr
+
+
+def test_verifier_rejects_tampered_block_idx():
+    """Chain with altered block_idx must be rejected."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        chain = Path(d) / "chain.txt"
+        src.write_text("\n".join(json.dumps({"i": i}) for i in range(5)) + "\n")
+        _build_valid_chain(src, chain, chunk=3)
+        lines = Path(chain).read_text().splitlines()
+        # Tamper first entry's block_idx from 0 to 99
+        parts = lines[0].split("\t")
+        parts[0] = "99"
+        lines[0] = "\t".join(parts)
+        Path(chain).write_text("\n".join(lines) + "\n")
+        r = _run_verifier(src, chain, chunk=3)
+        assert r.returncode != 0, "Verifier should reject chain with tampered block_idx"
+        assert "block_idx mismatch" in r.stderr
+
+
+def test_verifier_rejects_non_hex_digest():
+    """Chain entry with non-hex digest must be skipped/rejected."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "src.ndjson"
+        chain = Path(d) / "chain.txt"
+        src.write_text("\n".join(json.dumps({"i": i}) for i in range(5)) + "\n")
+        _build_valid_chain(src, chain, chunk=3)
+        lines = Path(chain).read_text().splitlines()
+        # Replace digest with 64 non-hex chars
+        parts = lines[0].split("\t")
+        parts[2] = "g" * 64
+        lines[0] = "\t".join(parts)
+        Path(chain).write_text("\n".join(lines) + "\n")
+        r = _run_verifier(src, chain, chunk=3)
+        # Entry is skipped → chain appears shorter → must fail
+        assert r.returncode != 0, "Verifier should reject chain with non-hex digest"
