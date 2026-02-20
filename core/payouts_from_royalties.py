@@ -22,6 +22,7 @@ import csv
 import json
 import math
 import os
+import re
 import sys
 from collections import defaultdict, Counter
 from datetime import datetime
@@ -248,12 +249,11 @@ def main():
     )
     args = ap.parse_args()
 
-    # Parse period
+    # Parse period — enforce strict YYYY-MM (zero-padded month required)
     try:
-        parts = args.period.split("-")
-        if len(parts) != 2:
-            raise ValueError("expected YYYY-MM")
-        year, month = int(parts[0]), int(parts[1])
+        if not re.fullmatch(r'\d{4}-\d{2}', args.period):
+            raise ValueError("expected exactly YYYY-MM with zero-padded month")
+        year, month = int(args.period[:4]), int(args.period[5:])
         if not (1 <= month <= 12):
             raise ValueError(f"month {month} out of range 1-12")
     except Exception as exc:

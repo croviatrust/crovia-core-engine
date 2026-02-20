@@ -452,6 +452,26 @@ def test_payouts_invalid_period_fatal():
         assert not out_csv.exists(), "No output CSV should be created on invalid period"
 
 
+def test_payouts_period_requires_zero_padded_month_fatal():
+    """--period 2025-1 (non-zero-padded) must exit non-zero with FATAL message."""
+    with tempfile.TemporaryDirectory() as d:
+        src = Path(d) / "receipts.ndjson"
+        src.write_text('{"schema":"royalty_receipt.v1","timestamp":"2025-01-01T00:00:00Z"}\n')
+        r = subprocess.run(
+            [sys.executable, str(PAYOUTS_SCRIPT),
+             "--input", str(src),
+             "--period", "2025-1",
+             "--eur-total", "1000",
+             "--out-csv", str(Path(d) / "out.csv"),
+             "--out-ndjson", str(Path(d) / "out.ndjson"),
+             "--out-assumptions", str(Path(d) / "assumptions.json"),
+             ],
+            capture_output=True, text=True
+        )
+        assert r.returncode != 0, "2025-1 should be rejected"
+        assert "FATAL" in r.stderr
+
+
 def test_payouts_invalid_month_fatal():
     """Month out of range (e.g. 2025-13) must also exit non-zero."""
     with tempfile.TemporaryDirectory() as d:
