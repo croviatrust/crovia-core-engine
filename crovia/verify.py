@@ -70,16 +70,27 @@ def main() -> None:
         if k not in artifacts:
             _fail(f"MANIFEST missing artifacts.{k}")
 
-    # existence checks
+    # existence checks + path traversal guard
+    safe_paths: dict = {}
     for k, rel in artifacts.items():
-        p = crc_dir / rel
-        if not p.exists():
+        if not isinstance(rel, str) or not rel.strip():
+            _fail(f"artifacts.{k} must be a non-empty string, got {rel!r}")
+        resolved = (crc_dir / rel).resolve()
+        try:
+            resolved.relative_to(crc_dir)
+        except ValueError:
+            _fail(
+                f"artifacts.{k} path {rel!r} escapes the bundle directory "
+                f"(path traversal rejected)"
+            )
+        if not resolved.exists():
             _fail(f"Missing artifact file: {rel} (from artifacts.{k})")
+        safe_paths[k] = resolved
     _ok("All artifacts present")
 
-    # Validate JSON of trust bundle
+    # Validate JSON of trust bundle (use already-resolved safe path)
     try:
-        json.loads((crc_dir / artifacts["trust_bundle"]).read_text(encoding="utf-8"))
+        json.loads(safe_paths["trust_bundle"].read_text(encoding="utf-8"))
     except Exception as e:
         _fail(f"trust_bundle invalid JSON: {e}")
     _ok("trust_bundle JSON valid")
@@ -88,8 +99,8 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parents[1]  # .../crovia-core-engine (repo root)
     verifier = _find_hashchain_verifier(repo_root)
 
-    receipts = crc_dir / artifacts["receipts"]
-    chain = crc_dir / artifacts["hashchain"]
+    receipts = safe_paths["receipts"]
+    chain = safe_paths["hashchain"]
 
     cmd = [
         sys.executable,

@@ -237,7 +237,45 @@ def test_verifier_rejects_non_hex_digest():
 
 
 # ---------------------------------------------------------------------------
-# 6. payouts_from_royalties — invalid period regression
+# 6. crovia.verify — path traversal regression
+# ---------------------------------------------------------------------------
+
+def test_verify_rejects_artifact_path_traversal():
+    """MANIFEST with ../outside path must be rejected by crovia.verify."""
+    import importlib, io
+    with tempfile.TemporaryDirectory() as d:
+        bundle = Path(d) / "bundle"
+        bundle.mkdir()
+        outside = Path(d) / "outside.ndjson"
+        outside.write_text('{"schema":"royalty_receipt.v1"}\n')
+
+        # Build a minimal valid MANIFEST but with traversal in receipts
+        manifest = {
+            "schema": "crovia.manifest.v1",
+            "contract": "CRC-1",
+            "artifacts": {
+                "receipts": "../outside.ndjson",   # traversal
+                "validate_report": "validate_report.md",
+                "hashchain": "hashchain.txt",
+                "trust_bundle": "trust_bundle.json",
+            }
+        }
+        (bundle / "MANIFEST.json").write_text(json.dumps(manifest))
+        # Create the other artifacts inside bundle so they don't trigger missing-file first
+        (bundle / "validate_report.md").write_text("ok")
+        (bundle / "hashchain.txt").write_text("0\t1\t" + "a" * 64 + "\n")
+        (bundle / "trust_bundle.json").write_text("{}")
+
+        r = subprocess.run(
+            [sys.executable, "-m", "crovia.verify", str(bundle)],
+            capture_output=True, text=True, cwd=str(REPO)
+        )
+        assert r.returncode != 0, "crovia.verify must reject path traversal in artifacts"
+        assert "traversal" in r.stdout.lower() or "traversal" in r.stderr.lower() or "escapes" in r.stdout.lower()
+
+
+# ---------------------------------------------------------------------------
+# 7. payouts_from_royalties — invalid period regression
 # ---------------------------------------------------------------------------
 
 PAYOUTS_SCRIPT = REPO / "core" / "payouts_from_royalties.py"
