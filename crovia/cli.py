@@ -20,6 +20,14 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
+# Windows UTF-8 fix
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 # ==========================
 #  ANSI COLORS – CROVIA PALETTE
 # ==========================
@@ -87,9 +95,9 @@ def is_operator_mode() -> bool:
 # ==========================
 
 def print_header(title: str) -> None:
-    line = "─" * max(40, len(title) + 20)
+    line = "-" * max(40, len(title) + 20)
     print(c(line, MAGENTA))
-    print(c(f"CROVIA — {title}", MAGENTA))
+    print(c(f"CROVIA -- {title}", MAGENTA))
     print(c(line, MAGENTA))
     print()
 
@@ -99,19 +107,19 @@ def print_section(title: str) -> None:
 
 
 def print_ok(msg: str) -> None:
-    print(c("✔ " + msg, GREEN))
+    print(c("[OK] " + msg, GREEN))
 
 
 def print_warn(msg: str) -> None:
-    print(c("⚠ " + msg, YELLOW))
+    print(c("[!] " + msg, YELLOW))
 
 
 def print_error(msg: str) -> None:
-    print(c("✖ " + msg, RED))
+    print(c("[X] " + msg, RED))
 
 
 def print_suggestion(msg: str) -> None:
-    print(c("⋄ " + msg, MAGENTA))
+    print(c(">>> " + msg, MAGENTA))
 
 
 def ask_menu(prompt: str, options: list[str]) -> int:
@@ -142,41 +150,41 @@ def cmd_legend(args: argparse.Namespace) -> None:
 
     print_section("Most common pipeline (end-to-end)")
     print("1) crovia scan   <dataset.ndjson>")
-    print("   → Turn a raw dataset into demo attribution receipts (royalty_receipt.v1).")
+    print("   -> Turn a raw dataset into demo attribution receipts (royalty_receipt.v1).")
     print()
     print("2) crovia check  receipts.ndjson")
-    print("   → Validate receipts + basic AI Act readiness report.")
+    print("   -> Validate receipts + basic AI Act readiness report.")
     print()
     print("3) crovia refine receipts.ndjson --out refined.ndjson")
-    print("   → Auto-fix share_sum / rank inconsistencies (optional).")
+    print("   -> Auto-fix share_sum / rank inconsistencies (optional).")
     print()
     print("4) crovia pay    refined.ndjson --period 2025-11 --budget 1000000")
-    print("   → Compute payouts for a monthly period (open-core engine).")
+    print("   -> Compute payouts for a monthly period (open-core engine).")
     print()
     print("5) crovia bundle --receipts refined.ndjson --payouts payouts_2025-11.ndjson")
-    print("   → Build a trust bundle JSON for audits / evidence.")
+    print("   -> Build a trust bundle JSON for audits / evidence.")
     print()
     print("6) crovia sign   crovia_trust_bundle.json")
-    print("   → Add an HMAC signature (CROVIA_HMAC_KEY) to the bundle.")
+    print("   -> Add an HMAC signature (CROVIA_HMAC_KEY) to the bundle.")
     print()
     print("7) crovia trace  receipts.ndjson --out proofs/hashchain_receipts.txt")
-    print("   → Create a hashchain over the receipts (or verify an existing one).")
+    print("   -> Create a hashchain over the receipts (or verify an existing one).")
     print()
     print("8) crovia explain crovia_trust_bundle.json")
-    print("   → Quick structural view (schema, signature, hashes, links).")
+    print("   -> Quick structural view (schema, signature, hashes, links.)")
     print()
 
     print_section("Command cheatsheet")
-    print("• legend  → Show this legend and recommended flows.")
-    print("• scan    → Spider / dataset attribution (demo receipts for now).")
-    print("• check   → Schema + business validation + AI Act hints.")
-    print("• refine  → Heuristic clean-up of weird receipts.")
-    print("• pay     → Turn receipts into payouts (with charts).")
-    print("• bundle  → Assemble all evidence into a single JSON bundle.")
-    print("• sign    → HMAC-sign JSON/NDJSON artifacts.")
-    print("• trace   → Hashchain generator / verifier.")
-    print("• explain → Metacognitive view on any Crovia JSON/.crovia file.")
-    print("• mode    → CLI profile (Operator Mode, defaults, auto-sign, etc.).")
+    print("  legend  -> Show this legend and recommended flows.")
+    print("  scan    -> Spider / dataset attribution (demo receipts for now).")
+    print("  check   -> Schema + business validation + AI Act hints.")
+    print("  refine  -> Heuristic clean-up of weird receipts.")
+    print("  pay     -> Turn receipts into payouts (with charts).")
+    print("  bundle  -> Assemble all evidence into a single JSON bundle.")
+    print("  sign    -> HMAC-sign JSON/NDJSON artifacts.")
+    print("  trace   -> Hashchain generator / verifier.")
+    print("  explain -> Metacognitive view on any Crovia JSON/.crovia file.")
+    print("  mode    -> CLI profile (Operator Mode, defaults, auto-sign, etc.).")
     print()
 
     print_section("If you are completely new, start with")
@@ -273,7 +281,7 @@ def cmd_check(args: argparse.Namespace) -> None:
     print()
 
     print_section("Short explanation")
-    print("share_sum out of tolerance → strong synergy between top shards or aggressive rounding.")
+    print("share_sum out of tolerance -> strong synergy between top shards or aggressive rounding.")
     print()
 
     print_section("Generated outputs")
@@ -1066,7 +1074,7 @@ def cmd_bridge_preview(args):
         for reg, scores in preview.global_coverage.items():
             current = scores.get("current", 0)
             potential = scores.get("potential", 0)
-            print(f"  {reg}: {current:.1%} → {potential:.1%}")
+            print(f"  {reg}: {current:.1%} -> {potential:.1%}")
         print()
         
         if preview.missing_capabilities:
