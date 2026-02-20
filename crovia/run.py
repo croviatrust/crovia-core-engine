@@ -22,6 +22,9 @@ import sys
 from pathlib import Path
 
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         prog="crovia-run",
@@ -75,7 +78,7 @@ def main(argv=None) -> int:
     subprocess.run(
         [
             sys.executable,
-            "validate/validate.py",
+            str(REPO_ROOT / "validate" / "validate.py"),
             str(receipts_copy),
             "--out-md",
             str(validate_md),
@@ -91,7 +94,7 @@ def main(argv=None) -> int:
     subprocess.run(
         [
             sys.executable,
-            "proofs/hashchain_writer.py",
+            str(REPO_ROOT / "proofs" / "hashchain_writer.py"),
             "--source",
             str(receipts_copy),
             "--out",

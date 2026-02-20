@@ -101,6 +101,31 @@ def test_check_missing_file():
 # 4. CRC-1 pipeline: run + verify
 # ---------------------------------------------------------------------------
 
+def test_run_from_external_cwd():
+    """crovia run launched from a directory outside the repo must still produce MANIFEST.json."""
+    if not MINIMAL_RECEIPTS.exists():
+        pytest.skip("Example receipts file not found")
+    with tempfile.TemporaryDirectory() as external_dir:
+        external_dir = Path(external_dir)
+        receipts = external_dir / "receipts.ndjson"
+        receipts.write_text(MINIMAL_RECEIPTS.read_text(encoding="utf-8"), encoding="utf-8")
+        out_dir = external_dir / "crc1_out"
+        r = subprocess.run(
+            [
+                sys.executable, "-m", "crovia.run",
+                "--receipts", str(receipts),
+                "--period", "2025-11",
+                "--out", str(out_dir),
+            ],
+            capture_output=True, text=True,
+            cwd=str(external_dir),   # NOT the repo root
+        )
+        assert r.returncode == 0, f"crovia run failed from external cwd:\n{r.stdout}\n{r.stderr}"
+        assert (out_dir / "MANIFEST.json").exists(), "MANIFEST.json not produced"
+        manifest = json.loads((out_dir / "MANIFEST.json").read_text())
+        assert manifest.get("contract") == "CRC-1"
+
+
 def test_run_and_verify():
     """Full CRC-1 pipeline: crovia run -> crovia-verify."""
     if not MINIMAL_RECEIPTS.exists():
