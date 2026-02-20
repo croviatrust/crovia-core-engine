@@ -452,6 +452,7 @@ def main():
                 wro.writerow([p, f"{amt:.2f}"])
 
     # assumptions.json
+    os.makedirs(os.path.dirname(args.out_assumptions) or ".", exist_ok=True)
     with open(args.out_assumptions, "w", encoding="utf-8") as fa:
         json.dump(
             {
