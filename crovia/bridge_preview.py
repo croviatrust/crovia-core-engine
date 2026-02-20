@@ -15,25 +15,25 @@ from typing import Dict, List, Optional, Any
 
 @dataclass
 class BridgeCapability:
-    """Mostra una capacità del bridge PRO."""
+    """Represents a PRO bridge capability."""
     capability_id: str
     name: str
     description: str
-    regulatory_coverage: List[str]  # Quali regolamentazioni copre
-    evidence_types: List[str]  # Tipi di prove generate
-    upgrade_required: bool  # Serve PRO per questa capability
-    preview_available: bool  # Preview disponibile in open
+    regulatory_coverage: List[str]  # Regulatory frameworks covered
+    evidence_types: List[str]  # Evidence types generated
+    upgrade_required: bool  # Requires PRO tier
+    preview_available: bool  # Preview available in open core
 
 
 @dataclass
 class CompliancePreview:
-    """Preview di compliance per un modello."""
+    """Compliance preview for a model."""
     model_id: str
-    preview_score: float  # 0.0-1.0 score base
-    potential_score: float  # Score POTENZIALE con PRO
-    missing_capabilities: List[str]  # Cosa manca per score completo
-    upgrade_benefits: List[str]  # Benefici dell'upgrade
-    global_coverage: Dict[str, float]  # Copertura per regolamentazione
+    preview_score: float  # 0.0-1.0 open core score
+    potential_score: float  # Potential score with PRO
+    missing_capabilities: List[str]  # Capabilities needed for full score
+    upgrade_benefits: List[str]  # PRO upgrade benefits
+    global_coverage: Dict[str, float]  # Coverage per regulatory framework
 
 
 class CroviaBridgePreview:
@@ -47,14 +47,14 @@ class CroviaBridgePreview:
         self.capabilities = self._initialize_capabilities()
     
     def _initialize_capabilities(self) -> Dict[str, BridgeCapability]:
-        """Inizializza capacità del bridge (PRO e Open)."""
+        """Initialize bridge capabilities (PRO and Open)."""
         
         return {
-            # Open capabilities (disponibili ora)
+            # Open capabilities (available now)
             "basic_scan": BridgeCapability(
                 capability_id="basic_scan",
                 name="Basic Model Scanning",
-                description="Scansione base per identificare potenziali issue di compliance",
+                description="Basic scan to identify potential compliance gaps",
                 regulatory_coverage=["eu-ai-act", "us-ftc"],
                 evidence_types=["basic_evidence", "model_metadata"],
                 upgrade_required=False,
@@ -64,18 +64,18 @@ class CroviaBridgePreview:
             "threat_assessment": BridgeCapability(
                 capability_id="threat_assessment",
                 name="Compliance Threat Assessment",
-                description="Valutazione dei rischi di non-compliance",
+                description="Assessment of non-compliance risks across regulatory frameworks",
                 regulatory_coverage=["eu-ai-act", "us-ftc", "china-ai"],
                 evidence_types=["risk_report", "threat_matrix"],
                 upgrade_required=False,
                 preview_available=True,
             ),
             
-            # PRO capabilities (solo preview)
+            # PRO capabilities (preview only)
             "zk_compliance": BridgeCapability(
                 capability_id="zk_compliance",
                 name="Zero-Knowledge Compliance Proofs",
-                description="Prove crittografiche di compliance senza rivelare dati",
+                description="Cryptographic compliance proofs without revealing underlying data",
                 regulatory_coverage=["eu-ai-act", "us-ftc", "china-ai", "global-ethics"],
                 evidence_types=["zk_proof", "commitment_proof", "range_proof"],
                 upgrade_required=True,
@@ -85,7 +85,7 @@ class CroviaBridgePreview:
             "absence_guarantee": BridgeCapability(
                 capability_id="absence_guarantee",
                 name="Cryptographic Absence Guarantee",
-                description="Garanzia matematica che dati specifici NON sono stati usati",
+                description="Mathematical guarantee that specific data was NOT used in training",
                 regulatory_coverage=["eu-ai-act", "gdpr", "ccpa"],
                 evidence_types=["absence_proof", "merkle_exclusion", "non_membership"],
                 upgrade_required=True,
@@ -95,21 +95,21 @@ class CroviaBridgePreview:
             "global_authority": BridgeCapability(
                 capability_id="global_authority",
                 name="Global Technical Authority",
-                description="Certificazione tecnica riconosciuta a livello mondiale",
+                description="Globally recognized technical authority certification",
                 regulatory_coverage=["eu-ai-act", "us-ftc", "china-ai", "uk-ai", "japan-ai"],
                 evidence_types=["authority_certificate", "global_evidence_pack"],
                 upgrade_required=True,
-                preview_available=False,  # Solo per PRO
+                preview_available=False,  # PRO only
             ),
             
             "turbo_performance": BridgeCapability(
                 capability_id="turbo_performance",
                 name="Turbo Engine Performance",
-                description="Accelerazione Rust-native per proof generation istantanea",
+                description="Rust-native acceleration for instant proof generation",
                 regulatory_coverage=["all"],
                 evidence_types=["fast_proof", "real_time_compliance"],
                 upgrade_required=True,
-                preview_available=False,  # Solo per PRO
+                preview_available=False,  # PRO only
             ),
         }
     
@@ -120,19 +120,19 @@ class CroviaBridgePreview:
         Shows potential improvement between open and PRO tiers.
         """
         
-        # 1. Calcola score base (open capabilities)
+        # 1. Calculate base score (open capabilities)
         open_score = self._calculate_open_score(model_id)
         
-        # 2. Calcola score potenziale (con PRO capabilities)
+        # 2. Calculate potential score (with PRO capabilities)
         pro_score = self._calculate_pro_score(model_id)
         
-        # 3. Identifica missing capabilities
+        # 3. Identify missing capabilities
         missing_caps = self._identify_missing_capabilities(model_id)
         
-        # 4. Calcola benefici upgrade
+        # 4. Calculate upgrade benefits
         upgrade_benefits = self._calculate_upgrade_benefits(model_id, missing_caps)
         
-        # 5. Calcola copertura globale
+        # 5. Calculate global coverage
         global_coverage = self._calculate_global_coverage(model_id, open_score, pro_score)
         
         return CompliancePreview(
@@ -145,7 +145,7 @@ class CroviaBridgePreview:
         )
     
     def list_upgrade_capabilities(self) -> List[BridgeCapability]:
-        """Mostra tutte le capacità PRO disponibili."""
+        """Return all PRO upgrade capabilities."""
         return [
             cap for cap in self.capabilities.values()
             if cap.upgrade_required
@@ -161,7 +161,7 @@ class CroviaBridgePreview:
         if not capability or not capability.preview_available:
             return {"error": "Capability not available for preview"}
         
-        # Genera demo results (mock data che mostra potenziale)
+        # Generate demo results (mock data showing PRO potential)
         demo_results = {
             "capability_id": capability_id,
             "name": capability.name,
@@ -175,11 +175,11 @@ class CroviaBridgePreview:
         return demo_results
     
     def _calculate_open_score(self, model_id: str) -> float:
-        """Calcola score base con open capabilities."""
-        # Simulazione: base capabilities coprono ~40% dei requisiti
+        """Calculate base score with open capabilities."""
+        # Open capabilities cover ~40% of requirements
         base_score = 0.4
         
-        # Aggiungi variazione basata su model ID
+        # Add variation based on model ID
         model_hash = hashlib.sha256(model_id.encode()).hexdigest()
         variation = int(model_hash[:8], 16) / 0xFFFFFFFF  # 0.0-1.0
         score_variation = (variation - 0.5) * 0.2  # ±0.1
@@ -187,11 +187,11 @@ class CroviaBridgePreview:
         return max(0.0, min(1.0, base_score + score_variation))
     
     def _calculate_pro_score(self, model_id: str) -> float:
-        """Calcola score potenziale con PRO capabilities."""
-        # Simulazione: PRO capabilities coprono ~95% dei requisiti
+        """Calculate potential score with PRO capabilities."""
+        # PRO capabilities cover ~95% of requirements
         pro_score = 0.95
         
-        # Aggiungi variazione minima (PRO è più consistente)
+        # Add minimal variation (PRO is more consistent)
         model_hash = hashlib.sha256((model_id + "pro").encode()).hexdigest()
         variation = int(model_hash[:8], 16) / 0xFFFFFFFF
         score_variation = (variation - 0.5) * 0.05  # ±0.025
@@ -199,8 +199,8 @@ class CroviaBridgePreview:
         return max(0.0, min(1.0, pro_score + score_variation))
     
     def _identify_missing_capabilities(self, model_id: str) -> List[str]:
-        """Identifica capabilities PRO mancanti."""
-        # Simulazione: tutti i modelli beneficiano delle stesse capabilities PRO
+        """Identify missing PRO capabilities."""
+        # All models benefit from the same PRO capabilities
         return [
             "zk_compliance",
             "absence_guarantee", 
@@ -211,32 +211,31 @@ class CroviaBridgePreview:
     def _calculate_upgrade_benefits(
         self, model_id: str, missing_caps: List[str]
     ) -> List[str]:
-        """Calcola benefici specifici dell'upgrade."""
+        """Calculate specific upgrade benefits for missing capabilities."""
         benefits = []
         
         if "zk_compliance" in missing_caps:
-            benefits.append("Prove crittografiche ZK per compliance senza rivelare dati")
+            benefits.append("ZK cryptographic proofs for compliance without revealing data")
         
         if "absence_guarantee" in missing_caps:
-            benefits.append("Garanzia matematica di non-utilizzo dati opt-out")
+            benefits.append("Mathematical guarantee of non-use for opted-out data")
         
         if "global_authority" in missing_caps:
-            benefits.append("Certificazione tecnica riconosciuta a livello mondiale")
+            benefits.append("Globally recognized technical authority certification")
         
         if "turbo_performance" in missing_caps:
-            benefits.append("Proof generation 100x più veloce con Turbo Engine")
+            benefits.append("Proof generation 100x faster with Turbo Engine")
         
-        # Aggiungi beneficio generico
-        benefits.append("Accesso a tutte le future capability PRO")
+        benefits.append("Access to all future PRO capabilities")
         
         return benefits
     
     def _calculate_global_coverage(
         self, model_id: str, open_score: float, pro_score: float
     ) -> Dict[str, float]:
-        """Calcola copertura per regolamentazione."""
+        """Calculate coverage per regulatory framework."""
         
-        # Open coverage limitata
+        # Open coverage is limited
         open_coverage = {
             "eu-ai-act": open_score * 0.6,
             "us-ftc": open_score * 0.5,
@@ -244,7 +243,7 @@ class CroviaBridgePreview:
             "global-ethics": open_score * 0.4,
         }
         
-        # PRO coverage completa
+        # PRO coverage is comprehensive
         pro_coverage = {
             "eu-ai-act": pro_score * 0.95,
             "us-ftc": pro_score * 0.90,
