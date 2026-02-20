@@ -28,9 +28,10 @@ from typing import List
 
 
 BASE_DIR = Path(__file__).resolve().parent
+REPO_DIR = BASE_DIR.parent
 DATA_DIR = BASE_DIR / "data"
 
-PROOFS_DIR = BASE_DIR / "proofs"
+PROOFS_DIR = REPO_DIR / "proofs"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 PROOFS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -237,7 +238,7 @@ def main() -> None:
             "Trust bundle",
             [
                 venv_python,
-                "make_trust_bundle.py",
+                str(make_bundle_script),
                 "--period",
                 period,
                 "--receipts",
@@ -271,7 +272,7 @@ def main() -> None:
             "Augment trust bundle",
             [
                 venv_python,
-                "augment_trust_bundle.py",
+                str(augment_script),
                 "--period",
                 period,
             ],
