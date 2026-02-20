@@ -221,7 +221,7 @@ def format_result(result: Dict[str, Any], verbose: bool = True) -> str:
     # Header
     lines.append("")
     lines.append(c("╔══════════════════════════════════════════════════════════════╗", MAGENTA))
-    lines.append(c("║                   CROVIA OMISSION ORACLE                     ║", MAGENTA))
+    lines.append(c("║                 CROVIA DISCLOSURE SCANNER                    ║", MAGENTA))
     lines.append(c("╠══════════════════════════════════════════════════════════════╣", MAGENTA))
     
     # Model
@@ -244,25 +244,25 @@ def format_result(result: Dict[str, Any], verbose: bool = True) -> str:
     score_str = str(score)
     badge = result["badge"]
     lines.append(f"║                                                              ║")
-    lines.append(f"║           {c(f'SHADOW SCORE: {score_str}', score_color + BOLD)}                              ║")
+    lines.append(f"║           {c(f'DISCLOSURE SCORE: {score_str}', score_color + BOLD)}                          ║")
     lines.append(f"║           {c(f'Badge: {badge}', score_color)}                                     ║")
     lines.append(f"║                                                              ║")
     
     # Violations
     if result["violations"]:
         lines.append(c("╠══════════════════════════════════════════════════════════════╣", MAGENTA))
-        lines.append(c("║  ⚠️  VIOLATIONS DETECTED                                     ║", YELLOW))
+        lines.append(c("║  [!] DISCLOSURE GAPS OBSERVED                                ║", YELLOW))
         lines.append(c("╠══════════════════════════════════════════════════════════════╣", MAGENTA))
         
         for v in result["violation_details"]:
             code = v["code"]
             name = v["name"][:40]
-            lines.append(f"║  {c(code, RED)}  {name:<46} ║")
+            lines.append(f"║  {c(code, YELLOW)}  {name:<46} ║")
             if verbose:
                 lines.append(f"║       {c(v['description'][:50], DIM):<55} ║")
     else:
         lines.append(c("╠══════════════════════════════════════════════════════════════╣", MAGENTA))
-        lines.append(c("║  ✓ ALL CHECKS PASSED                                         ║", GREEN))
+        lines.append(c("║  [OK] NO DISCLOSURE GAPS OBSERVED                            ║", GREEN))
     
     # Metadata
     lines.append(c("╠══════════════════════════════════════════════════════════════╣", MAGENTA))
