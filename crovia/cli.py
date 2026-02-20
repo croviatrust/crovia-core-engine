@@ -125,11 +125,16 @@ def print_suggestion(msg: str) -> None:
 def ask_menu(prompt: str, options: list[str]) -> int:
     """
     Print a small numbered menu and return the selected option index (1-based).
+    Returns 0 on invalid input, or len(options) (last option) in non-interactive/CI environments.
     """
     print(c(prompt, MAGENTA))
     for i, opt in enumerate(options, 1):
         print(c(f"{i})", MAGENTA), opt)
-    choice = input(">> ").strip()
+    try:
+        choice = input(">> ").strip()
+    except (EOFError, OSError):
+        print_warn("Non-interactive environment detected — skipping menu.")
+        return len(options)
     try:
         val = int(choice)
         if 1 <= val <= len(options):
