@@ -304,7 +304,7 @@ def cmd_refine(args: argparse.Namespace) -> None:
 
     print_section("Input")
     print(f"  File:   {path}")
-    print(f"  Lines:  {len(records)} valid, {parse_errors} unparseable")
+    print(f"  Lines:  {len(records)} valid, {parse_errors} unparsable")
     print()
 
     # Detect issues
@@ -673,7 +673,7 @@ def cmd_explain(args: argparse.Namespace) -> None:
             except Exception: errors += 1
         print_section("Structure")
         print(f"  Type:    NDJSON")
-        print(f"  Lines:   {len(lines)} total, {len(records)} valid, {errors} unparseable")
+        print(f"  Lines:   {len(lines)} total, {len(records)} valid, {errors} unparsable")
         if records:
             sample = records[0]
             keys = list(sample.keys()) if isinstance(sample, dict) else []
