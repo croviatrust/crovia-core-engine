@@ -1,0 +1,164 @@
+{
+  "targets": [
+    {
+      "target_id": "Falconsai/nsfw_image_detection",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 66019976,
+        "task": "image-classification"
+      }
+    },
+    {
+      "target_id": "dima806/fairface_age_image_detection",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 42111360,
+        "task": "image-classification"
+      }
+    },
+    {
+      "target_id": "timm/mobilenetv3_small_100.lamb_in1k",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 21450810,
+        "task": "image-classification"
+      }
+    },
+    {
+      "target_id": "Qwen/Qwen2.5-3B-Instruct",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 15507941,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "meta-llama/Llama-3.1-8B-Instruct",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 10127693,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "Qwen/Qwen3-0.6B",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 8622278,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "Qwen/Qwen2.5-7B-Instruct",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 7481951,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "openai-community/gpt2",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 7118330,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "openai/gpt-oss-20b",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 6654960,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "Qwen/Qwen2.5-1.5B-Instruct",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 6612315,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "cross-encoder/ms-marco-MiniLM-L6-v2",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 5244323,
+        "task": "text-classification"
+      }
+    },
+    {
+      "target_id": "iitolstykh/mivolo_v2",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 5088255,
+        "task": "image-classification"
+      }
+    },
+    {
+      "target_id": "Qwen/Qwen3-4B",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 4599417,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 4548855,
+        "task": "text-classification"
+      }
+    },
+    {
+      "target_id": "vikhyatk/moondream2",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 4261797,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "Qwen/Qwen3-8B",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 4230818,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "timm/resnet50.a1_in1k",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 4183069,
+        "task": "image-classification"
+      }
+    },
+    {
+      "target_id": "dphn/dolphin-2.9.1-yi-1.5-34b",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 4169227,
+        "task": "text-generation"
+      }
+    },
+    {
+      "target_id": "timm/mobilenetv3_large_100.ra_in1k",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 4121323,
+        "task": "image-classification"
+      }
+    },
+    {
+      "target_id": "Qwen/Qwen2.5-32B-Instruct",
+      "tipo_target": "model",
+      "metadata": {
+        "downloads": 4013582,
+        "task": "text-generation"
+      }
+    }
+  ]
+}

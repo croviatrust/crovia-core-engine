@@ -1,0 +1,74 @@
+{
+  "targets": [
+    {
+      "target_id": "huggingface/documentation-images",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1780257
+      }
+    },
+    {
+      "target_id": "hf-doc-build/doc-build",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1321498
+      }
+    },
+    {
+      "target_id": "deepmind/code_contests",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1279793
+      }
+    },
+    {
+      "target_id": "google-research-datasets/mbpp",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1278157
+      }
+    },
+    {
+      "target_id": "nvidia/PhysicalAI-Robotics-GR00T-X-Embodiment-Sim",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1168616
+      }
+    },
+    {
+      "target_id": "KakologArchives/KakologArchives",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1130834
+      }
+    },
+    {
+      "target_id": "Salesforce/GiftEvalPretrain",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1008798
+      }
+    },
+    {
+      "target_id": "m-a-p/FineFineWeb",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 871245
+      }
+    },
+    {
+      "target_id": "NTU-NLP-sg/xCodeEval",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 841751
+      }
+    },
+    {
+      "target_id": "Salesforce/wikitext",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 829911
+      }
+    }
+  ]
+}

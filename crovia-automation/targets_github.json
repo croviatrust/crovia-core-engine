@@ -1,0 +1,2677 @@
+[
+  {
+    "target_id": "gh:likedan/Awesome-CoreML-Models",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "likedan/Awesome-CoreML-Models",
+    "url": "https://github.com/likedan/Awesome-CoreML-Models",
+    "popularity": {
+      "stars": 6957,
+      "forks": 507
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "apple",
+        "awesome",
+        "awesome-list",
+        "caffe",
+        "caffemodel",
+        "core-ml",
+        "coreml",
+        "coreml-framework"
+      ],
+      "query": "topic:machine-learning topic:model stars:>1000"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:Angel-ML/angel",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "Angel-ML/angel",
+    "url": "https://github.com/Angel-ML/angel",
+    "popularity": {
+      "stars": 6782,
+      "forks": 1592
+    },
+    "metadata": {
+      "language": "Java",
+      "topics": [
+        "high-dimensional",
+        "machine-learning",
+        "model",
+        "online-learning",
+        "parameter-server",
+        "scala",
+        "spark",
+        "spark-streaming"
+      ],
+      "query": "topic:machine-learning topic:model stars:>1000"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:CoderSJX/AI-Resources-Central",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "CoderSJX/AI-Resources-Central",
+    "url": "https://github.com/CoderSJX/AI-Resources-Central",
+    "popularity": {
+      "stars": 1191,
+      "forks": 131
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "agent",
+        "ai",
+        "chatgpt",
+        "functioncall",
+        "gemini",
+        "llm",
+        "machine-learning",
+        "model"
+      ],
+      "query": "topic:machine-learning topic:model stars:>1000"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:deezer/spleeter",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "deezer/spleeter",
+    "url": "https://github.com/deezer/spleeter",
+    "popularity": {
+      "stars": 28077,
+      "forks": 3065
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "audio-processing",
+        "bass",
+        "deep-learning",
+        "deezer",
+        "drums",
+        "model",
+        "pretrained-models",
+        "python"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:mlfoundations/open_clip",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "mlfoundations/open_clip",
+    "url": "https://github.com/mlfoundations/open_clip",
+    "popularity": {
+      "stars": 13447,
+      "forks": 1248
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "computer-vision",
+        "contrastive-loss",
+        "deep-learning",
+        "language-model",
+        "multi-modal-learning",
+        "pretrained-models",
+        "pytorch",
+        "zero-shot-classification"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:bigscience-workshop/petals",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "bigscience-workshop/petals",
+    "url": "https://github.com/bigscience-workshop/petals",
+    "popularity": {
+      "stars": 9971,
+      "forks": 593
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bloom",
+        "chatbot",
+        "deep-learning",
+        "distributed-systems",
+        "falcon",
+        "gpt",
+        "guanaco",
+        "language-models"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:OptimalScale/LMFlow",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "OptimalScale/LMFlow",
+    "url": "https://github.com/OptimalScale/LMFlow",
+    "popularity": {
+      "stars": 8492,
+      "forks": 831
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "chatgpt",
+        "deep-learning",
+        "instruction-following",
+        "language-model",
+        "pretrained-models",
+        "pytorch",
+        "transformer"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:OFA-Sys/Chinese-CLIP",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "OFA-Sys/Chinese-CLIP",
+    "url": "https://github.com/OFA-Sys/Chinese-CLIP",
+    "popularity": {
+      "stars": 5808,
+      "forks": 547
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "chinese",
+        "clip",
+        "computer-vision",
+        "contrastive-loss",
+        "coreml-models",
+        "deep-learning",
+        "image-text-retrieval",
+        "multi-modal"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:facebookresearch/mmf",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "facebookresearch/mmf",
+    "url": "https://github.com/facebookresearch/mmf",
+    "popularity": {
+      "stars": 5619,
+      "forks": 944
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "captioning",
+        "deep-learning",
+        "dialog",
+        "hateful-memes",
+        "multi-tasking",
+        "multimodal",
+        "pretrained-models",
+        "pytorch"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:LLMBook-zh/LLMBook-zh.github.io",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "LLMBook-zh/LLMBook-zh.github.io",
+    "url": "https://github.com/LLMBook-zh/LLMBook-zh.github.io",
+    "popularity": {
+      "stars": 4273,
+      "forks": 323
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "artificial-intelligence",
+        "deep-learning",
+        "deep-neural-networks",
+        "deep-reinforcement-learning",
+        "fine-tuning",
+        "language-model",
+        "large-language-models",
+        "natural-language-processing"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:open-mmlab/mmpretrain",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "open-mmlab/mmpretrain",
+    "url": "https://github.com/open-mmlab/mmpretrain",
+    "popularity": {
+      "stars": 3832,
+      "forks": 1115
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "beit",
+        "clip",
+        "constrastive-learning",
+        "convnext",
+        "deep-learning",
+        "image-classification",
+        "mae",
+        "masked-image-modeling"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:osmr/imgclsmob",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "osmr/imgclsmob",
+    "url": "https://github.com/osmr/imgclsmob",
+    "popularity": {
+      "stars": 3020,
+      "forks": 559
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "3d-face-reconstruction",
+        "chainer",
+        "cifar",
+        "classification",
+        "deep-learning",
+        "gluon",
+        "human-pose-estimation",
+        "image-classification"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:isl-org/ZoeDepth",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "isl-org/ZoeDepth",
+    "url": "https://github.com/isl-org/ZoeDepth",
+    "popularity": {
+      "stars": 2791,
+      "forks": 271
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "adaptive-bins",
+        "deep-learning",
+        "depth-estimation",
+        "metric-depth-estimation",
+        "monocular-depth-estimation",
+        "neural-networks",
+        "pretrained-models",
+        "transformers"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:asteroid-team/asteroid",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "asteroid-team/asteroid",
+    "url": "https://github.com/asteroid-team/asteroid",
+    "popularity": {
+      "stars": 2545,
+      "forks": 446
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "audio-separation",
+        "deep-learning",
+        "pretrained-models",
+        "pytorch",
+        "source-separation",
+        "speech-enhancement",
+        "speech-separation"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:alibaba/EasyNLP",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "alibaba/EasyNLP",
+    "url": "https://github.com/alibaba/EasyNLP",
+    "popularity": {
+      "stars": 2180,
+      "forks": 258
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "deep-learning",
+        "fewshot-learning",
+        "knowledge-distillation",
+        "knowledge-pretraining",
+        "machine-learning",
+        "nlp",
+        "pretrained-models"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:qubvel/efficientnet",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "qubvel/efficientnet",
+    "url": "https://github.com/qubvel/efficientnet",
+    "popularity": {
+      "stars": 2101,
+      "forks": 463
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "classification",
+        "deep-learning",
+        "efficient",
+        "efficientnet",
+        "image-classification",
+        "imagenet",
+        "mobilenet",
+        "nasnetmobile"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:deepset-ai/FARM",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "deepset-ai/FARM",
+    "url": "https://github.com/deepset-ai/FARM",
+    "popularity": {
+      "stars": 1752,
+      "forks": 248
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "deep-learning",
+        "germanbert",
+        "language-models",
+        "ner",
+        "nlp",
+        "nlp-framework",
+        "nlp-library"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:balavenkatesh3322/CV-pretrained-model",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "balavenkatesh3322/CV-pretrained-model",
+    "url": "https://github.com/balavenkatesh3322/CV-pretrained-model",
+    "popularity": {
+      "stars": 1361,
+      "forks": 194
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "awesome-list",
+        "computer-vision",
+        "data-science",
+        "deep-learning",
+        "image",
+        "image-classification",
+        "keras",
+        "model"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:lightly-ai/lightly-train",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "lightly-ai/lightly-train",
+    "url": "https://github.com/lightly-ai/lightly-train",
+    "popularity": {
+      "stars": 1338,
+      "forks": 62
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "computer-vision",
+        "contrastive-learning",
+        "deep-learning",
+        "dinov2",
+        "dinov3",
+        "distillation",
+        "embeddings",
+        "eomt"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:segment-any-text/wtpsplit",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "segment-any-text/wtpsplit",
+    "url": "https://github.com/segment-any-text/wtpsplit",
+    "popularity": {
+      "stars": 1247,
+      "forks": 82
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "deep-learning",
+        "machine-learning",
+        "natural-language-processing",
+        "pretrained-models",
+        "python",
+        "sentence-boundary-detection",
+        "sentence-segmentation",
+        "sentence-segmenter"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:RUCAIBox/TextBox",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "RUCAIBox/TextBox",
+    "url": "https://github.com/RUCAIBox/TextBox",
+    "popularity": {
+      "stars": 1095,
+      "forks": 118
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "deep-learning",
+        "natural-language-generation",
+        "natural-language-processing",
+        "pretrained-models",
+        "python",
+        "pytorch",
+        "seq2seq",
+        "text-generation"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:qqlu/Entity",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "qqlu/Entity",
+    "url": "https://github.com/qqlu/Entity",
+    "popularity": {
+      "stars": 1040,
+      "forks": 60
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "cnn",
+        "computer-vision",
+        "condinst",
+        "deep-learning",
+        "detectron2",
+        "fcos",
+        "image-segmentation",
+        "instance-segmentation"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:nyukat/breast_cancer_classifier",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "nyukat/breast_cancer_classifier",
+    "url": "https://github.com/nyukat/breast_cancer_classifier",
+    "popularity": {
+      "stars": 885,
+      "forks": 276
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "breast-cancer",
+        "breast-cancer-diagnosis",
+        "classification",
+        "deep-learning",
+        "medical-image-analysis",
+        "medical-imaging",
+        "neural-network",
+        "pretrained-models"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:lmnt-com/diffwave",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "lmnt-com/diffwave",
+    "url": "https://github.com/lmnt-com/diffwave",
+    "popularity": {
+      "stars": 884,
+      "forks": 130
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "deep-learning",
+        "diffwave",
+        "machine-learning",
+        "neural-network",
+        "paper",
+        "pretrained-models",
+        "pytorch",
+        "speech"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:brade31919/SRGAN-tensorflow",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "brade31919/SRGAN-tensorflow",
+    "url": "https://github.com/brade31919/SRGAN-tensorflow",
+    "popularity": {
+      "stars": 858,
+      "forks": 279
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "cnn",
+        "deep-learning",
+        "generative-adversarial-network",
+        "pretrained-models",
+        "srgan",
+        "super-resolution",
+        "tensorflow",
+        "tf-slim"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:shariqfarooq123/AdaBins",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "shariqfarooq123/AdaBins",
+    "url": "https://github.com/shariqfarooq123/AdaBins",
+    "popularity": {
+      "stars": 782,
+      "forks": 161
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "adaptive-bins",
+        "deep-learning",
+        "depth-estimation",
+        "metric-depth-estimation",
+        "monocular-depth-estimation",
+        "neural-networks",
+        "pretrained-models",
+        "single-image-depth-prediction"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:ikergarcia1996/Self-Driving-Car-in-Video-Games",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "ikergarcia1996/Self-Driving-Car-in-Video-Games",
+    "url": "https://github.com/ikergarcia1996/Self-Driving-Car-in-Video-Games",
+    "popularity": {
+      "stars": 777,
+      "forks": 112
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "autonomous-driving",
+        "deep-learning",
+        "deep-neural-network",
+        "machine-learning",
+        "neural-network",
+        "pretrained-models",
+        "python",
+        "pytorch"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:creafz/pytorch-cnn-finetune",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "creafz/pytorch-cnn-finetune",
+    "url": "https://github.com/creafz/pytorch-cnn-finetune",
+    "popularity": {
+      "stars": 725,
+      "forks": 121
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "convolutional-neural-networks",
+        "deep-learning",
+        "pretrained-models",
+        "pytorch"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:moon-hotel/BertWithPretrained",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "moon-hotel/BertWithPretrained",
+    "url": "https://github.com/moon-hotel/BertWithPretrained",
+    "popularity": {
+      "stars": 606,
+      "forks": 108
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "deep-learning",
+        "nlp",
+        "pretrained-models",
+        "pytorch",
+        "question-answering",
+        "squad",
+        "swag"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:matlab-deep-learning/MATLAB-Deep-Learning-Model-Hub",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "matlab-deep-learning/MATLAB-Deep-Learning-Model-Hub",
+    "url": "https://github.com/matlab-deep-learning/MATLAB-Deep-Learning-Model-Hub",
+    "popularity": {
+      "stars": 551,
+      "forks": 116
+    },
+    "metadata": {
+      "language": "MATLAB",
+      "topics": [
+        "awesome",
+        "awesome-list",
+        "deep-learning",
+        "matlab",
+        "matlab-deep-learning",
+        "model-zoo",
+        "pretrained-models"
+      ],
+      "query": "topic:deep-learning topic:pretrained-models stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:lukasmasuch/best-of-ml-python",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "lukasmasuch/best-of-ml-python",
+    "url": "https://github.com/lukasmasuch/best-of-ml-python",
+    "popularity": {
+      "stars": 23252,
+      "forks": 3095
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "automl",
+        "chatgpt",
+        "data-analysis",
+        "data-science",
+        "data-visualization",
+        "data-visualizations",
+        "deep-learning",
+        "gpt"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:graykode/nlp-tutorial",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "graykode/nlp-tutorial",
+    "url": "https://github.com/graykode/nlp-tutorial",
+    "popularity": {
+      "stars": 14866,
+      "forks": 3965
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "attention",
+        "bert",
+        "natural-language-processing",
+        "nlp",
+        "paper",
+        "pytorch",
+        "tensorflow",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:GeeeekExplorer/nano-vllm",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "GeeeekExplorer/nano-vllm",
+    "url": "https://github.com/GeeeekExplorer/nano-vllm",
+    "popularity": {
+      "stars": 11970,
+      "forks": 1655
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "deep-learning",
+        "inference",
+        "llm",
+        "nlp",
+        "pytorch",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:jessevig/bertviz",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "jessevig/bertviz",
+    "url": "https://github.com/jessevig/bertviz",
+    "popularity": {
+      "stars": 7929,
+      "forks": 867
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "gpt2",
+        "machine-learning",
+        "natural-language-processing",
+        "neural-network",
+        "nlp",
+        "pytorch",
+        "roberta"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:Morizeyao/GPT2-Chinese",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "Morizeyao/GPT2-Chinese",
+    "url": "https://github.com/Morizeyao/GPT2-Chinese",
+    "popularity": {
+      "stars": 7600,
+      "forks": 1695
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "chinese",
+        "gpt-2",
+        "nlp",
+        "text-generation",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:codertimo/BERT-pytorch",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "codertimo/BERT-pytorch",
+    "url": "https://github.com/codertimo/BERT-pytorch",
+    "popularity": {
+      "stars": 6515,
+      "forks": 1328
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "language-model",
+        "nlp",
+        "pytorch",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:AutoGPTQ/AutoGPTQ",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "AutoGPTQ/AutoGPTQ",
+    "url": "https://github.com/AutoGPTQ/AutoGPTQ",
+    "popularity": {
+      "stars": 5027,
+      "forks": 532
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "deep-learning",
+        "inference",
+        "large-language-models",
+        "llms",
+        "nlp",
+        "pytorch",
+        "quantization",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:thunlp/OpenPrompt",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "thunlp/OpenPrompt",
+    "url": "https://github.com/thunlp/OpenPrompt",
+    "popularity": {
+      "stars": 4829,
+      "forks": 486
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "ai",
+        "deep-learning",
+        "natural-language-processing",
+        "natural-language-understanding",
+        "nlp",
+        "nlp-library",
+        "nlp-machine-learning",
+        "pre-trained-language-models"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:PaddlePaddle/awesome-DeepLearning",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "PaddlePaddle/awesome-DeepLearning",
+    "url": "https://github.com/PaddlePaddle/awesome-DeepLearning",
+    "popularity": {
+      "stars": 3578,
+      "forks": 858
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "bert",
+        "classification",
+        "cnn",
+        "detection",
+        "dqn",
+        "dssm",
+        "dynabert",
+        "gan"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:datawhalechina/learn-nlp-with-transformers",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "datawhalechina/learn-nlp-with-transformers",
+    "url": "https://github.com/datawhalechina/learn-nlp-with-transformers",
+    "popularity": {
+      "stars": 3120,
+      "forks": 498
+    },
+    "metadata": {
+      "language": "Shell",
+      "topics": [
+        "bert",
+        "nlp",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:guillaume-be/rust-bert",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "guillaume-be/rust-bert",
+    "url": "https://github.com/guillaume-be/rust-bert",
+    "popularity": {
+      "stars": 3046,
+      "forks": 242
+    },
+    "metadata": {
+      "language": "Rust",
+      "topics": [
+        "bart",
+        "bert",
+        "deep-learning",
+        "electra",
+        "gpt",
+        "gpt-2",
+        "language-generation",
+        "machine-learning"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:yangjianxin1/GPT2-chitchat",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "yangjianxin1/GPT2-chitchat",
+    "url": "https://github.com/yangjianxin1/GPT2-chitchat",
+    "popularity": {
+      "stars": 3011,
+      "forks": 673
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "chichat",
+        "dialogpt",
+        "dialogue-model",
+        "gpt-2",
+        "gpt2",
+        "nlp",
+        "text-generation",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:km1994/NLP-Interview-Notes",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "km1994/NLP-Interview-Notes",
+    "url": "https://github.com/km1994/NLP-Interview-Notes",
+    "popularity": {
+      "stars": 2579,
+      "forks": 504
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "bert",
+        "deel-learning",
+        "ner",
+        "nlp",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:curiousily/Getting-Things-Done-with-Pytorch",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "curiousily/Getting-Things-Done-with-Pytorch",
+    "url": "https://github.com/curiousily/Getting-Things-Done-with-Pytorch",
+    "popularity": {
+      "stars": 2482,
+      "forks": 647
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "anomaly-detection",
+        "bert",
+        "computer-vision",
+        "coronavirus",
+        "deep-learning",
+        "face-detection",
+        "face-recognition",
+        "lstm"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:jsksxs360/How-to-use-Transformers",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "jsksxs360/How-to-use-Transformers",
+    "url": "https://github.com/jsksxs360/How-to-use-Transformers",
+    "popularity": {
+      "stars": 1849,
+      "forks": 223
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "classification",
+        "natural-language-processing",
+        "ner",
+        "nlp",
+        "prompt",
+        "pytorch",
+        "qa"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:SqueezeAILab/LLMCompiler",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "SqueezeAILab/LLMCompiler",
+    "url": "https://github.com/SqueezeAILab/LLMCompiler",
+    "popularity": {
+      "stars": 1825,
+      "forks": 126
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "efficient-inference",
+        "function-calling",
+        "large-language-models",
+        "llama",
+        "llama2",
+        "llm",
+        "llm-agent",
+        "llm-agents"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:yongzhuo/Keras-TextClassification",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "yongzhuo/Keras-TextClassification",
+    "url": "https://github.com/yongzhuo/Keras-TextClassification",
+    "popularity": {
+      "stars": 1809,
+      "forks": 401
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "albert",
+        "bert",
+        "capsule",
+        "charcnn",
+        "crnn",
+        "dcnn",
+        "dpcnn",
+        "embeddings"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:yoshitomo-matsubara/torchdistill",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "yoshitomo-matsubara/torchdistill",
+    "url": "https://github.com/yoshitomo-matsubara/torchdistill",
+    "popularity": {
+      "stars": 1596,
+      "forks": 144
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "amazon-sagemaker-lab",
+        "cifar10",
+        "cifar100",
+        "coco",
+        "colab-notebook",
+        "glue",
+        "google-colab",
+        "image-classification"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:Tencent/TurboTransformers",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "Tencent/TurboTransformers",
+    "url": "https://github.com/Tencent/TurboTransformers",
+    "popularity": {
+      "stars": 1544,
+      "forks": 205
+    },
+    "metadata": {
+      "language": "C++",
+      "topics": [
+        "albert",
+        "bert",
+        "decoder",
+        "gpt2",
+        "gpu",
+        "huggingface-transformers",
+        "inference",
+        "machine-translation"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:MilaNLProc/contextualized-topic-models",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "MilaNLProc/contextualized-topic-models",
+    "url": "https://github.com/MilaNLProc/contextualized-topic-models",
+    "popularity": {
+      "stars": 1265,
+      "forks": 150
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "embeddings",
+        "multilingual-models",
+        "multilingual-topic-models",
+        "neural-topic-models",
+        "nlp",
+        "nlp-library",
+        "nlp-machine-learning"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:NVIDIA-Merlin/Transformers4Rec",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "NVIDIA-Merlin/Transformers4Rec",
+    "url": "https://github.com/NVIDIA-Merlin/Transformers4Rec",
+    "popularity": {
+      "stars": 1251,
+      "forks": 158
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "gtp",
+        "huggingface",
+        "language-model",
+        "nlp",
+        "pytorch",
+        "recommender-system",
+        "recsys"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:patil-suraj/question_generation",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "patil-suraj/question_generation",
+    "url": "https://github.com/patil-suraj/question_generation",
+    "popularity": {
+      "stars": 1143,
+      "forks": 350
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "deep-learning",
+        "natural-language-generation",
+        "natural-language-processing",
+        "nlg",
+        "nlp",
+        "question-generation",
+        "t5",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:cedrickchee/awesome-transformer-nlp",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "cedrickchee/awesome-transformer-nlp",
+    "url": "https://github.com/cedrickchee/awesome-transformer-nlp",
+    "popularity": {
+      "stars": 1130,
+      "forks": 133
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "attention-mechanism",
+        "awesome",
+        "awesome-list",
+        "bert",
+        "chatgpt",
+        "gpt-2",
+        "gpt-3",
+        "gpt-4"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:ashishpatel26/Treasure-of-Transformers",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "ashishpatel26/Treasure-of-Transformers",
+    "url": "https://github.com/ashishpatel26/Treasure-of-Transformers",
+    "popularity": {
+      "stars": 1124,
+      "forks": 230
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "awesome",
+        "bert",
+        "jax",
+        "language-model",
+        "language-models",
+        "model-hub",
+        "natural-language-generation",
+        "natural-language-processing"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:liucongg/GPT2-NewsTitle",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "liucongg/GPT2-NewsTitle",
+    "url": "https://github.com/liucongg/GPT2-NewsTitle",
+    "popularity": {
+      "stars": 1115,
+      "forks": 181
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "chinese",
+        "gpt2",
+        "news-summarization",
+        "nlp",
+        "text-generation",
+        "torch",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:MorvanZhou/NLP-Tutorials",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "MorvanZhou/NLP-Tutorials",
+    "url": "https://github.com/MorvanZhou/NLP-Tutorials",
+    "popularity": {
+      "stars": 955,
+      "forks": 317
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "attention",
+        "bert",
+        "elmo",
+        "gpt",
+        "nlp",
+        "seq2seq",
+        "transformer",
+        "tutorial"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:explosion/curated-transformers",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "explosion/curated-transformers",
+    "url": "https://github.com/explosion/curated-transformers",
+    "popularity": {
+      "stars": 894,
+      "forks": 35
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "albert",
+        "bert",
+        "camembert",
+        "dolly2",
+        "falcon",
+        "gptneox",
+        "llama",
+        "llm"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:Separius/BERT-keras",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "Separius/BERT-keras",
+    "url": "https://github.com/Separius/BERT-keras",
+    "popularity": {
+      "stars": 815,
+      "forks": 191
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "keras",
+        "language-modeling",
+        "nlp",
+        "pretrained-models",
+        "tensorflow",
+        "theano",
+        "transfer-learning",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:google-research/bigbird",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "google-research/bigbird",
+    "url": "https://github.com/google-research/bigbird",
+    "popularity": {
+      "stars": 631,
+      "forks": 108
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "bert",
+        "deep-learning",
+        "longer-sequences",
+        "nlp",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:mit-han-lab/lite-transformer",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "mit-han-lab/lite-transformer",
+    "url": "https://github.com/mit-han-lab/lite-transformer",
+    "popularity": {
+      "stars": 610,
+      "forks": 83
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "nlp",
+        "pytorch",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:changwookjun/nlp-paper",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "changwookjun/nlp-paper",
+    "url": "https://github.com/changwookjun/nlp-paper",
+    "popularity": {
+      "stars": 596,
+      "forks": 122
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "bert",
+        "deeplearning",
+        "language-model",
+        "meachinelearning",
+        "nlp",
+        "paper",
+        "transfer-learning",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:Ki6an/fastT5",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "Ki6an/fastT5",
+    "url": "https://github.com/Ki6an/fastT5",
+    "popularity": {
+      "stars": 589,
+      "forks": 74
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "deep-learning",
+        "fast",
+        "fastt5",
+        "inference",
+        "inference-speed",
+        "nlp",
+        "onnx",
+        "onnxruntime"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:chengchingwen/Transformers.jl",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "chengchingwen/Transformers.jl",
+    "url": "https://github.com/chengchingwen/Transformers.jl",
+    "popularity": {
+      "stars": 567,
+      "forks": 81
+    },
+    "metadata": {
+      "language": "Julia",
+      "topics": [
+        "attention",
+        "deep-learning",
+        "flux",
+        "machine-learning",
+        "natural-language-processing",
+        "nlp",
+        "transformer"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:JayYip/m3tl",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "JayYip/m3tl",
+    "url": "https://github.com/JayYip/m3tl",
+    "popularity": {
+      "stars": 543,
+      "forks": 124
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "bert",
+        "cws",
+        "encoder-decoder",
+        "multi-task-learning",
+        "multitask-learning",
+        "named-entity-recognition",
+        "ner",
+        "nlp"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:subho406/OmniNet",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "subho406/OmniNet",
+    "url": "https://github.com/subho406/OmniNet",
+    "popularity": {
+      "stars": 513,
+      "forks": 59
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "artificial-intelligence",
+        "deep-learning",
+        "image-captioning",
+        "machine-learning",
+        "multimodal-learning",
+        "multitask-learning",
+        "neural-network",
+        "nlp"
+      ],
+      "query": "topic:transformer topic:nlp stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:PINTO0309/PINTO_model_zoo",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "PINTO0309/PINTO_model_zoo",
+    "url": "https://github.com/PINTO0309/PINTO_model_zoo",
+    "popularity": {
+      "stars": 4087,
+      "forks": 635
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "caffe",
+        "computer-vision",
+        "coreml",
+        "edgetpu",
+        "keras",
+        "mediapipe",
+        "model",
+        "model-zoo"
+      ],
+      "query": "topic:computer-vision topic:model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:OvidijusParsiunas/myvision",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "OvidijusParsiunas/myvision",
+    "url": "https://github.com/OvidijusParsiunas/myvision",
+    "popularity": {
+      "stars": 608,
+      "forks": 70
+    },
+    "metadata": {
+      "language": "JavaScript",
+      "topics": [
+        "ai",
+        "annotation",
+        "annotation-tool",
+        "coco",
+        "computer-vision",
+        "image",
+        "image-annotation",
+        "label"
+      ],
+      "query": "topic:computer-vision topic:model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:jingyaogong/minimind",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "jingyaogong/minimind",
+    "url": "https://github.com/jingyaogong/minimind",
+    "popularity": {
+      "stars": 40332,
+      "forks": 4856
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "artificial-intelligence",
+        "large-language-model"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:ScrapeGraphAI/Scrapegraph-ai",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "ScrapeGraphAI/Scrapegraph-ai",
+    "url": "https://github.com/ScrapeGraphAI/Scrapegraph-ai",
+    "popularity": {
+      "stars": 22830,
+      "forks": 1994
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "ai-crawler",
+        "ai-scraping",
+        "ai-search",
+        "crawler",
+        "data-extraction",
+        "firecrawl-alternative",
+        "large-language-model",
+        "llm"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:The-Pocket/PocketFlow-Tutorial-Codebase-Knowledge",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "The-Pocket/PocketFlow-Tutorial-Codebase-Knowledge",
+    "url": "https://github.com/The-Pocket/PocketFlow-Tutorial-Codebase-Knowledge",
+    "popularity": {
+      "stars": 12112,
+      "forks": 1384
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "coding",
+        "large-language-model",
+        "large-language-models",
+        "llm",
+        "llm-agent",
+        "llm-agents",
+        "llm-application",
+        "llm-apps"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:OpenSPG/KAG",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "OpenSPG/KAG",
+    "url": "https://github.com/OpenSPG/KAG",
+    "popularity": {
+      "stars": 8583,
+      "forks": 664
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "knowledge-graph",
+        "large-language-model",
+        "logical-reasoning",
+        "multi-hop-question-answering",
+        "trustfulness"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:InternLM/InternLM",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "InternLM/InternLM",
+    "url": "https://github.com/InternLM/InternLM",
+    "popularity": {
+      "stars": 7160,
+      "forks": 506
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "chatbot",
+        "chinese",
+        "fine-tuning-llm",
+        "flash-attention",
+        "gpt",
+        "large-language-model",
+        "llm",
+        "long-context"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:open-compass/opencompass",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "open-compass/opencompass",
+    "url": "https://github.com/open-compass/opencompass",
+    "popularity": {
+      "stars": 6708,
+      "forks": 738
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "benchmark",
+        "chatgpt",
+        "evaluation",
+        "large-language-model",
+        "llama2",
+        "llama3",
+        "llm",
+        "openai"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:0xPlaygrounds/rig",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "0xPlaygrounds/rig",
+    "url": "https://github.com/0xPlaygrounds/rig",
+    "popularity": {
+      "stars": 6232,
+      "forks": 676
+    },
+    "metadata": {
+      "language": "Rust",
+      "topics": [
+        "agent",
+        "ai",
+        "artificial-intelligence",
+        "automation",
+        "generative-ai",
+        "large-language-model",
+        "llm",
+        "llmops"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:gluonfield/enchanted",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "gluonfield/enchanted",
+    "url": "https://github.com/gluonfield/enchanted",
+    "popularity": {
+      "stars": 5820,
+      "forks": 401
+    },
+    "metadata": {
+      "language": "Swift",
+      "topics": [
+        "ios",
+        "large-language-model",
+        "llama",
+        "llama2",
+        "llm",
+        "mistral",
+        "ollama",
+        "ollama-app"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:BrainBlend-AI/atomic-agents",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "BrainBlend-AI/atomic-agents",
+    "url": "https://github.com/BrainBlend-AI/atomic-agents",
+    "popularity": {
+      "stars": 5724,
+      "forks": 470
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "ai",
+        "artificial-intelligence",
+        "large-language-model",
+        "large-language-models",
+        "llms",
+        "openai",
+        "openai-api"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:skyzh/tiny-llm",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "skyzh/tiny-llm",
+    "url": "https://github.com/skyzh/tiny-llm",
+    "popularity": {
+      "stars": 3845,
+      "forks": 283
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "course",
+        "large-language-model",
+        "llm",
+        "python",
+        "qwen",
+        "qwen2",
+        "serving",
+        "vllm"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:verazuo/jailbreak_llms",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "verazuo/jailbreak_llms",
+    "url": "https://github.com/verazuo/jailbreak_llms",
+    "popularity": {
+      "stars": 3576,
+      "forks": 317
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "chatgpt",
+        "jailbreak",
+        "jailbreaking",
+        "large-language-model",
+        "llm",
+        "llm-security",
+        "prompt"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:ridgerchu/matmulfreellm",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "ridgerchu/matmulfreellm",
+    "url": "https://github.com/ridgerchu/matmulfreellm",
+    "popularity": {
+      "stars": 3057,
+      "forks": 199
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "large-language-model",
+        "linear-transformer",
+        "llm"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:JIA-Lab-research/LISA",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "JIA-Lab-research/LISA",
+    "url": "https://github.com/JIA-Lab-research/LISA",
+    "popularity": {
+      "stars": 2590,
+      "forks": 199
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "large-language-model",
+        "llm",
+        "multi-modal",
+        "segmentation"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:RManLuo/Awesome-LLM-KG",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "RManLuo/Awesome-LLM-KG",
+    "url": "https://github.com/RManLuo/Awesome-LLM-KG",
+    "popularity": {
+      "stars": 2571,
+      "forks": 177
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "awsome",
+        "chatgpt",
+        "gpt-4",
+        "kg",
+        "knowledge-graph",
+        "language-model",
+        "large-language-model",
+        "llm"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:hyp1231/awesome-llm-powered-agent",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "hyp1231/awesome-llm-powered-agent",
+    "url": "https://github.com/hyp1231/awesome-llm-powered-agent",
+    "popularity": {
+      "stars": 2203,
+      "forks": 190
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "awesome-list",
+        "chatgpt",
+        "embodied-agent",
+        "embodied-ai",
+        "foundation-model",
+        "foundation-models",
+        "generative-agents",
+        "generative-ai"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:intel/intel-extension-for-transformers",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "intel/intel-extension-for-transformers",
+    "url": "https://github.com/intel/intel-extension-for-transformers",
+    "popularity": {
+      "stars": 2175,
+      "forks": 217
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "4-bits",
+        "autoround",
+        "chatbot",
+        "chatpdf",
+        "gaudi3",
+        "habana",
+        "intel-optimized-llamacpp",
+        "large-language-model"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:samchon/nestia",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "samchon/nestia",
+    "url": "https://github.com/samchon/nestia",
+    "popularity": {
+      "stars": 2126,
+      "forks": 120
+    },
+    "metadata": {
+      "language": "TypeScript",
+      "topics": [
+        "agent",
+        "ai",
+        "api",
+        "class-validator",
+        "decorator",
+        "hacktoberfest",
+        "large-language-model",
+        "llm"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:genieincodebottle/generative-ai",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "genieincodebottle/generative-ai",
+    "url": "https://github.com/genieincodebottle/generative-ai",
+    "popularity": {
+      "stars": 1795,
+      "forks": 439
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "agentic-ai",
+        "agentic-framework",
+        "claude",
+        "gemini",
+        "genai",
+        "genai-usecase",
+        "generative-ai",
+        "interview-questions"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:zchoi/Awesome-Embodied-Robotics-and-Agent",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "zchoi/Awesome-Embodied-Robotics-and-Agent",
+    "url": "https://github.com/zchoi/Awesome-Embodied-Robotics-and-Agent",
+    "popularity": {
+      "stars": 1724,
+      "forks": 92
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "agent",
+        "awesome",
+        "embodied-agent",
+        "embodied-ai",
+        "large-language-model",
+        "manipulator-robotics",
+        "navigation",
+        "planning-algorithms"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:EgoAlpha/prompt-in-context-learning",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "EgoAlpha/prompt-in-context-learning",
+    "url": "https://github.com/EgoAlpha/prompt-in-context-learning",
+    "popularity": {
+      "stars": 1688,
+      "forks": 101
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "ai-agent",
+        "chain-of-thought",
+        "chatbot",
+        "chatgpt",
+        "chatgpt-api",
+        "cot",
+        "in-context-learning",
+        "language-modeling"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:starpig1129/DATAGEN",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "starpig1129/DATAGEN",
+    "url": "https://github.com/starpig1129/DATAGEN",
+    "popularity": {
+      "stars": 1627,
+      "forks": 222
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "agent",
+        "ai",
+        "ai-data-analysis",
+        "artificial-intelligence",
+        "code-generation",
+        "data-analysis",
+        "data-analytics",
+        "data-science"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:ByteDance-Seed/Seed1.5-VL",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "ByteDance-Seed/Seed1.5-VL",
+    "url": "https://github.com/ByteDance-Seed/Seed1.5-VL",
+    "popularity": {
+      "stars": 1551,
+      "forks": 63
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "cookbook",
+        "large-language-model",
+        "multimodal-large-language-models",
+        "vision-language-model"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:llm-jp/awesome-japanese-llm",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "llm-jp/awesome-japanese-llm",
+    "url": "https://github.com/llm-jp/awesome-japanese-llm",
+    "popularity": {
+      "stars": 1348,
+      "forks": 42
+    },
+    "metadata": {
+      "language": "TypeScript",
+      "topics": [
+        "foundation-models",
+        "generative-ai",
+        "generative-model",
+        "generative-models",
+        "japanese",
+        "japanese-language",
+        "japanese-language-model",
+        "japanese-llm"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:Tebmer/Awesome-Knowledge-Distillation-of-LLMs",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "Tebmer/Awesome-Knowledge-Distillation-of-LLMs",
+    "url": "https://github.com/Tebmer/Awesome-Knowledge-Distillation-of-LLMs",
+    "popularity": {
+      "stars": 1259,
+      "forks": 69
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "alignment",
+        "compression",
+        "data-augmentation",
+        "data-synthesis",
+        "feedback",
+        "instruction-following",
+        "kd",
+        "knowledge-distillation"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:acon96/home-llm",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "acon96/home-llm",
+    "url": "https://github.com/acon96/home-llm",
+    "popularity": {
+      "stars": 1252,
+      "forks": 128
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "homeassistant-custom-component",
+        "large-language-model"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:AkaliKong/MiniOneRec",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "AkaliKong/MiniOneRec",
+    "url": "https://github.com/AkaliKong/MiniOneRec",
+    "popularity": {
+      "stars": 1144,
+      "forks": 165
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "generative-ai",
+        "generative-recommendation",
+        "generative-recommenders",
+        "large-language-model",
+        "large-language-models",
+        "llm",
+        "recommendation",
+        "recommendation-system"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:X-LANCE/SLAM-LLM",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "X-LANCE/SLAM-LLM",
+    "url": "https://github.com/X-LANCE/SLAM-LLM",
+    "popularity": {
+      "stars": 984,
+      "forks": 106
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "audio-processing",
+        "large-language-model",
+        "multimodal-large-language-models",
+        "music-processing",
+        "peft",
+        "speech-processing"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:thinkwee/AgentsMeetRL",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "thinkwee/AgentsMeetRL",
+    "url": "https://github.com/thinkwee/AgentsMeetRL",
+    "popularity": {
+      "stars": 838,
+      "forks": 37
+    },
+    "metadata": {
+      "language": "HTML",
+      "topics": [
+        "agent",
+        "agentic-ai",
+        "agentic-coding",
+        "agentic-workflow",
+        "awesome-list",
+        "large-language-model",
+        "llm",
+        "llm-age"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:EasyJailbreak/EasyJailbreak",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "EasyJailbreak/EasyJailbreak",
+    "url": "https://github.com/EasyJailbreak/EasyJailbreak",
+    "popularity": {
+      "stars": 819,
+      "forks": 79
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "discrete-optimization",
+        "jailbreak",
+        "jailbreak-framework",
+        "large-language-model",
+        "llm-safety-benchmark",
+        "llm-security"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:zhanshijinwat/Steel-LLM",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "zhanshijinwat/Steel-LLM",
+    "url": "https://github.com/zhanshijinwat/Steel-LLM",
+    "popularity": {
+      "stars": 789,
+      "forks": 78
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "large-language-model",
+        "llama",
+        "llm",
+        "qwen"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:ImprintLab/Medical-Graph-RAG",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "ImprintLab/Medical-Graph-RAG",
+    "url": "https://github.com/ImprintLab/Medical-Graph-RAG",
+    "popularity": {
+      "stars": 740,
+      "forks": 126
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "deep-learning",
+        "graph-rag",
+        "large-language-model",
+        "large-language-models",
+        "machine-learning",
+        "medical",
+        "retrieval-augmented-generation"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:onejune2018/Awesome-LLM-Eval",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "onejune2018/Awesome-LLM-Eval",
+    "url": "https://github.com/onejune2018/Awesome-LLM-Eval",
+    "popularity": {
+      "stars": 614,
+      "forks": 51
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "awsome-list",
+        "awsome-lists",
+        "benchmark",
+        "bert",
+        "chatglm",
+        "chatgpt",
+        "dataset",
+        "evaluation"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:showlab/VLog",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "showlab/VLog",
+    "url": "https://github.com/showlab/VLog",
+    "popularity": {
+      "stars": 589,
+      "forks": 31
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "chatgpt",
+        "langchain",
+        "large-language-model",
+        "video-language",
+        "vocabulary",
+        "whisper"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:yingpengma/Awesome-Story-Generation",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "yingpengma/Awesome-Story-Generation",
+    "url": "https://github.com/yingpengma/Awesome-Story-Generation",
+    "popularity": {
+      "stars": 587,
+      "forks": 28
+    },
+    "metadata": {
+      "language": "Python",
+      "topics": [
+        "language-generation",
+        "large-language-model",
+        "narrative",
+        "natural-language-processing",
+        "nlp",
+        "novel",
+        "open-ended",
+        "story"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:casbin/caswaf",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "casbin/caswaf",
+    "url": "https://github.com/casbin/caswaf",
+    "popularity": {
+      "stars": 555,
+      "forks": 58
+    },
+    "metadata": {
+      "language": "Go",
+      "topics": [
+        "ai",
+        "firewall",
+        "gateway",
+        "http",
+        "large-language-model",
+        "llm",
+        "modsecurity",
+        "modsecurity-core-rule-set"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:SeekingDream/Static-to-Dynamic-LLMEval",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "SeekingDream/Static-to-Dynamic-LLMEval",
+    "url": "https://github.com/SeekingDream/Static-to-Dynamic-LLMEval",
+    "popularity": {
+      "stars": 545,
+      "forks": 46
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "benchmark",
+        "dynamic-evaluation",
+        "evaluation",
+        "large-language-model",
+        "llm",
+        "llms",
+        "testing"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:chrisliu298/awesome-llm-unlearning",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "chrisliu298/awesome-llm-unlearning",
+    "url": "https://github.com/chrisliu298/awesome-llm-unlearning",
+    "popularity": {
+      "stars": 541,
+      "forks": 30
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "alignment",
+        "awesome",
+        "large-language-model",
+        "llm",
+        "llm-unlearning",
+        "machine-unlearning",
+        "unlearning"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:Wang-ML-Lab/llm-continual-learning-survey",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "Wang-ML-Lab/llm-continual-learning-survey",
+    "url": "https://github.com/Wang-ML-Lab/llm-continual-learning-survey",
+    "popularity": {
+      "stars": 526,
+      "forks": 22
+    },
+    "metadata": {
+      "language": null,
+      "topics": [
+        "continual-learning",
+        "large-language-model",
+        "llm"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  },
+  {
+    "target_id": "gh:dylanhogg/llmgraph",
+    "source": "github",
+    "tipo_target": "repo",
+    "name": "dylanhogg/llmgraph",
+    "url": "https://github.com/dylanhogg/llmgraph",
+    "popularity": {
+      "stars": 502,
+      "forks": 31
+    },
+    "metadata": {
+      "language": "Jupyter Notebook",
+      "topics": [
+        "chatgpt",
+        "gephi",
+        "gexf",
+        "graph",
+        "graphml",
+        "knowledge-graph",
+        "large-language-model",
+        "llama2"
+      ],
+      "query": "topic:large-language-model stars:>500"
+    },
+    "fetched_at": "2026-03-03T17:08:25.013745Z"
+  }
+]

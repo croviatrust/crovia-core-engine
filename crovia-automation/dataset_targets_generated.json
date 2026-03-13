@@ -1,0 +1,1062 @@
+{
+  "schema": "crovia.targets.v1",
+  "generated_at": "2026-01-26T20:13:05.833745Z",
+  "criteria": {
+    "download_threshold": 5000,
+    "target_type": "dataset",
+    "limit": 150,
+    "note": "Mechanical criterion - not editorial selection"
+  },
+  "targets": [
+    {
+      "target_id": "huggingface/documentation-images",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1780257
+      }
+    },
+    {
+      "target_id": "hf-doc-build/doc-build",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1321498
+      }
+    },
+    {
+      "target_id": "deepmind/code_contests",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1279793
+      }
+    },
+    {
+      "target_id": "google-research-datasets/mbpp",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1278157
+      }
+    },
+    {
+      "target_id": "nvidia/PhysicalAI-Robotics-GR00T-X-Embodiment-Sim",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1168616
+      }
+    },
+    {
+      "target_id": "KakologArchives/KakologArchives",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1130834
+      }
+    },
+    {
+      "target_id": "Salesforce/GiftEvalPretrain",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 1008798
+      }
+    },
+    {
+      "target_id": "m-a-p/FineFineWeb",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 871245
+      }
+    },
+    {
+      "target_id": "NTU-NLP-sg/xCodeEval",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 841751
+      }
+    },
+    {
+      "target_id": "Salesforce/wikitext",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 829911
+      }
+    },
+    {
+      "target_id": "lavita/medical-qa-shared-task-v1-toy",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 769650
+      }
+    },
+    {
+      "target_id": "banned-historical-archives/banned-historical-archives",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 763342
+      }
+    },
+    {
+      "target_id": "allenai/objaverse",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 684335
+      }
+    },
+    {
+      "target_id": "princeton-nlp/SWE-bench_Verified",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 604744
+      }
+    },
+    {
+      "target_id": "tasl-lab/uniocc",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 583435
+      }
+    },
+    {
+      "target_id": "updatebao/geonamebase_1",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 516087
+      }
+    },
+    {
+      "target_id": "allenai/c4",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 508415
+      }
+    },
+    {
+      "target_id": "openai/gsm8k",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 466587
+      }
+    },
+    {
+      "target_id": "AquaV/genshin-voices-separated",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 437804
+      }
+    },
+    {
+      "target_id": "allenai/dolma3_dolmino_mix-100B-1125",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 378457
+      }
+    },
+    {
+      "target_id": "allenai/dolma3_mix-6T-1025-7B",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 374098
+      }
+    },
+    {
+      "target_id": "HuggingFaceFW/fineweb-edu",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 343203
+      }
+    },
+    {
+      "target_id": "nyu-mll/glue",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 318879
+      }
+    },
+    {
+      "target_id": "mvp-lab/LLaVA-OneVision-1.5-Mid-Training-85M",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 315715
+      }
+    },
+    {
+      "target_id": "YiboZhang2001/TexVerse",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 300020
+      }
+    },
+    {
+      "target_id": "xlangai/ubuntu_osworld_file_cache",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 296847
+      }
+    },
+    {
+      "target_id": "jacobbieker/eumetsat-iodc",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 289792
+      }
+    },
+    {
+      "target_id": "cais/mmlu",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 282503
+      }
+    },
+    {
+      "target_id": "rtrm/debug",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 281156
+      }
+    },
+    {
+      "target_id": "travisdriver/astrovision-data",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 278214
+      }
+    },
+    {
+      "target_id": "Tuxifan/UbuntuIRC",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 272560
+      }
+    },
+    {
+      "target_id": "allenai/ai2_arc",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 272240
+      }
+    },
+    {
+      "target_id": "shenyunhang/VoiceAssistant-400K",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 270176
+      }
+    },
+    {
+      "target_id": "huggingface-course/documentation-images",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 268215
+      }
+    },
+    {
+      "target_id": "wendyl21/parity-experiments",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 266223
+      }
+    },
+    {
+      "target_id": "cadene/droid",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 260416
+      }
+    },
+    {
+      "target_id": "YiboZhang2001/TexVerse-1K",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 228479
+      }
+    },
+    {
+      "target_id": "huggingface/badges",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 227301
+      }
+    },
+    {
+      "target_id": "HuggingFaceFW/fineweb",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 226559
+      }
+    },
+    {
+      "target_id": "genrobot2025/10Kh-RealOmin-OpenData",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 218601
+      }
+    },
+    {
+      "target_id": "bigcode/commitpackft",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 211486
+      }
+    },
+    {
+      "target_id": "Rowan/hellaswag",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 210482
+      }
+    },
+    {
+      "target_id": "aps/super_glue",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 206700
+      }
+    },
+    {
+      "target_id": "World-Snapshot/wsg-Archive",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 205844
+      }
+    },
+    {
+      "target_id": "allenai/MADLAD-400",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 202970
+      }
+    },
+    {
+      "target_id": "cadene/droid_1.0.1",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 196802
+      }
+    },
+    {
+      "target_id": "liwu/MNBVC",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 193526
+      }
+    },
+    {
+      "target_id": "bezirganyan/LUMA",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 192274
+      }
+    },
+    {
+      "target_id": "OpenSQZ/AutoMathText-V2",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 191434
+      }
+    },
+    {
+      "target_id": "allenai/winogrande",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 190760
+      }
+    },
+    {
+      "target_id": "applied-ai-018/peacock-data-public-datasets-idc-warc-data",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 187869
+      }
+    },
+    {
+      "target_id": "Symato/cc",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 185913
+      }
+    },
+    {
+      "target_id": "AnimeFans/Iwara_MMD_all",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 183213
+      }
+    },
+    {
+      "target_id": "nvidia/PhysicalAI-Autonomous-Vehicles",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 172379
+      }
+    },
+    {
+      "target_id": "EpicPinkPenguin/procgen",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 165422
+      }
+    },
+    {
+      "target_id": "agents-course/course-images",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 164350
+      }
+    },
+    {
+      "target_id": "wecover/OPUS_TED2020",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 161852
+      }
+    },
+    {
+      "target_id": "qqjz/VoxEval",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 160384
+      }
+    },
+    {
+      "target_id": "haesungoh/MVAdapt-Dataset-Mini",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 160228
+      }
+    },
+    {
+      "target_id": "Gourieff/ReActor",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 155916
+      }
+    },
+    {
+      "target_id": "Jsinowitz/snodas-snowmelt-cache",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 154261
+      }
+    },
+    {
+      "target_id": "IPEC-COMMUNITY/droid_lerobot",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 153980
+      }
+    },
+    {
+      "target_id": "ieasybooks-org/prophet-mosque-library",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 152455
+      }
+    },
+    {
+      "target_id": "openai/openai_humaneval",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 148475
+      }
+    },
+    {
+      "target_id": "ryanmarten/OpenThoughts-1k-sample",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 143071
+      }
+    },
+    {
+      "target_id": "RogersPyke/robocoin_10K_20260121",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 140260
+      }
+    },
+    {
+      "target_id": "mlfoundations/dclm-baseline-1.0",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 139116
+      }
+    },
+    {
+      "target_id": "LEAP/ClimSim_low-res_aqua-planet",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 138985
+      }
+    },
+    {
+      "target_id": "CohereLabs/xP3x",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 135559
+      }
+    },
+    {
+      "target_id": "nvidia/PhysicalAI-Autonomous-Vehicle-Cosmos-Drive-Dreams",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 131928
+      }
+    },
+    {
+      "target_id": "IPEC-COMMUNITY/language_table_lerobot",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 130475
+      }
+    },
+    {
+      "target_id": "Puyiiii/Cars-Gaussian-Seed",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 128267
+      }
+    },
+    {
+      "target_id": "Zyphra/Zyda-2",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 127545
+      }
+    },
+    {
+      "target_id": "SALT-Research/DeepDialogue-xtts",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 126037
+      }
+    },
+    {
+      "target_id": "anfera236/HHDC",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 121170
+      }
+    },
+    {
+      "target_id": "huggingface/brand-assets",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 120396
+      }
+    },
+    {
+      "target_id": "HuggingFaceM4/FineVision",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 118315
+      }
+    },
+    {
+      "target_id": "behavior-1k/2025-challenge-demos",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 117186
+      }
+    },
+    {
+      "target_id": "shi-labs/oneformer_demo",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 113973
+      }
+    },
+    {
+      "target_id": "FDlalala/tranS",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 113767
+      }
+    },
+    {
+      "target_id": "Tiger14n/osumaps19866",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 113540
+      }
+    },
+    {
+      "target_id": "IPEC-COMMUNITY/fractal20220817_data_lerobot",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 112294
+      }
+    },
+    {
+      "target_id": "wecover/OPUS_Tatoeba",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 112260
+      }
+    },
+    {
+      "target_id": "Yanis236/fsc-180k",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 112253
+      }
+    },
+    {
+      "target_id": "banned-historical-archives/wenhuibao_disk",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 111952
+      }
+    },
+    {
+      "target_id": "Narsil/image_dummy",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 111383
+      }
+    },
+    {
+      "target_id": "DeliberatorArchiver/asmr-archive-data-02",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 111339
+      }
+    },
+    {
+      "target_id": "applied-ai-018/peacock-data-public-datasets-idc",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 110863
+      }
+    },
+    {
+      "target_id": "HuggingFaceFW/fineweb-2",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 110207
+      }
+    },
+    {
+      "target_id": "hf-doc-build/doc-build-dev",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 110044
+      }
+    },
+    {
+      "target_id": "nguha/legalbench",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 109777
+      }
+    },
+    {
+      "target_id": "aaajamjam/scannetpp",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 108525
+      }
+    },
+    {
+      "target_id": "jxcai-scale/hle-public-questions",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 106593
+      }
+    },
+    {
+      "target_id": "Zyphra/dclm-dedup",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 105387
+      }
+    },
+    {
+      "target_id": "HuggingFaceH4/MATH-500",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 104895
+      }
+    },
+    {
+      "target_id": "Respair/BBC_Pargar",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 104632
+      }
+    },
+    {
+      "target_id": "anon8231489123/ShareGPT_Vicuna_unfiltered",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 104547
+      }
+    },
+    {
+      "target_id": "cerebras/SlimPajama-627B",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 104236
+      }
+    },
+    {
+      "target_id": "samwaugh/artefact-markdown",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 102970
+      }
+    },
+    {
+      "target_id": "ILSVRC/imagenet-1k",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 102384
+      }
+    },
+    {
+      "target_id": "ibrahimhamamci/CT-RATE",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 102206
+      }
+    },
+    {
+      "target_id": "espnet/yodas",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 101687
+      }
+    },
+    {
+      "target_id": "hallucinations-leaderboard/results",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 100098
+      }
+    },
+    {
+      "target_id": "allenai/openbookqa",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 99724
+      }
+    },
+    {
+      "target_id": "atokforps/latent_worker_early-a2_05",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 99533
+      }
+    },
+    {
+      "target_id": "boltzgen/inference-data",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 99521
+      }
+    },
+    {
+      "target_id": "hf-internal-testing/hf_hub_cache",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 99164
+      }
+    },
+    {
+      "target_id": "allenai/dolma3_longmino_mix-100B-1125",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 99013
+      }
+    },
+    {
+      "target_id": "legacy-datasets/wikipedia",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 98778
+      }
+    },
+    {
+      "target_id": "inaf-oact-ai/solar-flare-hmi-dataset",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 97715
+      }
+    },
+    {
+      "target_id": "mcp-course/images",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 95860
+      }
+    },
+    {
+      "target_id": "tripolskypetr/trading-signals",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 95177
+      }
+    },
+    {
+      "target_id": "jamesqijingsong/zidian",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 94080
+      }
+    },
+    {
+      "target_id": "stanfordnlp/imdb",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 93893
+      }
+    },
+    {
+      "target_id": "jobs-git/HPLT2.0_cleaned",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 93354
+      }
+    },
+    {
+      "target_id": "datania/boe",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 93023
+      }
+    },
+    {
+      "target_id": "applied-ai-018/pretraining_v1-omega_books",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 92769
+      }
+    },
+    {
+      "target_id": "baber/piqa",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 91916
+      }
+    },
+    {
+      "target_id": "realrainmaker/RAW-RAIN-rgb",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 90091
+      }
+    },
+    {
+      "target_id": "orionweller/old-data-store-real",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 89968
+      }
+    },
+    {
+      "target_id": "huggingface-deep-rl-course/course-images",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 89228
+      }
+    },
+    {
+      "target_id": "mteb/sts22-crosslingual-sts",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 89108
+      }
+    },
+    {
+      "target_id": "Naveen0501/dlgenai-nppe-dataset",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 88392
+      }
+    },
+    {
+      "target_id": "fancyzhx/ag_news",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 87972
+      }
+    },
+    {
+      "target_id": "hf-vision/course-assets",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 87295
+      }
+    },
+    {
+      "target_id": "jat-project/jat-dataset-tokenized",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 85304
+      }
+    },
+    {
+      "target_id": "InternRobotics/InternData-BridgeV2",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 85141
+      }
+    },
+    {
+      "target_id": "ltzheng/minecraft",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 84970
+      }
+    },
+    {
+      "target_id": "RealSourceData/RealSource-World",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 83574
+      }
+    },
+    {
+      "target_id": "Weyaxi/huggingface-spaces-codes",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 83360
+      }
+    },
+    {
+      "target_id": "rishab-iyer1/ambivalent_affect",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 81776
+      }
+    },
+    {
+      "target_id": "mlfoundations/MINT-1T-PDF-CC-2024-10",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 80652
+      }
+    },
+    {
+      "target_id": "TIGER-Lab/MMLU-Pro",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 80494
+      }
+    },
+    {
+      "target_id": "koutefra/lenia-explorer-data",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 79614
+      }
+    },
+    {
+      "target_id": "Cnam-LMSSC/vibravox",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 79599
+      }
+    },
+    {
+      "target_id": "wikimedia/wikipedia",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 79299
+      }
+    },
+    {
+      "target_id": "pietrolesci/pythia-deduped-stats-raw",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 79214
+      }
+    },
+    {
+      "target_id": "rajpurkar/squad",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 79029
+      }
+    },
+    {
+      "target_id": "IPEC-COMMUNITY/bridge_orig_lerobot",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 78772
+      }
+    },
+    {
+      "target_id": "jose-barreiros-tri/hhi-assist",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 78675
+      }
+    },
+    {
+      "target_id": "allenai/dolma3_mix-6T",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 78458
+      }
+    },
+    {
+      "target_id": "McGill-NLP/weblinx-browsergym",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 78287
+      }
+    },
+    {
+      "target_id": "nunchaku-ai/cdn",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 78219
+      }
+    },
+    {
+      "target_id": "builddotai/Egocentric-100K",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 78162
+      }
+    },
+    {
+      "target_id": "Idavidrein/gpqa",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 78020
+      }
+    },
+    {
+      "target_id": "banned-historical-archives/zhongyangribao",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 77347
+      }
+    },
+    {
+      "target_id": "Puyiiii/DTD-Gaussian-2.0",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 75604
+      }
+    },
+    {
+      "target_id": "abisee/cnn_dailymail",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 75494
+      }
+    },
+    {
+      "target_id": "helenqu/GenPairs",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 75449
+      }
+    },
+    {
+      "target_id": "Dandandooo/teach-turns",
+      "tipo_target": "dataset",
+      "metadata": {
+        "downloads": 75274
+      }
+    }
+  ]
+}

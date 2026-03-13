@@ -1,0 +1,19 @@
+{
+  "total_packages": 80,
+  "transparency": {
+    "no_disclosure": 0,
+    "partial_disclosure": 0,
+    "full_disclosure": 80,
+    "no_disclosure_pct": 0.0
+  },
+  "eu_ai_act": {
+    "avg_compliance_score": 26.0,
+    "fully_compliant": 0
+  },
+  "potential_impact": {
+    "models_needing_enhancement": 0,
+    "if_5pct_accept": 0,
+    "if_10pct_accept": 0,
+    "if_20pct_accept": 0
+  }
+}
