@@ -1,0 +1,26 @@
+{
+  "schema": "https://croviatrust.com/schemas/public-claims-v1.json",
+  "version": "1.0.0",
+  "generated_at": null,
+  "status": "source-contract",
+  "claims": [
+    {
+      "id": "crovia-observation-scope",
+      "statement": "Crovia records what training-data information was observable on specified public surfaces during a defined observation window.",
+      "evidence": ["https://croviatrust.com/methodology/"],
+      "limitations": ["A missing public disclosure does not establish intent, illegality, or the absence of private evidence."]
+    },
+    {
+      "id": "crovia-seal-profile",
+      "statement": "Crovia Seal is an experimental tamper-evident receipt format developed alongside draft-crovia-seal-01.",
+      "evidence": ["https://datatracker.ietf.org/doc/draft-crovia-seal/", "https://github.com/croviatrust/crovia-seal"],
+      "limitations": ["An Internet-Draft is not an IETF standard or endorsement."]
+    },
+    {
+      "id": "cryptographic-states",
+      "statement": "Signature, Merkle inclusion, OpenTimestamps submission, and Bitcoin confirmation are separate verification states.",
+      "evidence": ["https://croviatrust.com/verify/"],
+      "limitations": ["A signature proves integrity and control of a signing key; it does not by itself prove the truth or legality of a claim."]
+    }
+  ]
+}
