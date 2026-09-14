@@ -34,10 +34,10 @@
   </section>
 </main>
 <script>
-const ids={total_envelopes:"envelopes",lacuna_count:"lacuna",silence_days:"days",bitcoin_anchor_entries:"anchors"};
 const fmt=n=>Number.isFinite(Number(n))?new Intl.NumberFormat("en").format(Number(n)):"—";
 fetch("/registry/data/_home_pulse.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()}).then(d=>{
-  for(const [key,id] of Object.entries(ids)){document.getElementById(id).textContent=fmt(d[key])}
+  const metrics={envelopes:d?.ledger?.n_envelopes_total,lacuna:d?.ledger?.by_axiom_type?.["AX.LAC"],days:d?.silence?.total_days,anchors:d?.bitcoin?.n_bitcoin};
+  for(const [id,value] of Object.entries(metrics)){document.getElementById(id).textContent=fmt(value)}
   const generated=Date.parse(d.generated_at||""); const ttl=Number(d.ttl_seconds||3600); const age=(Date.now()-generated)/1000;
   const fresh=Number.isFinite(age)&&age>=0&&age<=ttl;
   const s=document.getElementById("state"); if(fresh)s.classList.add("fresh");
