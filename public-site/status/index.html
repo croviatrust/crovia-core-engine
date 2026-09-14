@@ -38,9 +38,11 @@ const fmt=n=>Number.isFinite(Number(n))?new Intl.NumberFormat("en").format(Numbe
 fetch("/registry/data/_home_pulse.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()}).then(d=>{
   const metrics={envelopes:d?.ledger?.n_envelopes_total,lacuna:d?.ledger?.by_axiom_type?.["AX.LAC"],days:d?.silence?.total_days,anchors:d?.bitcoin?.n_bitcoin};
   for(const [id,value] of Object.entries(metrics)){document.getElementById(id).textContent=fmt(value)}
-  const generated=Date.parse(d.generated_at||""); const ttl=Number(d.ttl_seconds||3600); const age=(Date.now()-generated)/1000;
-  const fresh=Number.isFinite(age)&&age>=0&&age<=ttl;
+  const generated=Date.parse(d.generated_at||""); const ttl=Number(d.ttl_seconds||3600);
+  const documentAge=(Date.now()-generated)/1000;
+  const evidenceAge=Number(d?.ledger?.pulse_freshness_seconds);
+  const fresh=Number.isFinite(documentAge)&&documentAge>=0&&documentAge<=ttl&&Number.isFinite(evidenceAge)&&evidenceAge>=0&&evidenceAge<=ttl;
   const s=document.getElementById("state"); if(fresh)s.classList.add("fresh");
-  s.lastElementChild.textContent=fresh?"Live feed is within its declared freshness window":`Evidence feed is stale or has no valid timestamp · last generated ${d.generated_at||"unknown"}`;
+  s.lastElementChild.textContent=fresh?"Live evidence is within its declared freshness window":`Evidence is stale or has no valid timestamp · document ${Math.max(0,Math.round(documentAge))}s old · latest observation ${Number.isFinite(evidenceAge)?Math.round(evidenceAge)+"s old":"unknown"}`;
 }).catch(e=>{document.getElementById("state").lastElementChild.textContent="Live evidence feed unavailable · "+e.message});
 </script></body></html>
