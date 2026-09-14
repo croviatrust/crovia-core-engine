@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Crovia Evidence Status</title>
+  <meta name="description" content="Live freshness and verification boundaries for Crovia public evidence.">
+  <style>
+    :root{color-scheme:dark;--bg:#07100e;--panel:#0d1b17;--line:#23443a;--text:#edf7f2;--muted:#9eb8ae;--ok:#67e8b7;--warn:#ffd479}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#123329 0,var(--bg) 42%);color:var(--text);font:16px/1.55 system-ui,sans-serif}
+    main{max-width:980px;margin:auto;padding:64px 24px}.eyebrow{color:var(--ok);letter-spacing:.14em;text-transform:uppercase;font-size:.78rem}
+    h1{font-size:clamp(2.5rem,7vw,5.5rem);line-height:.95;margin:.35em 0}.lede{max-width:720px;color:var(--muted);font-size:1.15rem}
+    .state{display:inline-flex;gap:.6rem;align-items:center;border:1px solid var(--line);border-radius:999px;padding:.55rem .85rem;margin:24px 0}
+    .dot{width:.65rem;height:.65rem;border-radius:50%;background:var(--warn)}.fresh .dot{background:var(--ok)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:28px 0}.card{background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:16px;padding:20px}
+    .label{color:var(--muted);font-size:.82rem;text-transform:uppercase;letter-spacing:.08em}.value{font-size:2rem;font-weight:700;margin-top:.3rem}
+    section{margin-top:52px}a{color:var(--ok)}code{background:#13251f;padding:.15rem .35rem;border-radius:5px}
+  </style>
+</head>
+<body><main>
+  <div class="eyebrow">Evidence before assertion</div>
+  <h1>Public evidence status</h1>
+  <p class="lede">This page reports what Crovia can verify now. It does not convert missing public information into a claim of intent, illegality, or regulatory non-compliance.</p>
+  <div id="state" class="state"><span class="dot"></span><span>Checking live evidence feed…</span></div>
+  <div class="grid">
+    <div class="card"><div class="label">Signed envelopes</div><div class="value" id="envelopes">—</div></div>
+    <div class="card"><div class="label">LACUNA records</div><div class="value" id="lacuna">—</div></div>
+    <div class="card"><div class="label">Observed silence days</div><div class="value" id="days">—</div></div>
+    <div class="card"><div class="label">Published anchor entries</div><div class="value" id="anchors">—</div></div>
+  </div>
+  <section><h2>Verification boundaries</h2>
+    <p>Signing, Merkle inclusion, OpenTimestamps submission and Bitcoin confirmation are distinct states. A count shown here must not be interpreted as proof that every record has reached every state.</p>
+    <p><a href="/methodology/">Methodology</a> · <a href="/verify/">Verifier</a> · <a href="/limitations/">Limitations</a> · <a href="/data/public_claims.json">Machine-readable claims</a></p>
+  </section>
+</main>
+<script>
+const ids={total_envelopes:"envelopes",lacuna_count:"lacuna",silence_days:"days",bitcoin_anchor_entries:"anchors"};
+const fmt=n=>Number.isFinite(Number(n))?new Intl.NumberFormat("en").format(Number(n)):"—";
+fetch("/registry/data/_home_pulse.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()}).then(d=>{
+  for(const [key,id] of Object.entries(ids)){document.getElementById(id).textContent=fmt(d[key])}
+  const generated=Date.parse(d.generated_at||""); const ttl=Number(d.ttl_seconds||3600); const age=(Date.now()-generated)/1000;
+  const fresh=Number.isFinite(age)&&age>=0&&age<=ttl;
+  const s=document.getElementById("state"); if(fresh)s.classList.add("fresh");
+  s.lastElementChild.textContent=fresh?"Live feed is within its declared freshness window":`Evidence feed is stale or has no valid timestamp · last generated ${d.generated_at||"unknown"}`;
+}).catch(e=>{document.getElementById("state").lastElementChild.textContent="Live evidence feed unavailable · "+e.message});
+</script></body></html>
