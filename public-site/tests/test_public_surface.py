@@ -32,5 +32,8 @@ for forbidden in (
     assert forbidden.lower() not in page.lower()
 
 assert 'cache:"no-store"' in page
-assert "stale or has no valid timestamp" in page
+assert "d?.ledger?.pulse_freshness_seconds" in page
+assert "documentAge<=ttl" in page
+assert "evidenceAge<=ttl" in page
+assert "Evidence is stale or has no valid timestamp" in page
 print("public surface contract: PASS")
