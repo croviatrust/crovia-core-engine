@@ -19,7 +19,7 @@
     {
       "id": "cryptographic-states",
       "statement": "Signature, Merkle inclusion, OpenTimestamps submission, and Bitcoin confirmation are separate verification states.",
-      "evidence": ["https://croviatrust.com/verify/"],
+      "evidence": ["https://croviatrust.com/registry/seal/verify/"],
       "limitations": ["A signature proves integrity and control of a signing key; it does not by itself prove the truth or legality of a claim."]
     }
   ]
