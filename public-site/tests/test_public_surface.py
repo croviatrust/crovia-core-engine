@@ -46,6 +46,9 @@ for claim in claims["claims"]:
     assert claim["id"] and claim["statement"]
     assert claim["evidence"] and claim["limitations"]
 
+observation_claim = next(claim for claim in claims["claims"] if claim["id"] == "crovia-observation-scope")
+assert any("parsing failures are indeterminate" in item for item in observation_claim["limitations"])
+
 required_paths = (
     'd?.ledger?.n_envelopes_total',
     'd?.ledger?.by_axiom_type?.["AX.LAC"]',
