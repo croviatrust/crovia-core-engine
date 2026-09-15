@@ -4,7 +4,6 @@
 import argparse
 import hashlib
 import json
-import shutil
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,10 +26,12 @@ def build(output: Path) -> dict:
     if output == ROOT.resolve() or output in ROOT.resolve().parents or ROOT.resolve() in output.parents:
         raise ValueError("output must not contain or replace the source tree")
     if output.exists():
-        if output.is_symlink():
-            raise ValueError("output directory must not be a symlink")
-        shutil.rmtree(output)
-    output.mkdir(parents=True)
+        if output.is_symlink() or not output.is_dir():
+            raise ValueError("output must be a real directory")
+        if any(output.iterdir()):
+            raise ValueError("output directory must be empty")
+    else:
+        output.mkdir(parents=True)
 
     files = []
     seen = set()
