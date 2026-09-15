@@ -220,6 +220,15 @@ class ModelCardAnalyzer:
             return self.cache[cache_key]
         
         readme_content, api_data = self._fetch_readme(repo_id, repo_type)
+
+        # Fail closed: an acquisition failure is not evidence that disclosures
+        # are absent. Callers must record this target as indeterminate.
+        if readme_content is None and api_data is None:
+            self.stats["errors"] += 1
+            raise RuntimeError(
+                f"indeterminate acquisition for {repo_type}:{repo_id}: "
+                "README and API metadata are both unavailable"
+            )
         
         # Initialize with defaults
         now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -248,12 +257,14 @@ class ModelCardAnalyzer:
         author = None
         
         if api_data:
+            card_data = api_data.get("cardData") or {}
+
             # License
-            license_value = api_data.get("license") or api_data.get("cardData", {}).get("license")
+            license_value = api_data.get("license") or card_data.get("license")
             has_license = bool(license_value)
             
             # Languages
-            languages = api_data.get("languages") or api_data.get("cardData", {}).get("language") or []
+            languages = api_data.get("languages") or card_data.get("language") or []
             if isinstance(languages, str):
                 languages = [languages]
             has_languages = len(languages) > 0
@@ -264,7 +275,7 @@ class ModelCardAnalyzer:
             has_tags = tags_count > 0
             
             # Model index (evaluation)
-            model_index = api_data.get("model-index") or api_data.get("cardData", {}).get("model-index")
+            model_index = api_data.get("model-index") or card_data.get("model-index")
             has_model_index = bool(model_index)
             
             # Author
@@ -292,8 +303,27 @@ class ModelCardAnalyzer:
         completeness_score = int((passed_checks / total_checks) * 100)
         
         # Create hash
+        digest_input = {
+            "repo_id": repo_id,
+            "repo_type": repo_type,
+            "readme": readme_content or "",
+            "card_data": (api_data or {}).get("cardData") or {},
+            "checks": {
+                "training": has_training,
+                "dataset": has_dataset,
+                "evaluation": has_eval,
+                "limitations": has_limits,
+                "intended_use": has_intended,
+                "bias": has_bias,
+                "environmental": has_env,
+                "license": has_license,
+                "model_index": has_model_index,
+            },
+        }
         content_hash = hashlib.sha256(
-            f"{repo_id}{readme_length}{has_training}{has_license}".encode()
+            json.dumps(
+                digest_input, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")
         ).hexdigest()[:16]
         
         analysis = ModelCardAnalysis(
