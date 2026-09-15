@@ -36,18 +36,23 @@
   </section>
 </main>
 <script>
-const fmt=n=>Number.isFinite(Number(n))?new Intl.NumberFormat("en").format(Number(n)):"—";
+const fmt=value=>{if(value===null||value===""||typeof value==="boolean")return "—";const n=Number(value);return Number.isSafeInteger(n)&&n>=0?new Intl.NumberFormat("en").format(n):"—"};
 const iso=value=>{const time=Date.parse(value||"");return Number.isFinite(time)?new Date(time).toISOString():"unknown"};
 fetch("/registry/data/_home_pulse.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()}).then(d=>{
   const metrics={envelopes:d?.ledger?.n_envelopes_total,lacuna:d?.ledger?.by_axiom_type?.["AX.LAC"],days:d?.silence?.total_days,anchors:d?.bitcoin?.n_bitcoin};
   for(const [id,value] of Object.entries(metrics)){document.getElementById(id).textContent=fmt(value)}
   document.getElementById("generated-at").textContent=iso(d.generated_at);
   document.getElementById("last-observed-at").textContent=iso(d?.ledger?.last_envelope_at);
-  const generated=Date.parse(d.generated_at||""); const ttl=Number(d.ttl_seconds||3600);
+  const generated=Date.parse(d.generated_at||"");
+  const observed=Date.parse(d?.ledger?.last_envelope_at||"");
+  const ttl=Number(d.ttl_seconds);
   const documentAge=(Date.now()-generated)/1000;
-  const evidenceAge=Number(d?.ledger?.pulse_freshness_seconds);
-  const fresh=Number.isFinite(documentAge)&&documentAge>=0&&documentAge<=ttl&&Number.isFinite(evidenceAge)&&evidenceAge>=0&&evidenceAge<=ttl;
-  const s=document.getElementById("state"); if(fresh)s.classList.add("fresh");
-  s.lastElementChild.textContent=fresh?"Live evidence is within its declared freshness window":`Evidence is stale or has no valid timestamp · document ${Math.max(0,Math.round(documentAge))}s old · latest observation ${Number.isFinite(evidenceAge)?Math.round(evidenceAge)+"s old":"unknown"}`;
+  const observationAge=(Date.now()-observed)/1000;
+  const reportedEvidenceAge=Number(d?.ledger?.pulse_freshness_seconds);
+  const validTtl=Number.isFinite(ttl)&&ttl>0;
+  const fresh=validTtl&&Number.isFinite(documentAge)&&documentAge>=0&&documentAge<=ttl&&Number.isFinite(observationAge)&&observationAge>=0&&observationAge<=ttl&&Number.isFinite(reportedEvidenceAge)&&reportedEvidenceAge>=0&&reportedEvidenceAge<=ttl;
+  const state=document.getElementById("state"); if(fresh)state.classList.add("fresh");
+  state.lastElementChild.textContent=fresh?"Live evidence is within its declared freshness window":`Evidence is stale or has no valid timestamp · document ${Number.isFinite(documentAge)?Math.max(0,Math.round(documentAge))+"s old":"unknown"} · latest observation ${Number.isFinite(observationAge)?Math.max(0,Math.round(observationAge))+"s old":"unknown"}`;
+  if(validTtl)setTimeout(()=>location.reload(),Math.min(Math.max(ttl,60),300)*1000);
 }).catch(e=>{document.getElementById("state").lastElementChild.textContent="Live evidence feed unavailable · "+e.message});
 </script></body></html>
