@@ -97,7 +97,11 @@ assert "https://croviatrust.com/registry/verify/" not in llms
 assert 'cache:"no-store"' in page
 assert "d?.ledger?.pulse_freshness_seconds" in page
 assert "documentAge<=ttl" in page
-assert "evidenceAge<=ttl" in page
+assert "observationAge<=ttl" in page
+assert "reportedEvidenceAge<=ttl" in page
+assert "value===null" in page
+assert "Number.isSafeInteger(n)&&n>=0" in page
+assert "setTimeout(()=>location.reload()" in page
 assert "Evidence is stale or has no valid timestamp" in page
 assert "Ledger envelopes" in page
 assert "Signed envelopes" not in page
