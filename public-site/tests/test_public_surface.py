@@ -79,9 +79,17 @@ assert "does not establish intent, illegality" in llms
 
 assert "https://croviatrust.com/status/" in readme
 assert "https://croviatrust.com/data/public_claims.json" in readme
+assert "https://croviatrust.com/registry/seal/verify/" in readme
+assert "https://croviatrust.com/registry/verify/" not in readme
 assert "An Internet-Draft is not an IETF standard or endorsement." in readme
 assert "Crovia produces **facts**" not in readme
 assert "Signature validity, Merkle inclusion, OpenTimestamps submission, and Bitcoin confirmation are separate states." in readme
+
+assert "https://croviatrust.com/registry/seal/verify/" in llms
+assert "/registry/seal/verify/" in page
+assert "https://croviatrust.com/registry/seal/verify/" in json.dumps(claims)
+assert "/verify/" not in page.replace("/registry/seal/verify/", "")
+assert "https://croviatrust.com/registry/verify/" not in llms
 
 assert 'cache:"no-store"' in page
 assert "d?.ledger?.pulse_freshness_seconds" in page
