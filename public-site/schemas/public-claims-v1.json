@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://croviatrust.com/schemas/public-claims-v1.json",
+  "title": "Crovia Public Claims Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "version", "generated_at", "status", "claims"],
+  "properties": {
+    "schema": {"const": "https://croviatrust.com/schemas/public-claims-v1.json"},
+    "version": {"type": "string", "pattern": "^1\\.[0-9]+\\.[0-9]+$"},
+    "generated_at": {"type": ["string", "null"], "format": "date-time"},
+    "status": {"enum": ["source-contract", "generated", "stale"]},
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "statement", "evidence", "limitations"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+          "statement": {"type": "string", "minLength": 20},
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "format": "uri"},
+            "uniqueItems": true
+          },
+          "limitations": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 10}
+          }
+        }
+      }
+    }
+  }
+}
