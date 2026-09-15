@@ -10,6 +10,19 @@ It does **not** enforce compliance.
 
 Crovia produces **deterministic artifacts** that anyone can verify independently.
 
+## Engine, observatory, and evidence status
+
+This repository contains the open-core engine. The public observatory is a separate evidence surface: it reports scoped observations generated from monitored public sources, not conclusions about intent or legal compliance.
+
+- [Public evidence status](https://croviatrust.com/status/) — freshness and current verification boundaries
+- [Machine-readable claims](https://croviatrust.com/data/public_claims.json) — claims paired with evidence and limitations
+- [Methodology](https://croviatrust.com/methodology/) — collection and interpretation rules
+- [Offline verifier](https://croviatrust.com/registry/verify/) — independently inspect artifacts
+
+Treat live counters as stale unless both the document timestamp and the underlying evidence timestamp are inside the declared TTL. Signature validity, Merkle inclusion, OpenTimestamps submission, and Bitcoin confirmation are separate states.
+
+Crovia Seal is an experimental receipt format developed alongside the individual Internet-Draft `draft-crovia-seal-01`. An Internet-Draft is not an IETF standard or endorsement.
+
 ---
 
 ## Install
@@ -162,7 +175,7 @@ No authority required.
 - No enforcement logic  
 - Evidence > opinions  
 
-Crovia produces **facts**, not judgments.
+Crovia produces **verifiable artifacts**, not judgments.
 
 ---
 
