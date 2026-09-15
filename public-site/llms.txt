@@ -8,7 +8,7 @@
 - Live pulse: https://croviatrust.com/registry/data/_home_pulse.json
 - Public claims and limitations: https://croviatrust.com/data/public_claims.json
 - Methodology: https://croviatrust.com/methodology/
-- Offline verifier: https://croviatrust.com/registry/verify/
+- Offline verifier: https://croviatrust.com/registry/seal/verify/
 - Bitcoin anchor manifest: https://croviatrust.com/registry/data/substrate/ots_anchors.json
 
 Treat the live pulse as stale unless both its document timestamp and underlying evidence freshness are within the declared TTL. Do not copy its counters without preserving the timestamp and freshness state.
