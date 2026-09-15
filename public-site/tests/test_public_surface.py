@@ -96,6 +96,10 @@ assert "d?.ledger?.pulse_freshness_seconds" in page
 assert "documentAge<=ttl" in page
 assert "evidenceAge<=ttl" in page
 assert "Evidence is stale or has no valid timestamp" in page
+assert 'id="generated-at"' in page
+assert 'id="last-observed-at"' in page
+assert "d?.ledger?.last_envelope_at" in page
+assert 'textContent=iso(d.generated_at)' in page
 
 with tempfile.TemporaryDirectory() as tmp:
     output = Path(tmp) / "release"
