@@ -27,6 +27,8 @@
     <div class="card"><div class="label">LACUNA records</div><div class="value" id="lacuna">—</div></div>
     <div class="card"><div class="label">Observed silence days</div><div class="value" id="days">—</div></div>
     <div class="card"><div class="label">Published anchor entries</div><div class="value" id="anchors">—</div></div>
+    <div class="card"><div class="label">Status document generated</div><div class="value" id="generated-at">—</div></div>
+    <div class="card"><div class="label">Latest underlying observation</div><div class="value" id="last-observed-at">—</div></div>
   </div>
   <section><h2>Verification boundaries</h2>
     <p>Signing, Merkle inclusion, OpenTimestamps submission and Bitcoin confirmation are distinct states. A count shown here must not be interpreted as proof that every record has reached every state.</p>
@@ -35,9 +37,12 @@
 </main>
 <script>
 const fmt=n=>Number.isFinite(Number(n))?new Intl.NumberFormat("en").format(Number(n)):"—";
+const iso=value=>{const time=Date.parse(value||"");return Number.isFinite(time)?new Date(time).toISOString():"unknown"};
 fetch("/registry/data/_home_pulse.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()}).then(d=>{
   const metrics={envelopes:d?.ledger?.n_envelopes_total,lacuna:d?.ledger?.by_axiom_type?.["AX.LAC"],days:d?.silence?.total_days,anchors:d?.bitcoin?.n_bitcoin};
   for(const [id,value] of Object.entries(metrics)){document.getElementById(id).textContent=fmt(value)}
+  document.getElementById("generated-at").textContent=iso(d.generated_at);
+  document.getElementById("last-observed-at").textContent=iso(d?.ledger?.last_envelope_at);
   const generated=Date.parse(d.generated_at||""); const ttl=Number(d.ttl_seconds||3600);
   const documentAge=(Date.now()-generated)/1000;
   const evidenceAge=Number(d?.ledger?.pulse_freshness_seconds);
