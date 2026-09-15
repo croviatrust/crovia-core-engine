@@ -97,4 +97,17 @@ with tempfile.TemporaryDirectory() as tmp:
         assert hashlib.sha256(deployed.read_bytes()).hexdigest() == item["sha256"]
         assert deployed.stat().st_size == item["size"]
 
+with tempfile.TemporaryDirectory() as tmp:
+    occupied = Path(tmp) / "occupied"
+    occupied.mkdir()
+    sentinel = occupied / "must-survive.txt"
+    sentinel.write_text("do not delete", encoding="utf-8")
+    refused = subprocess.run(
+        ["python3", str(ROOT / "tools/build_release.py"), "--output", str(occupied)],
+        capture_output=True,
+        text=True,
+    )
+    assert refused.returncode != 0
+    assert sentinel.read_text(encoding="utf-8") == "do not delete"
+
 print("public surface contract: PASS")
