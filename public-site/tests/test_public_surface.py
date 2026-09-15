@@ -11,6 +11,7 @@ schema = json.loads((ROOT / "schemas/public-claims-v1.json").read_text(encoding=
 release = json.loads((ROOT / "release-manifest.json").read_text(encoding="utf-8"))
 page = (ROOT / "status/index.html").read_text(encoding="utf-8")
 llms = (ROOT / "llms.txt").read_text(encoding="utf-8")
+readme = (ROOT.parent / "README.md").read_text(encoding="utf-8")
 
 assert claims["version"] == "1.0.0"
 assert claims["schema"] == schema["$id"]
@@ -75,6 +76,12 @@ for copied_counter in ("287,116", "492 LACUNA", "45 batches", "419,640"):
     assert copied_counter not in llms
 assert "An Internet-Draft is not an IETF standard or endorsement." in llms
 assert "does not establish intent, illegality" in llms
+
+assert "https://croviatrust.com/status/" in readme
+assert "https://croviatrust.com/data/public_claims.json" in readme
+assert "An Internet-Draft is not an IETF standard or endorsement." in readme
+assert "Crovia produces **facts**" not in readme
+assert "Signature validity, Merkle inclusion, OpenTimestamps submission, and Bitcoin confirmation are separate states." in readme
 
 assert 'cache:"no-store"' in page
 assert "d?.ledger?.pulse_freshness_seconds" in page
