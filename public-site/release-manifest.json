@@ -1,0 +1,47 @@
+{
+  "schema": "crovia.public-release.v1",
+  "release": "evidence-first-preview",
+  "source_root": "public-site",
+  "target_root": "/var/www/registry",
+  "files": [
+    {
+      "source": "status/index.html",
+      "target": "status/index.html",
+      "mode": "0644",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "source": "llms.txt",
+      "target": "llms.txt",
+      "mode": "0644",
+      "content_type": "text/plain; charset=utf-8"
+    },
+    {
+      "source": "data/public_claims.json",
+      "target": "data/public_claims.json",
+      "mode": "0644",
+      "content_type": "application/json"
+    },
+    {
+      "source": "schemas/public-claims-v1.json",
+      "target": "schemas/public-claims-v1.json",
+      "mode": "0644",
+      "content_type": "application/schema+json"
+    }
+  ],
+  "preflight": {
+    "require_clean_validation": true,
+    "require_backup": true,
+    "require_same_filesystem_staging": true,
+    "forbid_symlinks": true
+  },
+  "post_deploy": {
+    "required_status_codes": {
+      "/status/": 200,
+      "/llms.txt": 200,
+      "/data/public_claims.json": 200,
+      "/schemas/public-claims-v1.json": 200
+    },
+    "rollback_on_failure": true
+  }
+}

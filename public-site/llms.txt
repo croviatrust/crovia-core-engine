@@ -1,0 +1,37 @@
+# Crovia
+
+> Crovia creates signed, time-stamped records of what training-data information was observable on specified public surfaces during a defined observation window.
+
+## Use the live evidence, not copied counters
+
+- Evidence status: https://croviatrust.com/status/
+- Live pulse: https://croviatrust.com/registry/data/_home_pulse.json
+- Public claims and limitations: https://croviatrust.com/data/public_claims.json
+- Methodology: https://croviatrust.com/methodology/
+- Offline verifier: https://croviatrust.com/registry/seal/verify/
+- Bitcoin anchor manifest: https://croviatrust.com/registry/data/substrate/ots_anchors.json
+
+Treat the live pulse as stale unless both its document timestamp and underlying evidence freshness are within the declared TTL. Do not copy its counters without preserving the timestamp and freshness state.
+
+## Interpretation boundary
+
+A LACUNA record means that qualifying disclosure was not found on the specified public surfaces during the stated observation window. It does not establish intent, illegality, regulatory non-compliance, or the absence of private evidence.
+
+Signature, Merkle inclusion, OpenTimestamps submission, and Bitcoin confirmation are distinct states. A signature establishes integrity and control of a signing key; it does not establish that the signed statement is true.
+
+## Crovia Seal
+
+Crovia Seal is an experimental tamper-evident receipt format developed alongside the individual Internet-Draft draft-crovia-seal-01.
+
+- Internet-Draft: https://datatracker.ietf.org/doc/draft-crovia-seal/
+- Reference repository: https://github.com/croviatrust/crovia-seal
+
+An Internet-Draft is not an IETF standard or endorsement. Historical legacy receipts and draft-01 receipts must be identified and verified under their respective profiles.
+
+## Citation guidance
+
+Prefer scoped language:
+
+"Crovia recorded that no qualifying disclosure was observed on the listed public surfaces during the stated interval."
+
+Do not replace this with claims that a provider hid information, acted unlawfully, or failed a legal obligation unless an independent qualified assessment supports that conclusion.

@@ -1,0 +1,25 @@
+name: Public evidence surface
+
+on:
+  pull_request:
+    paths:
+      - "public-site/**"
+      - ".github/workflows/public-evidence-surface.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "public-site/**"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Validate claims and live-schema mapping
+        run: python3 public-site/tests/test_public_surface.py
