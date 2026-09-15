@@ -17,7 +17,7 @@ This repository contains the open-core engine. The public observatory is a separ
 - [Public evidence status](https://croviatrust.com/status/) — freshness and current verification boundaries
 - [Machine-readable claims](https://croviatrust.com/data/public_claims.json) — claims paired with evidence and limitations
 - [Methodology](https://croviatrust.com/methodology/) — collection and interpretation rules
-- [Offline verifier](https://croviatrust.com/registry/verify/) — independently inspect artifacts
+- [Crovia Seal verifier](https://croviatrust.com/registry/seal/verify/) — client-side verification of Seal receipts
 
 Treat live counters as stale unless both the document timestamp and the underlying evidence timestamp are inside the declared TTL. Signature validity, Merkle inclusion, OpenTimestamps submission, and Bitcoin confirmation are separate states.
 
@@ -42,9 +42,10 @@ If you read only one thing, read this:
 **Crovia turns a declaration into a closed, verifiable evidence capsule.**  
 Nothing more. Nothing less.
 
-No trust required.  
 No network required.  
 No hidden logic.
+
+Verification still requires choosing which issuer key and evidence source you trust.
 
 ---
 
@@ -73,78 +74,50 @@ All files are **offline-verifiable**.
 ### Generate CRC-1 Evidence Packs
 
 ```bash
-# Full pipeline — receipts in, evidence pack out
 crovia run --receipts examples/minimal_royalty_receipts.ndjson --period 2025-11 --budget 1000000 --out out_crc1
 ```
 
-This creates a fully self-contained evidence capsule in `out_crc1/`.
+This creates a self-contained evidence capsule in `out_crc1/`.
 
-### Disclosure Scanner — check a model's disclosure gaps
+### Disclosure Scanner
 
 ```bash
-# Scan a HuggingFace model for missing training data declarations
 crovia oracle scan meta-llama/Llama-3-8B
 crovia oracle scan mistralai/Mistral-7B-v0.1
 ```
 
-### Evidence Wedge — check a directory for evidence artifacts
+A scanner result is an observation over configured public surfaces, not proof of intent, illegality, or regulatory non-compliance.
+
+### Evidence Wedge
 
 ```bash
-crovia wedge scan              # scan current directory
+crovia wedge scan
 crovia wedge scan --path ./my-project
-crovia wedge status            # one-line status
-crovia wedge explain           # what artifacts Crovia looks for
+crovia wedge status
+crovia wedge explain
 ```
 
 ### Other commands
 
 ```bash
-crovia check   <receipts.ndjson>   # validate receipts (real)
-crovia refine  <receipts.ndjson>   # fix share_sum / rank issues
-crovia pay     <receipts.ndjson> --period YYYY-MM --budget N  # compute payouts
-crovia bundle  --receipts X --payouts Y  # assemble trust bundle
-crovia sign    <file>              # HMAC-sign any artifact
-crovia trace   <file>              # generate / verify hashchain
-crovia explain <file>              # inspect any Crovia JSON/NDJSON
-crovia license status              # check tier (OPEN / PRO)
-crovia bridge  preview <model>     # PRO capability preview
-crovia mode    show                # show CLI config
-crovia legend                      # full command reference
+crovia check   <receipts.ndjson>
+crovia refine  <receipts.ndjson>
+crovia pay     <receipts.ndjson> --period YYYY-MM --budget N
+crovia bundle  --receipts X --payouts Y
+crovia sign    <file>
+crovia trace   <file>
+crovia explain <file>
+crovia license status
+crovia bridge  preview <model>
+crovia mode    show
+crovia legend
 ```
 
-> `crovia scan` (attribution spider) requires the FAISS corpus index — not yet in open core.  
-> Run `crovia scan <file>` for details.
-
-- No network  
-- No secrets  
-- Fully deterministic  
+> `crovia scan` requires the FAISS corpus index, which is not shipped in open core.
 
 ---
 
-## Inspect the artifacts
-
-```bash
-# Linux / macOS
-ls out_crc1
-cat out_crc1/MANIFEST.json
-
-# Windows
-dir out_crc1
-type out_crc1\MANIFEST.json
-```
-
-`MANIFEST.json` defines exactly which files must exist.
-
-Nothing implicit.  
-Nothing hidden.
-
----
-
-## Verify evidence (offline, by anyone)
-
-Verification requires **only the files themselves**.
-
-Example:
+## Verify evidence offline
 
 ```bash
 crovia-verify out_crc1
@@ -152,7 +125,7 @@ crovia-verify out_crc1
 
 Expected result:
 
-```
+```text
 [OK] All artifacts present
 [OK] trust_bundle JSON valid
 [OK] Hashchain verified
@@ -160,47 +133,29 @@ Expected result:
 [OK] CRC-1 VERIFIED
 ```
 
-If verification fails, the evidence is invalid.
-
-No trust assumptions.  
-No authority required.
+A successful result establishes integrity under the verifier's stated profile. It does not independently establish the truth of declarations or the trustworthiness of their issuer.
 
 ---
 
 ## Design principles
 
-- Offline-first  
-- Deterministic  
-- No attribution claims  
-- No enforcement logic  
-- Evidence > opinions  
+- Offline-first
+- Deterministic
+- No attribution claims
+- No enforcement logic
+- Evidence over opinion
 
 Crovia produces **verifiable artifacts**, not judgments.
 
 ---
 
-## Where to see real evidence
+## Reproducible public evidence
 
-Crovia Open Core does not ship conclusions.
-
-All public, inspectable evidence generated with this engine lives here:
+Public, inspectable examples generated with this engine live in:
 
 https://github.com/croviatrust/crovia-evidence-lab
 
-That repository contains:
-- reproducible CRC-1 capsules  
-- offline-verifiable artifacts  
-- neutral semantic observations (DSSE)  
-- presence / absence observations (Spider)  
-
-If you want to see results, go there.  
-If you want to reproduce them, stay here.
-
----
-
-## Source
-
-https://github.com/croviatrust/crovia-core-engine
+Use that repository to inspect artifacts and reproduction instructions. Use this repository to inspect or run the engine.
 
 ---
 
@@ -208,4 +163,3 @@ https://github.com/croviatrust/crovia-core-engine
 
 Apache-2.0  
 CroviaTrust
-
