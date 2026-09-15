@@ -24,7 +24,7 @@ def build(output: Path) -> dict:
         raise ValueError("unsupported release manifest schema")
 
     output = output.resolve()
-    if output == ROOT.resolve() or ROOT.resolve() in output.parents:
+    if output == ROOT.resolve() or output in ROOT.resolve().parents or ROOT.resolve() in output.parents:
         raise ValueError("output must not contain or replace the source tree")
     if output.exists():
         if output.is_symlink():
