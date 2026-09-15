@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+import hashlib
 import json
+import subprocess
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,4 +81,20 @@ assert "d?.ledger?.pulse_freshness_seconds" in page
 assert "documentAge<=ttl" in page
 assert "evidenceAge<=ttl" in page
 assert "Evidence is stale or has no valid timestamp" in page
+
+with tempfile.TemporaryDirectory() as tmp:
+    output = Path(tmp) / "release"
+    subprocess.run(
+        ["python3", str(ROOT / "tools/build_release.py"), "--output", str(output)],
+        check=True,
+    )
+    artifact = json.loads((output / "SHA256SUMS.json").read_text(encoding="utf-8"))
+    assert artifact["schema"] == "crovia.public-release-artifact.v1"
+    assert {item["target"] for item in artifact["files"]} == allowed_targets
+    for item in artifact["files"]:
+        deployed = output / item["target"]
+        assert deployed.is_file() and not deployed.is_symlink()
+        assert hashlib.sha256(deployed.read_bytes()).hexdigest() == item["sha256"]
+        assert deployed.stat().st_size == item["size"]
+
 print("public surface contract: PASS")
