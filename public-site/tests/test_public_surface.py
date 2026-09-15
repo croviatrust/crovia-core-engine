@@ -31,7 +31,15 @@ for forbidden in (
     "courtroom-grade",
 ):
     assert forbidden.lower() not in page.lower()
-    assert forbidden.lower() not in llms.lower()
+
+for forbidden_machine_claim in (
+    "Crovia Seal is an IETF standard",
+    "Crovia Seal is an open standard",
+    "every record is Bitcoin",
+    "immutable by construction",
+    "courtroom-grade",
+):
+    assert forbidden_machine_claim.lower() not in llms.lower()
 
 for copied_counter in ("287,116", "492 LACUNA", "45 batches", "419,640"):
     assert copied_counter not in llms
