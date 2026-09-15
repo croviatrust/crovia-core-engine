@@ -5,12 +5,34 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 claims = json.loads((ROOT / "data/public_claims.json").read_text(encoding="utf-8"))
 schema = json.loads((ROOT / "schemas/public-claims-v1.json").read_text(encoding="utf-8"))
+release = json.loads((ROOT / "release-manifest.json").read_text(encoding="utf-8"))
 page = (ROOT / "status/index.html").read_text(encoding="utf-8")
 llms = (ROOT / "llms.txt").read_text(encoding="utf-8")
 
 assert claims["version"] == "1.0.0"
 assert claims["schema"] == schema["$id"]
 assert schema["$schema"].endswith("/draft/2020-12/schema")
+
+assert release["schema"] == "crovia.public-release.v1"
+assert release["target_root"] == "/var/www/registry"
+assert release["preflight"]["require_backup"] is True
+assert release["post_deploy"]["rollback_on_failure"] is True
+allowed_targets = {
+    "status/index.html",
+    "llms.txt",
+    "data/public_claims.json",
+    "schemas/public-claims-v1.json",
+}
+targets = {entry["target"] for entry in release["files"]}
+assert targets == allowed_targets
+for entry in release["files"]:
+    source = Path(entry["source"])
+    target = Path(entry["target"])
+    assert not source.is_absolute() and ".." not in source.parts
+    assert not target.is_absolute() and ".." not in target.parts
+    assert (ROOT / source).is_file()
+    assert entry["mode"] == "0644"
+
 assert claims["status"] == "source-contract"
 assert claims["generated_at"] is None
 assert len(claims["claims"]) >= 3
