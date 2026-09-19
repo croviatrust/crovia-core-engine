@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use the Crovia 2026 archive ledger or its collectors, please cite this repository."
+title: "Crovia Core Engine: the Substrate (2026 archive)"
+type: software
+authors:
+  - name: "Crovia Trust"
+    email: info@croviatrust.com
+    website: https://croviatrust.com
+repository-code: https://github.com/croviatrust/crovia-core-engine
+url: https://croviatrust.com/registry/explore/
+license: Apache-2.0
+date-released: 2026-09-19
+keywords:
+  - AI transparency
+  - training data disclosure
+  - signed observations
+  - Merkle seals
+  - OpenTimestamps
+  - Ed25519
+abstract: >
+  The Crovia Substrate records observations of what AI providers publish about their
+  training data as Ed25519-signed envelopes in an append-only AXIOM ledger, Merkle-seals the
+  ledger hourly and anchors new roots in Bitcoin through OpenTimestamps. This repository
+  holds the collectors, the observer, the sealer, the anchoring job and the Phase-0
+  post-processors that enforce the canonical definitions of every headline figure. Live
+  observation of absence has moved to TACET (croviatrust/countersign); the ledger built here
+  is preserved as the 2026 archive.
+references:
+  - type: software
+    title: "TACET: Verifiable Silence for AI Training Disclosure"
+    url: https://github.com/croviatrust/countersign
+    authors:
+      - name: "Crovia Trust"
