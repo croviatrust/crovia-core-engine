@@ -139,6 +139,29 @@ Left as-is on purpose: `crovia_broadcast.py` (daily card to Bluesky/Telegram/Mas
 idempotent), `crovia_broadcast_changes.py` (rare, high-signal only), `wayback_save_submitter.py`
 (useful: archived copies let third parties re-run TACET predicates), `zenodo_deposit_weekly.py`.
 
+## Server changes of 2026-09-19 (night): model records replace graded dossiers
+
+`model_records.py` (this directory, installed at `/opt/crovia/scripts/model_records.py`,
+cron `9 * * * *`) now produces the whole per-model surface:
+
+- `/m/<org>/<model>/` — one page per observed model: live TACET summary
+  (observations, negatives, Bitcoin-anchored epochs, last verdict, proof link when
+  a level-2 proof exists) and/or the observation-bounded 2026-archive record.
+  No grades. Unified site shell. Claim + BreadcrumbList JSON-LD.
+- `/m/` — browsable index of every record, client-side filter.
+- `/badge/m/<org>/<model>.svg|.json` — grade-free badge and shields endpoint.
+  nginx now serves `/badge/m/` statically (previously proxied to the seal badge
+  API, which answered 404 for every model badge advertised on 1,379 pages).
+- `/registry/data/model_records.json` — the same facts as data.
+- Pages and badges not regenerated are deleted (42 pages, 84 badges on first run).
+
+Retired in cron (commented, not deleted): `build_model_dossiers.py` (read a
+`top_100` key that no longer exists, so every page came from stale LACUNA
+candidates with a wall-clock day count and an A–F grade) and `badge_model.py`
+(same grades). `/registry/cci/` (A–F vendor grades) and `/registry/e/`
+(Observatory event pages) return 301 like the other retired paths; `?legacy=1`
+still reaches them. `seo_sitemap_indexnow.py` lists `/m/` as a core page.
+
 ## What Phase 0 does not do
 
 It does not revive `AX.ABS` emission or the old LACUNA issuance. Absence is now
