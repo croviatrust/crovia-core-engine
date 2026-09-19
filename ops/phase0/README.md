@@ -51,7 +51,13 @@ Also applied on the server the same day:
   `/var/www/registry/seal/index.html` shows a real `crovia.seal.v1` example;
   `/var/www/registry/lacuna/index.html` loads `lacuna_banner.js?v=…` (query string busts the
   Cloudflare cache); `/var/www/crovia/index.html` no longer falls back to a hard-coded 492 when
-  `by_axiom_type['AX.LAC']` is 0 (JS `|| 492` treated zero as missing).
+  `by_axiom_type['AX.LAC']` is 0 (JS `|| 492` treated zero as missing), and shows
+  `pulse.anchors.distinct_roots` (39) instead of `ots_anchors.bitcoin_confirmed` (106), per
+  CANON §4: re-anchors of an unchanged root do not count. Backup
+  `index.html.bak_20260919T1755Z`.
+- `crovia-evidence-lab` hourly sync (`/opt/crovia/repos/crovia-evidence-lab`) had been
+  failing since 2026-05-17 on an orphaned `.git/index.lock`; lock removed, repo identity set
+  to Crovia Trust, backlog (2026-W20…W38) pushed. Watch `/var/log/crovia/evidence_lab_sync.log`.
 - Disk: the 37 GB HuggingFace tensor cache (`latent_cache`, unused since 2026-05-13) was
   purged; the data volume went from 100 % to 61 %.
 
@@ -77,9 +83,53 @@ copy of the current `silence_index.json` before the first run if the embed
 widget depends on a field that v2 renames (`n_real_targets`,
 `total_silence_days`, `top_silent.target_id` are preserved).
 
-## What this does not do
+## Server changes of 2026-09-19 (evening): TACET live, access policy, cron cleanup
 
-It does not revive the collectors (`autonomous_observer`, `wayback_hf_collector`)
-or restart LACUNA issuance. Those come back through TACET's observer (see
-`tacet/SPEC.md` §7), which replaces the heartbeat-as-certificate model with
-beacon-bound negative snapshots.
+**Correction to the earlier diagnosis.** The `autonomous_observer` is alive
+(`crovia-observer.timer`, hourly, ~120 observations/run into Postgres, exported as
+`AX.NEC` envelopes with per-necessity `is_present`). What died in June was only the
+`AX.ABS` emission that fed `lacuna_candidates`. TACET now takes over that role with
+its own, independently verifiable snapshots.
+
+**TACET operator installed** (`countersign/tacet/operator`, venv `/opt/crovia/tacet/.venv`,
+state `/opt/crovia/tacet/state`, public `/var/www/registry/data/tacet/`). Keys created
+(seeds 0600); public keys in `trust_root.json` and `canon.json → tacet`. Target list
+`/opt/crovia/tacet/targets.txt` = 859 model candidates + 7,301 unified observer models
+(datasets removed; `state/target_resolution.json`). Epoch 0 emitted 18:25Z:
+69 snapshots, 45 negative, 24 disclosures, sheet stamped with OTS. Cron:
+
+```
+5 * * * *     tacet-operator run-epoch --targets /opt/crovia/tacet/targets.txt
+40 */6 * * *  tacet-operator refresh-anchors
+50 4 * * *    tacet-operator publish --proofs
+```
+
+**Access policy applied** (CANON §5): the `$is_bulk_data` referer gate in
+`/etc/nginx/snippets/data-protection.conf` is now empty; every data file is fetchable
+directly (rate limit stays). Only `forensic_dossiers.json` / `forensic_report.json`
+keep the `$pro_gate`. `/registry/api/` marks `global_ranking`, `tpa_latest`,
+`tpa_summary`, `sonar_chains` as free links.
+
+**Cron / timer cleanup** (backup: `/opt/crovia/tacet/state/crontab.bak_20260919`):
+
+| unit | action | why |
+|---|---|---|
+| `crovia-outreach.timer` | `disable --now` | LIVE mode, tried to open 20 HF discussions/week (failing on token); outreach is stopped by decision |
+| `outreach_status_checker.py` (07:30) | commented | reads GitHub issue status of a stopped campaign |
+| `scripts/ots_anchor.py stamp` (03:05) | commented | re-stamped the same substrate root daily; superseded by `ots_stamp_substrate_root.sh` |
+| `scripts/smoke_public.sh` (*/15) | commented | probed retired paths and overwrote `_smoke.json` with false failures |
+| `smoke_public_v2.sh` | hourly → `*/15` | single writer of `_smoke.json`; 0/42 failing |
+
+**Disk.** `/opt/crovia/.venv` carried 6.6 GB of CUDA libraries on a GPU-less host;
+torch reinstalled as `2.9.1+cpu` (imports verified, `croviatrust.service` healthy).
+Root went from 96 % to 80 %.
+
+Left as-is on purpose: `crovia_broadcast.py` (daily card to Bluesky/Telegram/Mastodon,
+idempotent), `crovia_broadcast_changes.py` (rare, high-signal only), `wayback_save_submitter.py`
+(useful: archived copies let third parties re-run TACET predicates), `zenodo_deposit_weekly.py`.
+
+## What Phase 0 does not do
+
+It does not revive `AX.ABS` emission or the old LACUNA issuance. Absence is now
+produced by TACET (beacon-bound negative snapshots, `tacet/SPEC.md` §7) and the
+LACUNA page will read from `/registry/data/tacet/`.
