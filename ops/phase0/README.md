@@ -100,9 +100,20 @@ state `/opt/crovia/tacet/state`, public `/var/www/registry/data/tacet/`). Keys c
 
 ```
 5 * * * *     tacet-operator run-epoch --targets /opt/crovia/tacet/targets.txt
-40 */6 * * *  tacet-operator refresh-anchors
+40 */2 * * *  tacet-operator refresh-anchors      # was */6; re-issues featured proofs when a sheet closes
 50 4 * * *    tacet-operator publish --proofs
 ```
+
+The packages are editable installs from `/opt/crovia/repos/countersign` (`git pull` there,
+no reinstall needed unless `pyproject.toml` changes). First three epochs closed in Bitcoin
+blocks 967736 and 967740 at 20:52Z on day one.
+
+**Nginx CSP (2026-09-19 21:18Z).** `connect-src` on `croviatrust.com` gained
+`https://api.drand.sh https://mempool.space https://blockstream.info`: the browser
+verifier's network checks (drand round bytes, and SPEC §8.6 Bitcoin headers) were being
+blocked by the old policy and reported "not reachable" to every visitor. Backup:
+`/etc/nginx/sites-backup/croviatrust.com.bak_*_csp`. A stray
+`croviatrust.com.bak_20260919T185832Z` was moved out of `sites-enabled/` (nginx includes `*`).
 
 **Access policy applied** (CANON §5): the `$is_bulk_data` referer gate in
 `/etc/nginx/snippets/data-protection.conf` is now empty; every data file is fetchable
