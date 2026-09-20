@@ -139,31 +139,30 @@ Left as-is on purpose: `crovia_broadcast.py` (daily card to Bluesky/Telegram/Mas
 idempotent), `crovia_broadcast_changes.py` (rare, high-signal only), `wayback_save_submitter.py`
 (useful: archived copies let third parties re-run TACET predicates), `zenodo_deposit_weekly.py`.
 
-## Server changes of 2026-09-19 (night): model records replace graded dossiers
-
-`model_records.py` (this directory, installed at `/opt/crovia/scripts/model_records.py`,
-cron `9 * * * *`) now produces the whole per-model surface:
-
-- `/m/<org>/<model>/` — one page per observed model: live TACET summary
-  (observations, negatives, Bitcoin-anchored epochs, last verdict, proof link when
-  a level-2 proof exists) and/or the observation-bounded 2026-archive record.
-  No grades. Unified site shell. Claim + BreadcrumbList JSON-LD.
-- `/m/` — browsable index of every record, client-side filter.
-- `/badge/m/<org>/<model>.svg|.json` — grade-free badge and shields endpoint.
-  nginx now serves `/badge/m/` statically (previously proxied to the seal badge
-  API, which answered 404 for every model badge advertised on 1,379 pages).
-- `/registry/data/model_records.json` — the same facts as data.
-- Pages and badges not regenerated are deleted (42 pages, 84 badges on first run).
-
-Retired in cron (commented, not deleted): `build_model_dossiers.py` (read a
-`top_100` key that no longer exists, so every page came from stale LACUNA
-candidates with a wall-clock day count and an A–F grade) and `badge_model.py`
-(same grades). `/registry/cci/` (A–F vendor grades) and `/registry/e/`
-(Observatory event pages) return 301 like the other retired paths; `?legacy=1`
-still reaches them. `seo_sitemap_indexnow.py` lists `/m/` as a core page.
-
 ## What Phase 0 does not do
 
 It does not revive `AX.ABS` emission or the old LACUNA issuance. Absence is now
 produced by TACET (beacon-bound negative snapshots, `tacet/SPEC.md` §7) and the
 LACUNA page will read from `/registry/data/tacet/`.
+
+## Server changes of 2026-09-20 (Silence Report, retirements)
+
+A second, legacy Crovia was still live and updated hourly: `/index/` ("Transparency Index", letter
+grades per lab), `/card/<day>/` (daily OG card "80% of major labs score F"), `/feed.xml` (RSS of the
+same), `/registry/data/transparency_index.json`, and `crovia_broadcast.py` posting the card to
+Bluesky every day. None of it was in canon or in the audit; all of it contradicted "observation facts
+only". Retired and replaced:
+
+| what | action |
+|---|---|
+| `generate_transparency_index.py` (hourly), `generate_daily_card.py` (hourly) | cron commented; outputs moved to `/opt/crovia/site-backups/legacy-index-20260920/` |
+| `/index/`, `/card/` | 301 → `/m/`, `/report/` (`snippets/legacy-freeze.conf`) |
+| `/registry/data/transparency_index.json` | 410 with a JSON pointer to `model_records.json` and `/report/report.json`; removed from canon `data_files` |
+| `guard_index.sh` (*/5) | cron commented: restored `registry/index.html` from a `.canonical` copy whenever the new file was smaller |
+| `scripts/silence_report.py` (07:20 daily, new) | weekly Silence Report: `/report/<YYYY-Www>/`, card PNG, `/report/index.html`, `/report/report.json` (with `previous` = last closed week), `/feed.xml` RSS with one item per week |
+| `scripts/crovia_broadcast.py` (07:35 daily, rewritten) | posts each closed week once per platform (Bluesky configured); `/opt/crovia/crovia_broadcast.py` replaced with the same file because `crovia_broadcast_changes.py` imports its helpers |
+| `scripts/zenodo_deposit_weekly.py` (Tue 03:00, rewritten) | deposits the TACET files (sheets, proofs, targets, anchors, report facts, MANIFEST, DATASHEET, METHODS) under the existing Concept DOI 10.5281/zenodo.20111130; metadata aligned with canon. `--revise` published 2026-W38-r2 (10.5281/zenodo.22856637) so the concept resolves to canon-conformant content |
+| `seo_sitemap_indexnow.py` | `/report/` added to CORE_PAGES |
+
+Kept: `global_ranking.json` and `/registry/compliance/` (model-card checklist coverage: counts of
+present/absent items, no grades), `crovia_broadcast_changes.py` (high-signal change posts).
