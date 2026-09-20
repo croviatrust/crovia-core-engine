@@ -417,7 +417,7 @@ def render_record(rec: Dict[str, Any]) -> str:
   <div class="mr-card"><div class="k">Level-2 silence proof</div><h3>A signed proof exists for this model</h3>
     <p>The proof wraps every negative observation of <b>{tid_e}</b> in a <a href="/registry/seal/">Crovia Seal</a>: sparse-Merkle non-inclusion for each epoch, the drand round that opened it and the OpenTimestamps receipt that closed it. Your browser checks all of it, Bitcoin anchor included.</p>
     <div class="mr-btns"><a class="mr-btn pri" href="{vurl}">Verify in your browser</a><a class="mr-btn" href="{html.escape(purl, quote=True)}">proof .seal.json</a></div>
-    <pre>pip install crovia-tacet-operator "crovia-seal @ git+https://github.com/croviatrust/crovia-seal#subdirectory=reference/python"
+    <pre>pip install crovia-tacet-operator crovia-seal
 curl -sO {html.escape(purl)}
 tacet-operator verify {html.escape(slug(tid))}.seal.json</pre>
   </div>""")
