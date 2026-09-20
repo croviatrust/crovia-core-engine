@@ -343,7 +343,7 @@ def render_record(rec: Dict[str, Any]) -> str:
 
     if live:
         v = live_verdict(live)
-        eyebrow = f'Model record <span class="st live">\u25cf live \u00b7 TACET</span>'
+        eyebrow = 'Model record <span class="st live">\u25cf live \u00b7 TACET</span>'
         verdict_cls = v["key"]
         verdict = v["headline"]
         lead = (f"{v['sentence']} Crovia fetches the <a href=\"{html.escape(hf_url, quote=True)}\" rel=\"noopener\">Hugging Face model card</a> "
@@ -417,7 +417,7 @@ def render_record(rec: Dict[str, Any]) -> str:
   <div class="mr-card"><div class="k">Level-2 silence proof</div><h3>A signed proof exists for this model</h3>
     <p>The proof wraps every negative observation of <b>{tid_e}</b> in a <a href="/registry/seal/">Crovia Seal</a>: sparse-Merkle non-inclusion for each epoch, the drand round that opened it and the OpenTimestamps receipt that closed it. Your browser checks all of it, Bitcoin anchor included.</p>
     <div class="mr-btns"><a class="mr-btn pri" href="{vurl}">Verify in your browser</a><a class="mr-btn" href="{html.escape(purl, quote=True)}">proof .seal.json</a></div>
-    <pre>pip install crovia-tacet-operator   # or: see github.com/croviatrust/countersign
+    <pre>pip install crovia-tacet-operator "crovia-seal @ git+https://github.com/croviatrust/crovia-seal#subdirectory=reference/python"
 curl -sO {html.escape(purl)}
 tacet-operator verify {html.escape(slug(tid))}.seal.json</pre>
   </div>""")
