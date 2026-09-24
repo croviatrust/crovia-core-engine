@@ -6,7 +6,9 @@ letter grades the observations could not support. This report states counts and 
 reader can recompute from the files it links: epoch sheets, proofs, anchors.
 
 Outputs (WEB_ROOT = /var/www/crovia):
-    /report/<YYYY-Www>/index.html      the week's report (regenerated daily until the week closes)
+    /report/<YYYY-Www>/index.html      the week's report (regenerated daily until the week closes,
+                                        then finalized once and never overwritten; corrections are
+                                        explicit: --refinalize WEEK --note ..., earlier facts kept as facts.rN.json)
     /report/<YYYY-Www>.png              1200x630 Open Graph card for that week
     /report/latest.png                  same card, stable URL
     /report/index.html                  latest report + archive
@@ -69,6 +71,37 @@ def short_ts(s: str | None) -> str:
     return t.strftime("%Y-%m-%d %H:%MZ") if t else "—"
 
 
+def observed_targets_from_snapshots(tacet: Path, in_week: list[dict[str, Any]]) -> tuple[list[dict[str, Any]] | None, list[dict[str, Any]]]:
+    """Distinct targets in the week's snapshot files, with each one's last verdict of the week.
+
+    Returns (observed, negative) as lists of {target_id, last_result}; (None, []) when no
+    snapshot file of the week can be read, so the caller can fall back and say so.
+    """
+    last: dict[str, bool | None] = {}
+    seen_files = 0
+    for e in sorted(in_week, key=lambda x: int(x.get("epoch", -1))):
+        p = tacet / "snapshots" / f"{e.get('epoch')}.jsonl"
+        try:
+            text = p.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        seen_files += 1
+        for line in text.splitlines():
+            if not line.strip():
+                continue
+            try:
+                snap = json.loads(line)
+            except ValueError:
+                continue
+            tid = snap.get("target_id")
+            if isinstance(tid, str):
+                last[tid] = snap.get("result")
+    if not seen_files and in_week:
+        return None, []
+    observed = [{"target_id": t, "last_result": r} for t, r in sorted(last.items())]
+    return observed, [t for t in observed if t["last_result"] is False]
+
+
 def collect(now: dt.datetime) -> dict[str, Any]:
     start, end, label = week_bounds(now.date())
     tacet = DATA_ROOT / "tacet"
@@ -80,13 +113,24 @@ def collect(now: dt.datetime) -> dict[str, Any]:
 
     epochs = [e for e in index.get("epochs", []) if isinstance(e, dict)]
     closed = [e for e in epochs if e.get("closed") not in (None, "pending")]
-    in_week = [e for e in closed if (t := parse_ts(e.get("epoch_end"))) and start <= t < end]
+    # every epoch emitted in the week counts as an epoch of the week; whether its anchor has
+    # confirmed is a separate fact, stated as such (a closed week may still have pending anchors)
+    in_week = [e for e in epochs if (t := parse_ts(e.get("epoch_end"))) and start <= t < end]
     anchored_week = [e for e in in_week if e.get("block_height")]
+    pending_week = [e for e in in_week if not e.get("block_height")]
     heights = sorted(int(e["block_height"]) for e in anchored_week)
 
     tlist = [t for t in targets.get("targets", []) if isinstance(t, dict)]
-    observed_week = [t for t in tlist if (ts := parse_ts(t.get("last_seen"))) and start <= ts < end]
-    negative_week_targets = [t for t in observed_week if t.get("last_result") is False]
+    # models observed in the week: distinct targets in the week's snapshot files, and the verdict
+    # of each one's last snapshot of the week. targets.json only knows the *latest* observation of
+    # a target, so a closed week read later from it shrinks as models are seen again.
+    observed_week, negative_week_targets = observed_targets_from_snapshots(tacet, in_week)
+    if observed_week is None:  # snapshot files unavailable: fall back to targets.json and say so
+        observed_week = [t for t in tlist if (ts := parse_ts(t.get("last_seen"))) and start <= ts < end]
+        negative_week_targets = [t for t in observed_week if t.get("last_result") is False]
+        observed_source = "targets.json (last_seen in the week; snapshot files unavailable)"
+    else:
+        observed_source = "snapshots/<epoch>.jsonl of the week's epochs"
 
     plist = [p for p in proofs.get("proofs", []) if isinstance(p, dict)]
     for p in plist:
@@ -105,6 +149,8 @@ def collect(now: dt.datetime) -> dict[str, Any]:
         "generated_at": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "epochs_week": len(in_week),
         "epochs_anchored_week": len(anchored_week),
+        "epochs_pending_week": len(pending_week),
+        "observed_source": observed_source,
         "block_range": [heights[0], heights[-1]] if heights else None,
         "snapshots_week": sum(int(e.get("snapshots") or 0) for e in in_week),
         "negative_week": sum(int(e.get("negative") or 0) for e in in_week),
@@ -253,6 +299,7 @@ def shell_head(title: str, desc: str, url: str, image: str, jsonld: dict[str, An
   .rp-card pre{{margin-top:12px;background:#070b12;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font:12px/1.6 var(--mono);color:var(--text);overflow-x:auto;white-space:pre-wrap;word-break:break-all}}
   .rp-cardimg{{width:100%;border:1px solid var(--border);border-radius:12px;display:block;margin-top:24px}}
   .rp-end{{margin:28px 0 72px;font-size:12.5px;color:var(--text-faint)}}
+  .rp-corrections{{margin:0 0 8px 18px;font-size:13.5px;color:var(--text-muted);line-height:1.6}}
   .rp-end a{{color:var(--accent)}}
   .rp-pill{{display:inline-block;font:500 11px var(--mono);border:1px solid var(--border);border-radius:999px;padding:3px 10px;color:var(--text-muted);margin-left:8px;vertical-align:middle}}
   {extra_css}
@@ -312,9 +359,24 @@ def render_week(f: dict[str, Any]) -> str:
     img = f"{SITE}/report/{wk}.png?v={f['generated_at'][:13].replace('T', '').replace('-', '')}"
     title = f"Silence Report {wk}: {fmt_int(f['targets_observed_week'])} models observed, {fmt_int(f['proofs_total'])} signed silence proofs"
     desc = headline(f)
-    status = "closed week" if f["closed_week"] else "week in progress, updated daily"
+    status = ("closed week · finalized " + short_ts(f.get("finalized_at"))) if f.get("final") else ("closed week" if f["closed_week"] else "week in progress, updated daily")
     br = f["block_range"]
     block_txt = f"blocks {fmt_int(br[0])}–{fmt_int(br[1])}" if br and br[0] != br[1] else (f"block {fmt_int(br[0])}" if br else "anchors pending confirmation")
+    pending = int(f.get("epochs_pending_week") or 0)
+    pending_txt = f" · {fmt_int(pending)} still awaiting {'its' if pending == 1 else 'their'} anchor when this was written" if pending else ""
+    corrections = f.get("corrections") or []
+    corr_html = ""
+    if corrections:
+        items = "".join(
+            f"<li><b>Revision {int(c.get('revision', 0))}</b>, {html.escape(str(c.get('date', '')))}: {html.escape(str(c.get('note', '')))} "
+            f"Previous figures: <a href=\"/report/{html.escape(wk)}/facts.r{int(c.get('revision', 1)) - 1}.json\">facts.r{int(c.get('revision', 1)) - 1}.json</a>.</li>"
+            for c in corrections)
+        corr_html = f'<div class="rp-head" id="corrections"><h2>Corrections</h2><div class="meta">the earlier figures stay published</div></div><ul class="rp-corrections">{items}</ul>'
+    if f.get("final"):
+        end_txt = (f"Finalized {html.escape(str(f.get('finalized_at', '')))} from the files published at that moment; this page does not change afterwards. "
+                   f"A correction, if ever needed, is added below with the earlier figures kept.")
+    else:
+        end_txt = f"Generated {html.escape(f['generated_at'])} from published files only; regenerated daily until the week closes, then finalized once."
     jsonld = {
         "@context": "https://schema.org", "@type": "Report", "name": title, "headline": desc, "url": url,
         "datePublished": f["week_start"], "dateModified": f["generated_at"], "inLanguage": "en",
@@ -336,9 +398,9 @@ def render_week(f: dict[str, Any]) -> str:
     <h1>{fmt_int(f['targets_observed_week'])} models observed, hour by hour. {fmt_int(f['proofs_total'])} carry a signed proof that nothing was disclosed.</h1>
     <p class="rp-lead">{html.escape(desc)} Every figure below is computed from files you can download and re-check: the <a href="/registry/data/tacet/index.json">epoch index</a>, the <a href="/registry/data/tacet/targets.json">target list</a>, the <a href="/registry/data/tacet/proofs/index.json">proof index</a>. Crovia records what was observed and what was not; it does not grade, rank or accuse.</p>
     <div class="rp-strip">
-      <a class="rp-stat" href="/registry/data/tacet/index.json"><div class="n">{fmt_int(f['epochs_week'])}</div><div class="l">hourly epochs closed this week</div></a>
-      <a class="rp-stat" href="/registry/data/tacet/index.json"><div class="n">{fmt_int(f['epochs_anchored_week'])}</div><div class="l">anchored in Bitcoin · {html.escape(block_txt)}</div></a>
-      <a class="rp-stat" href="/registry/data/tacet/targets.json"><div class="n">{fmt_int(f['targets_observed_week'])}</div><div class="l">models observed · {fmt_int(f['targets_negative_week'])} with no disclosure found</div></a>
+      <a class="rp-stat" href="/registry/data/tacet/index.json"><div class="n">{fmt_int(f['epochs_week'])}</div><div class="l">hourly epochs this week</div></a>
+      <a class="rp-stat" href="/registry/data/tacet/index.json"><div class="n">{fmt_int(f['epochs_anchored_week'])}</div><div class="l">anchored in Bitcoin · {html.escape(block_txt)}{pending_txt}</div></a>
+      <a class="rp-stat" href="/registry/data/tacet/snapshots/"><div class="n">{fmt_int(f['targets_observed_week'])}</div><div class="l">models observed · {fmt_int(f['targets_negative_week'])} with no disclosure found</div></a>
       <a class="rp-stat" href="/registry/data/tacet/index.json"><div class="n">{fmt_int(f['negative_week'])}</div><div class="l">negative snapshots of {fmt_int(f['snapshots_week'])} taken</div></a>
       <a class="rp-stat" href="/registry/data/tacet/proofs/index.json"><div class="n">{fmt_int(f['proofs_total'])}</div><div class="l">signed silence proofs · {fmt_int(f['proofs_new_week'])} extended this week</div></a>
     </div>
@@ -358,7 +420,8 @@ def render_week(f: dict[str, Any]) -> str:
     <div class="rp-card"><div class="k">Reuse</div><h3>CC-BY-4.0 · embed the card · subscribe</h3><p>Cite as "Crovia Trust, Silence Report {html.escape(wk)}, {html.escape(url)}". The card is <a href="/report/{html.escape(wk)}.png">{html.escape(wk)}.png</a>; the weekly feed is <a href="/feed.xml">/feed.xml</a>; the same facts as JSON: <a href="/report/report.json">report.json</a>.</p>
     <pre>&lt;a href="{html.escape(url)}"&gt;&lt;img src="{SITE}/report/latest.png" width="600" alt="Crovia Silence Report"&gt;&lt;/a&gt;</pre></div>
   </div>
-  <p class="rp-end">Generated {html.escape(f['generated_at'])} from published files only; regenerated daily until the week closes. Errors: <a href="mailto:info@croviatrust.com">info@croviatrust.com</a> or <a href="https://github.com/croviatrust/countersign/issues">open an issue</a>. <a href="/report/">All reports</a>.</p>
+  {corr_html}
+  <p class="rp-end">{end_txt} Errors: <a href="mailto:info@croviatrust.com">info@croviatrust.com</a> or <a href="https://github.com/croviatrust/countersign/issues">open an issue</a>. <a href="/report/">All reports</a>.</p>
 </main>
 """
     return shell_head(title, desc, url, img, jsonld) + body + FOOT
@@ -436,22 +499,79 @@ def write_week(facts: dict[str, Any], root: Path) -> None:
     (root / wk / "index.html").write_text(render_week(facts), encoding="utf-8")
 
 
-def main() -> int:
+def finalize_previous(now: dt.datetime, root: Path) -> dict[str, Any] | None:
+    """The week before `now`, written exactly once after it closes and never overwritten.
+
+    A closed week's figures are what the published files showed at finalization (pending
+    anchors are counted and stated, not waited for). Recomputing a closed week later would
+    silently move numbers people have already cited — anchors confirm, proofs grow, and
+    targets.json forgets earlier observations — so the frozen facts.json wins. Changing a
+    finalized week is a correction: `--refinalize WEEK --note ...` keeps the earlier figures
+    as facts.rN.json and lists the correction on the page.
+    """
+    prev_now = now - dt.timedelta(days=7)
+    _, _, wk = week_bounds(prev_now.date())
+    existing = load(root / wk / "facts.json", None)
+    if isinstance(existing, dict) and existing.get("final"):
+        return existing
+    prev = collect(prev_now)
+    if not (prev["epochs_week"] or prev["targets_observed_week"]):
+        return None
+    prev["closed_week"] = True
+    prev["final"] = True
+    prev["finalized_at"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    prev["corrections"] = []
+    write_week(prev, root)
+    return prev
+
+
+def refinalize(week: str, note: str, now: dt.datetime, root: Path) -> dict[str, Any]:
+    """Re-run a finalized week with a stated reason; the superseded figures stay published."""
+    if not re.fullmatch(r"\d{4}-W\d{2}", week):
+        raise SystemExit(f"week must look like 2026-W38, got {week!r}")
+    existing = load(root / week / "facts.json", None)
+    if not (isinstance(existing, dict) and existing.get("final")):
+        raise SystemExit(f"{week} is not a finalized week; nothing to correct")
+    if not note.strip():
+        raise SystemExit("--note is required: say what changed and why")
+    year, wnum = int(week[:4]), int(week[-2:])
+    monday = dt.date.fromisocalendar(year, wnum, 1)
+    fresh = collect(dt.datetime(monday.year, monday.month, monday.day, 12, tzinfo=dt.timezone.utc))
+    corrections = list(existing.get("corrections") or [])
+    revision = len(corrections) + 2
+    (root / week / f"facts.r{revision - 1}.json").write_text(json.dumps(existing, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    changed = {k: [existing.get(k), fresh.get(k)] for k in ("epochs_week", "epochs_anchored_week", "epochs_pending_week",
+                                                             "targets_observed_week", "targets_negative_week", "proofs_total")
+               if existing.get(k) != fresh.get(k)}
+    corrections.append({"revision": revision, "date": now.strftime("%Y-%m-%d"), "note": note.strip(), "changed": changed})
+    fresh.update({"closed_week": True, "final": True, "finalized_at": existing.get("finalized_at"),
+                  "revised_at": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "revision": revision, "corrections": corrections})
+    write_week(fresh, root)
+    return fresh
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--refinalize", metavar="WEEK", help="re-run a finalized week as a stated correction (keeps facts.rN.json)")
+    ap.add_argument("--note", default="", help="reason for the correction (required with --refinalize)")
+    args = ap.parse_args(argv)
+
     now = dt.datetime.now(dt.timezone.utc)
+    root = WEB_ROOT / "report"
+    if args.refinalize:
+        f = refinalize(args.refinalize, args.note, now, root)
+        print(f"silence_report: {f['week']} revised (revision {f['revision']}); changed: {json.dumps(f['corrections'][-1]['changed'])}")
+        return 0
+
     facts = collect(now)
     if facts["epochs_week"] == 0 and facts["targets_observed_week"] == 0 and not facts["top_proofs"]:
         print("silence_report: no data for this week yet; nothing written", file=sys.stderr)
         return 0
-    root = WEB_ROOT / "report"
     write_week(facts, root)
     (root / "latest.png").write_bytes((root / f"{facts['week']}.png").read_bytes())
 
-    # the previous week is closed now: recompute it once more so its numbers are final
-    prev = collect(now - dt.timedelta(days=7))
-    prev_out = None
-    if prev["epochs_week"] or prev["targets_observed_week"]:
-        write_week(prev, root)
-        prev_out = prev
+    prev_out = finalize_previous(now, root)
 
     (root / "report.json").write_text(json.dumps({"schema": "crovia.silence_report.v1", "latest": facts["week"], "url": f"{SITE}/report/{facts['week']}/",
                                                   "previous": prev_out, **facts}, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -465,7 +585,8 @@ def main() -> int:
     archive = archive[:KEEP_WEEKS]
     (root / "index.html").write_text(render_index(facts, archive), encoding="utf-8")
     (WEB_ROOT / "feed.xml").write_text(render_feed(archive), encoding="utf-8")
-    print(f"silence_report: {facts['week']} · {facts['targets_observed_week']} models · {facts['epochs_week']} epochs ({facts['epochs_anchored_week']} anchored) · {facts['proofs_total']} proofs · previous week {'finalized' if prev_out else 'absent'} · {len(archive)} weeks in feed")
+    prev_state = "absent" if prev_out is None else ("already final" if prev_out.get("finalized_at") != now.strftime("%Y-%m-%dT%H:%M:%SZ") else "finalized now")
+    print(f"silence_report: {facts['week']} · {facts['targets_observed_week']} models · {facts['epochs_week']} epochs ({facts['epochs_anchored_week']} anchored, {facts['epochs_pending_week']} pending) · {facts['proofs_total']} proofs · previous week {prev_state} · {len(archive)} weeks in feed")
     return 0
 
 
