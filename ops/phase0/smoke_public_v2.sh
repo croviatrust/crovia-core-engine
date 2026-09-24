@@ -28,10 +28,10 @@ done
 results=()
 n_ok=0; n_fail=0
 
-check() {  # name url expected_status [marker]
+check() {  # name url expected_status [marker]   (CHECK_UA overrides the User-Agent for one call)
   local name="$1" url="$2" want="$3" marker="${4:-}"
-  local body code
-  body=$(curl -sS -L -A "$UA" --max-time 30 -w $'\n%{http_code}' "$url" 2>/dev/null)
+  local body code ua="${CHECK_UA:-$UA}"
+  body=$(curl -sS -L -A "$ua" --max-time 30 -w $'\n%{http_code}' "$url" 2>/dev/null)
   code="${body##*$'\n'}"; body="${body%$'\n'*}"
   local ok=1
   [ "$code" = "$want" ] || ok=0
@@ -85,6 +85,18 @@ check ots_anchors     "$BASE/registry/data/substrate/ots_anchors.json"          
 check trust_root      "$BASE/registry/data/substrate/trust_root.json"            200 "public_key_hex"
 check lacuna_cands    "$BASE/registry/data/substrate/lacuna_candidates.json"     200 "candidates"
 check seal_public_log "$BASE/registry/data/seal/public_log.jsonl"                200 "crovia.seal.v1"
+
+# The same data for a plain script. The reference verifiers (tacet, the
+# Python examples in the API docs) fetch with urllib and send its default
+# User-Agent; Cloudflare's Browser Integrity Check answers that client with
+# 403 (error 1010) unless the path is exempted. A 200 above and a 403 here
+# means "verifiable by anyone" is false for scripts. Fix: Cloudflare →
+# Rules → Configuration Rules → URI path starts with /registry/data/ →
+# Browser Integrity Check: off (same rule on causari.dev for /reports/, /r/).
+CHECK_UA="Python-urllib/3.12" check script_latest_seal "$BASE/registry/data/substrate/latest_seal.json" 200 "merkle_root"
+CHECK_UA="Python-urllib/3.12" check script_public_log  "$BASE/registry/data/seal/public_log.jsonl"      200 "crovia.seal.v1"
+CHECK_UA="Python-urllib/3.12" check script_trust_root  "$BASE/registry/data/substrate/trust_root.json"  200 "public_key_hex"
+CHECK_UA="Python-urllib/3.12" check script_silence     "$BASE/registry/data/silence_index.json"         200 "generated_at"
 
 # Seal issuer
 check seal_trust_root "$SEAL/trust-root.json"                 200 "pubkey"
