@@ -28,9 +28,18 @@ cron line** instead of running on a separate schedule (root crontab, backup in
 */30 * * * * /usr/bin/python3 /opt/crovia/scripts/build_silence_index.py …; cd /opt/crovia/phase0 && python3 truth_silence_index.py --ledger /opt/crovia/substrate/axiom_ledger.jsonl --out /var/www/registry/data/silence_index.json
 7 * * * *   … substrate_snapshots.py …; cd /opt/crovia/phase0 && python3 truth_lacuna_candidates.py --path /var/www/registry/data/substrate/lacuna_candidates.json
 15 */6 * * * cd /opt/crovia/phase0 && DATA=/var/www/registry/data ./ots_stamp_substrate_root.sh
-3 * * * *   cd /opt/crovia/phase0 && ./smoke_public_v2.sh --json > …/_smoke.json
+*/15 * * * * cd /opt/crovia/phase0 && ./smoke_public_v2.sh --out /var/www/registry/data/_smoke.json >> /var/log/crovia/smoke_v2.log 2>&1
 */10 * * * * cd /opt/crovia/phase0 && /opt/crovia/seal-svc/.venv/bin/python seal_public_log.py
 ```
+
+**`_smoke.json` frozen 2026-09-19 → 09-24 (fixed 2026-09-24).** The cron line
+had been `--json > _smoke.json.tmp 2>/dev/null && mv …`; the script exits 1
+when any check fails, so the `mv` never ran and the file stayed at the last
+all-green run while two checks were failing for stale reasons (the home
+marker after the copy rewrite, and `get_lacuna`, renamed `get_silence_proof`
+by MCP 2.0). Both markers updated; the script gained `--out PATH`, which
+writes atomically whether or not checks fail, and the cron line above uses
+it. A smoke file must show the failure, never freeze on it.
 
 `truth_pulse.py` scans the 4 GB ledger once an hour (`--cache`, 6 s with the `"AX.LAC"`
 prefilter) and reuses the count for the per-minute runs. `ots_stamp_substrate_root.sh`
