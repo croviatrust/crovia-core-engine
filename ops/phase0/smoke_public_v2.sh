@@ -2,15 +2,29 @@
 # Public smoke test aligned with CANON.md §5. Replaces the 2025 probe list that
 # still checked /check.html, /observatory/, /registry/tpa/ and other retired paths.
 #
-#   ./smoke_public_v2.sh                      # human output
-#   ./smoke_public_v2.sh --json > _smoke.json # same schema as the current _smoke.json
+#   ./smoke_public_v2.sh                            # human output
+#   ./smoke_public_v2.sh --json > _smoke.json       # same schema as the current _smoke.json
+#   ./smoke_public_v2.sh --json --out /var/www/registry/data/_smoke.json
 #
-# Exit 0 iff every check passes. Dependencies: curl, python3.
+# Exit 0 iff every check passes. With --out the JSON is written atomically
+# (tmp + mv) whether or not checks fail: a smoke file must show the failure,
+# not freeze at the last green run. Never chain `--json > f && mv` in cron
+# for that reason (that form froze _smoke.json from 2026-09-19 to 09-24).
+# Dependencies: curl, python3.
 set -u
 BASE="${BASE:-https://croviatrust.com}"
 SEAL="${SEAL:-https://seal.croviatrust.com}"
 UA="crovia-smoke/2.0"
-JSON=0; [ "${1:-}" = "--json" ] && JSON=1
+JSON=0; OUT=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --json) JSON=1;;
+    --out) OUT="${2:-}"; shift;;
+    *) echo "usage: $0 [--json] [--out PATH]" >&2; exit 2;;
+  esac
+  shift
+done
+[ -n "$OUT" ] && JSON=1
 results=()
 n_ok=0; n_fail=0
 
@@ -39,7 +53,7 @@ redirect() {  # name path expected_location_prefix
 }
 
 # Pages (canon §5)
-check home            "$BASE/"                                200 "We record what AI"
+check home            "$BASE/"                                200 "Silence you can verify"
 check whitepaper      "$BASE/whitepaper.html"                 200 "Whitepaper"
 check proof           "$BASE/proof.html"                      200
 check registry        "$BASE/registry/"                       200 "Crovia Registry"
@@ -81,7 +95,8 @@ check seal_stats      "$SEAL/v1/stats"                        200 "total_seals"
 mcp=$(curl -sS -A "$UA" --max-time 30 -X POST "$BASE/mcp" -H 'content-type: application/json' -H 'accept: application/json, text/event-stream' \
       -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' -w $'\n%{http_code}')
 code="${mcp##*$'\n'}"; body="${mcp%$'\n'*}"
-ok=0; [ "$code" = 200 ] && grep -q '"lookup_model"' <<<"$body" && grep -q '"get_lacuna"' <<<"$body" && ok=1
+# MCP server 2.0 (2026-09-20) renamed get_lacuna → get_silence_proof.
+ok=0; [ "$code" = 200 ] && grep -q '"lookup_model"' <<<"$body" && grep -q '"get_silence_proof"' <<<"$body" && ok=1
 if [ "$ok" = 1 ]; then n_ok=$((n_ok+1)); else n_fail=$((n_fail+1)); fi
 results+=("{\"name\":\"mcp_tools_list\",\"url\":\"$BASE/mcp\",\"expected\":200,\"status\":${code:-0},\"ok\":$([ "$ok" = 1 ] && echo true || echo false)}")
 [ $JSON = 1 ] || printf '%s %-38s %s\n' "$([ "$ok" = 1 ] && echo PASS || echo FAIL)" mcp_tools_list "$code"
@@ -97,10 +112,20 @@ redirect r_substrate    /registry/substrate/   /registry/explore/
 redirect r_omissions    /registry/omissions/   /registry/explore/
 
 checked_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-if [ $JSON = 1 ]; then
+emit_json() {
   printf '{"schema":"crovia.smoke.v2","checked_at":"%s","base":"%s","n_checks":%d,"n_ok":%d,"n_failed":%d,"checks":[' "$checked_at" "$BASE" $((n_ok+n_fail)) $n_ok $n_fail
   (IFS=,; printf '%s' "${results[*]}")
   printf ']}\n'
+}
+if [ -n "$OUT" ]; then
+  tmp="$OUT.tmp.$$"
+  if emit_json > "$tmp" && python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$tmp" 2>/dev/null; then
+    mv -f "$tmp" "$OUT"
+  else
+    rm -f "$tmp"; echo "smoke: could not write $OUT" >&2; exit 2
+  fi
+elif [ $JSON = 1 ]; then
+  emit_json
 else
   echo; echo "$checked_at  $n_ok passed, $n_fail failed"
 fi
