@@ -41,6 +41,20 @@ by MCP 2.0). Both markers updated; the script gained `--out PATH`, which
 writes atomically whether or not checks fail, and the cron line above uses
 it. A smoke file must show the failure, never freeze on it.
 
+**Scripts get a 403 on the data (open, 2026-09-24).** Four `script_*` checks
+fetch `latest_seal.json`, `public_log.jsonl`, `trust_root.json` and
+`silence_index.json` with `User-Agent: Python-urllib/3.12`, what the tacet
+reference verifier and every urllib example in the API docs send. Cloudflare's
+Browser Integrity Check answers 403 (error 1010); the same requests with a
+curl or named agent get 200. Until the rule exists, "verifiable by anyone"
+is false for a script, and the smoke says 42 passed, 4 failed. Fix, one
+click in the Cloudflare dashboard of croviatrust.com: Rules → Configuration
+Rules → new rule, expression `starts_with(http.request.uri.path,
+"/registry/data/")` → Browser Integrity Check: **off** → deploy. Same on
+causari.dev for `/reports/`, `/r/`, `/llms.txt`, `/sitemap.xml` (or turn the
+zone-level check off: a static site has nothing for it to protect).
+`seal.croviatrust.com` is not affected.
+
 `truth_pulse.py` scans the 4 GB ledger once an hour (`--cache`, 6 s with the `"AX.LAC"`
 prefilter) and reuses the count for the per-minute runs. `ots_stamp_substrate_root.sh`
 writes `/opt/crovia/substrate/anchors/<root>.ots` + `<root>.status.json`, the layout
@@ -138,7 +152,7 @@ keep the `$pro_gate`. `/registry/api/` marks `global_ranking`, `tpa_latest`,
 | `outreach_status_checker.py` (07:30) | commented | reads GitHub issue status of a stopped campaign |
 | `scripts/ots_anchor.py stamp` (03:05) | commented | re-stamped the same substrate root daily; superseded by `ots_stamp_substrate_root.sh` |
 | `scripts/smoke_public.sh` (*/15) | commented | probed retired paths and overwrote `_smoke.json` with false failures |
-| `smoke_public_v2.sh` | hourly → `*/15` | single writer of `_smoke.json`; 0/42 failing |
+| `smoke_public_v2.sh` | hourly → `*/15` | single writer of `_smoke.json`; 46 checks, the 4 `script_*` ones fail until the Cloudflare rule exists |
 
 **Disk.** `/opt/crovia/.venv` carried 6.6 GB of CUDA libraries on a GPU-less host;
 torch reinstalled as `2.9.1+cpu` (imports verified, `croviatrust.service` healthy).
