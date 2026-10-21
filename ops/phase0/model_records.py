@@ -352,7 +352,8 @@ def render_record(rec: Dict[str, Any]) -> str:
                 f"anchored in Bitcoin. Numbers below are observation facts, not a judgement of the model.")
         desc = (f"{tid}: training-data disclosure {v['short']} on the Hugging Face model card. "
                 f"{live['observations']} signed TACET observations, {live['anchored']} confirmed in Bitcoin. Verifiable offline.")
-        title = f"{tid} \u2014 training-data disclosure on the model card: {v['short'].split(' \u00b7 ')[0]} \u00b7 Crovia"
+        short = v["short"].split(" \u00b7 ")[0]
+        title = f"{tid} \u2014 training-data disclosure on the model card: {short} \u00b7 Crovia"
         strip = (stat(live["observations"], "signed observations", f"since {short_day(live['first_seen'])}")
                  + stat(live["negative"], "returned \u201cnot found\u201d", "predicate false")
                  + stat(live["anchored"], "epochs confirmed in Bitcoin", "only these count")
@@ -446,15 +447,17 @@ tacet-operator verify {html.escape(slug(tid))}.seal.json</pre>
 
     # ---- archive section when both exist
     if live and arch:
+        archive_span = f"{short_ts(arch['first_seen'])} \u2192 {short_ts(arch['last_seen'])}"
+        archive_rows = kv([
+            ("observed days of silence", str(arch["observed_days"]) + " (observation-bounded)"),
+            ("signed observations", str(arch["observations"])),
+            ("first / last observation", archive_span),
+            ("collector", html.escape(arch["collector"])),
+            ("axiom id", html.escape(arch["axiom_id"] or "n/a")),
+        ])
         parts.append(f"""
 <div class="mr-head"><h2>Also in the 2026 archive</h2><div class="meta">first-generation collector \u00b7 observation paused {ARCHIVE_PAUSED}</div></div>
-<div class="mr-card">{kv([
-    ("observed days of silence", str(arch["observed_days"]) + " (observation-bounded)"),
-    ("signed observations", str(arch["observations"])),
-    ("first / last observation", f"{short_ts(arch['first_seen'])} \u2192 {short_ts(arch['last_seen'])}"),
-    ("collector", html.escape(arch["collector"])),
-    ("axiom id", html.escape(arch["axiom_id"] or "n/a")),
-])}</div>""")
+<div class="mr-card">{archive_rows}</div>""")
 
     # ---- embed
     badge_svg_url = f"{SITE}/badge/m/{tid}.svg"

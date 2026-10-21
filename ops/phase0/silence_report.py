@@ -247,6 +247,7 @@ def render_card(f: dict[str, Any], out: Path) -> None:
 # ----------------------------------------------------------------------------- html
 
 def shell_head(title: str, desc: str, url: str, image: str, jsonld: dict[str, Any], extra_css: str = "") -> str:
+    jsonld_script = json.dumps(jsonld, ensure_ascii=False).replace("</", "<\\/")
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -268,7 +269,7 @@ def shell_head(title: str, desc: str, url: str, image: str, jsonld: dict[str, An
 <meta name="twitter:image" content="{image}">
 <link rel="stylesheet" href="{SITE}/assets/crovia.css?v=20260919c">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script type="application/ld+json">{json.dumps(jsonld, ensure_ascii=False).replace('</', '<\\/')}</script>
+<script type="application/ld+json">{jsonld_script}</script>
 <style>
   .rp-wrap{{max-width:1040px;margin:0 auto;padding:0 24px}}
   .rp-hero{{padding:64px 0 28px}}
